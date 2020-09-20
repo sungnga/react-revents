@@ -1,4 +1,4 @@
-# STEP TO BUILDING REVENTS WEB APPLICATION
+# STEP TO BUILDING THE REVENTS WEB APP
 
 **CREATE-REACT-APP**
 - Run in command line. The --use-npm flag is to ensure that we're using the npm package manager: `npx create-react-app react-revents --use-npm`
@@ -6,7 +6,25 @@
 - Then run: `npm start`
 - Can view the react-revents app in the browser: `http://localhost:3000`
 
+## PROJECT SETUP
+**Hot Module Replacement**
+- The hot module replacement prevents a full page reload when we make changes to our code
+- In index.js file:
+  ```javascript
+  const rootEl = document.getElementById('root');
 
+  function render() {
+    ReactDOM.render(<App />, rootEl);
+  }
+
+  if (module.hot) {
+    module.hot.accept('./App', function () {
+      setTimeout(render);
+    });
+  }
+
+  render();
+  ```
 
 
 
