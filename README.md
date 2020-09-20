@@ -1,3 +1,43 @@
+# STEP TO BUILDING REVENTS WEB APPLICATION
+
+**CREATE-REACT-APP**
+- Run in command line. The --use-npm flag is to ensure that we're using the npm package manager: `npx create-react-app react-revents --use-npm`
+- Once the React app has been successfully created, cd into the directory: `cd react-revents`
+- Then run: `npm start`
+- Can view the react-revents app in the browser: `http://localhost:3000`
+
+
+
+
+
+
+
+
+
+## VSCode extensions:
+- Auto Import - steoates
+  - Configure the setting by going to preferences -> settings
+  - Type in the search bar, autoimport. Under File to Scan, also add js and jsx to the list
+- Auto Rename Tag - Jun Han
+- Bracket Pair Colorizer 2 - CoenraadS
+- ESLint - Dirk Baeumer
+- Javascript Debugger (Nightly) - Microsoft
+- Material Icon Theme - Philipp Kief
+- npm Intellisense - Christian Kohler
+- Path Intellisense - Christian Kohler
+- Prettier - Code formatter - Esben Petersen
+- Live Server - Ritwick Dey
+
+
+
+
+
+
+
+
+
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
