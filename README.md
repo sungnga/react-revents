@@ -1,4 +1,5 @@
 # STEPS TO BUILDING THE REVENTS WEB APP
+-----------------------------------------
 
 ### CREATE-REACT-APP
 - Run in command line. The --use-npm flag is to ensure that we're using the npm package manager: `npx create-react-app react-revents --use-npm`
@@ -6,6 +7,7 @@
 - Then run: `npm start`
 - Can view the react-revents app in the browser: `http://localhost:3000`
 
+------------------------------------------------------------------------
 
 ## PROJECT SETUP
 ### Semantic UI React
@@ -48,6 +50,7 @@
 - Prettier - Code formatter - Esben Petersen
 - Live Server - Ritwick Dey
 
+-----------------------------------------------------------
 
 ## REACT CONCEPTS
 - Components
@@ -89,8 +92,9 @@
 - JSX tags have a tag name, attributes and children. Whilst it looks very similar to HTML, there are a few slight differences
 - Note that we're not allowed to use the word 'class' inside JSX because the word 'class' is a reserved word in Javascript. Instead we use className to style our component
 
+-------------------------------------------------
 
-## S3: EVENT DASHBOARD PAGE LAYOUT
+## S3: EVENT DASHBOARD PAGE LAYOUTS
 **1. Building our first component - EventDashboard**
 - This component renders two columns, a 10-column grid and a 6-column grid, using Semantic Grid component
 - In src/features/events/eventDashboard folder, create a component/file called EventDashboard.jsx
@@ -130,7 +134,7 @@
   }
   ```
 
-**2. NavBar component**
+**2. Create Nav Menu: NavBar component**
 - Create Navigation menu
 - In features/nav folder, create a component/file called NavBar.jsx
 - In NavBar.jsx file:
@@ -202,7 +206,7 @@
   }
   ```
 
-**3. Event List Items: Create EventList, EventListItem, and EventListAttendee components**
+**3. Create Event List Items: EventList, EventListItem, and EventListAttendee components**
 - In the EventDashboard 10-column grid section, create and display the details of event list item that includes the title of the event, who is hosting the event, date, venue, description of the event, a button to view the event detail, and list of attendees
 - In features/events/eventDashboard folder, create a component/file called EventList.jsx
 - In EventList.jsx file:
@@ -284,13 +288,58 @@
   ```
 - In the EventDashboard.jsx file:
   - Import the EventList component: `import EventList from './EventList';`
-  - Render the EventList component inside the 10-column Grid component: `<EventList />`
+  - Render the EventList component inside the 10-column Grid component
   ```javascript
   <Grid.Column width={10}>
     <EventList />
   </Grid.Column>
   ```
 
+**4. Create an Event Form: EventForm component**
+- In features/events/eventForm folder, create a component/file called EventForm.jsx
+- In EventForm.jsx file:
+  - Import React: `import React from 'react';`
+  - Import Semantic components: `import { Button, Form, Header, Segment } from 'semantic-ui-react';`
+  - Write an EventForm functional component that renders a form using Semantic UI to create an event
+    ```javascript
+    export default function EventForm() {
+      return (
+        <Segment clearing>
+          <Header content='Create new event' />
+          <Form>
+            <Form.Field>
+              <input type='text' placeholder='Event Title' />
+            </Form.Field>
+            <Form.Field>
+              <input type='text' placeholder='Category' />
+            </Form.Field>
+            <Form.Field>
+              <input type='text' placeholder='Description' />
+            </Form.Field>
+            <Form.Field>
+              <input type='text' placeholder='City' />
+            </Form.Field>
+            <Form.Field>
+              <input type='text' placeholder='Venue' />
+            </Form.Field>
+            <Form.Field>
+              <input type='date' placeholder='Date' />
+            </Form.Field>
+            <Button type='submit' floated='right' positive content='Submit' />
+            <Button type='submit' floated='right' content='Cancel' />
+          </Form>
+        </Segment>
+      );
+    }
+    ```
+- In EventDashboard.jsx file:
+  - Import the EventForm component: `import EventForm from '../eventForm/EventForm';`
+  - Render the component inside the 6-column Grid component
+  ```javascript
+  <Grid.Column width={6}>
+    <EventForm />
+  </Grid.Column>
+  ```
 
 
 
