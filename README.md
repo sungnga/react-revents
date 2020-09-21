@@ -109,6 +109,43 @@
 - Note that we're not allowed to use the word 'class' inside JSX because the word 'class' is a reserved word in Javascript. Instead we use className to style our component
 
 
+## S3: OUR FIRST COMPONENT - EventDashboard
+**1. Building our first component - EventDashboard**
+- This component renders two columns, a 10-column grid and a 6-column grid, using Semantic Grid component
+- In src/features/events/eventDashboard folder, create a component/file called EventDashboard.jsx
+- In EventDashboard.jsx file:
+  - Import React: `import React from 'react';`
+  - Import semantic Grid component: `import { Grid } from 'semantic-ui-react';`
+  - Write an EventDashboard functional component
+    - Return JSX of the Semantic UI Grid for now
+    - Semantic UI uses a 16-column grid system
+    ```javascript
+    export default function EventDashboard() {
+      return (
+        <Grid>
+          <Grid.Column width={10}>
+            <h2>Left Column</h2>
+          </Grid.Column>
+          <Grid.Column width={6}>
+            <h2>Right Column</h2>
+          </Grid.Column>
+        </Grid>
+      );
+    }
+    ```
+- In App.jsx file:
+  - Import the EventDashboard component: `import EventDashboard from '../../features/events/eventDashboard/EventDashboard';`
+  - Use the component inside JSX
+  ```javascript
+  function App() {
+    return (
+      <div>
+        <h1>Re-vents</h1>
+        <EventDashboard />
+      </div>
+    );
+  }
+  ```
 
 
 
