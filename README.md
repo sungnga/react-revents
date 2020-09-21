@@ -1,5 +1,4 @@
 # STEPS TO BUILDING THE REVENTS WEB APP
------------------------------------------
 
 ### CREATE-REACT-APP
 - Run in command line. The --use-npm flag is to ensure that we're using the npm package manager: `npx create-react-app react-revents --use-npm`
@@ -7,7 +6,6 @@
 - Then run: `npm start`
 - Can view the react-revents app in the browser: `http://localhost:3000`
 
-------------------------------------------------------------------------
 
 ## PROJECT SETUP
 ### Semantic UI React
@@ -50,7 +48,6 @@
 - Prettier - Code formatter - Esben Petersen
 - Live Server - Ritwick Dey
 
------------------------------------------------------------
 
 ## REACT CONCEPTS
 - Components
@@ -92,7 +89,6 @@
 - JSX tags have a tag name, attributes and children. Whilst it looks very similar to HTML, there are a few slight differences
 - Note that we're not allowed to use the word 'class' inside JSX because the word 'class' is a reserved word in Javascript. Instead we use className to style our component
 
--------------------------------------------------
 
 ## S3: EVENT DASHBOARD PAGE LAYOUTS
 **1. Building our first component - EventDashboard**
@@ -426,6 +422,100 @@
     );
   }
   ```
+
+**6. React component state: React useState hook**
+- In EventDashboard.jsx file:
+  - Import react useState hook: `import React, { useState } from 'react';`
+  - Create an events state and initialize its value to sampleData. Now the events state holds the data sample coming from the dataSample.js file
+    - `const [events, setEvents] = useState(sampleData);`
+  - For the events props that we pass down to the EventList child component, we can assign its value to events state
+    - `<EventList events={events} />`
+- Now let's work on showing and hiding the event form based on the state. When the "Create Event" button in the NavBar is clicked, we want to display the EventForm. When the "Cancel" button in the EventForm is clicked, we want to hide the EventForm
+- In App.jsx file:
+  - Import react useState hook: `import React, { useState } from 'react';`
+  - Create a formOpen state and initialize it to false
+    - `const [formOpen, setFormOpen] = useState(false);`
+  - Pass the setFormOpen method down as props to the NavBar child component. The NavBar component will comsume this method, setting the state to true, when the 'Create Event' button is clicked. This will trigger the EventForm component to display in the EventDashboard component
+    - `<NavBar setFormOpen={setFormOpen} />`
+  - Pass the formOpen state and setFormOpen method down as props to the EventDashboard component
+    - `<EventDashboard formOpen={formOpen} setFormOpen={setFormOpen} />` 
+  ```javascript
+  export default function App() {
+    const [formOpen, setFormOpen] = useState(false);
+
+    return (
+      <>
+        <NavBar setFormOpen={setFormOpen} />
+        <Container className='main'>
+          <EventDashboard formOpen={formOpen} setFormOpen={setFormOpen} />
+        </Container>
+      </>
+    );
+  }
+  ```
+- In the NavBar.jsx file:
+  - Receive the setFormOpen props as an argument from App parent component and destructure it
+    - `export default function NavBar({ setFormOpen }) { ... }`
+  - In the 'Create Event' button element
+    - Add an onClick event that will execute the setFormOpen method when the button is clicked
+    - Execute the setFormOpen method inside an arrow/anonymous function and pass in true as an argument
+    - We execute the setFormOpen method inside an arrow function because we want to call setFormOpen() only when the button is clicked. We don't want to execute setFormOpn() when the NavBar component loads
+    - `<Button onClick={() => setFormOpen(true)} positive inverted content='Create Event' />`
+- In EventDashboard.jsx file:
+  - Receive the formOpen and setFormOpen props as an argument from App parent component and destructure them
+    - `export default function EventDashboard({ formOpen, setFormOpen }) { ... }`
+  - Pass the setFormOpen method down as props to the EventForm child component. The EventForm component will comsume this method, setting the state to false, when the 'Cancel' button is clicked
+  - We can show or hide the event form based on the state
+    - `{formOpen && <EventForm setFormOpen={setFormOpen} />}`
+    - Whatever is on the left of && is true, do whatever is on the right of &&
+    - Only display the EventForm component if formOpen state is true
+    - This means that when the when the 'Create Event' in the NavBar is clicked, formOpen state is true and EventForm will display
+    - When the 'Cancel' button in the EventForm component is clicked, formOpen state is false and EventForm will not display
+  ```javascript
+  export default function EventDashboard({ formOpen, setFormOpen }) {
+    const [events, setEvents] = useState(sampleData);
+
+    return (
+      <Grid>
+        <Grid.Column width={10}>
+          <EventList events={events} />
+        </Grid.Column>
+        <Grid.Column width={6}>
+          {formOpen && <EventForm setFormOpen={setFormOpen} />}
+        </Grid.Column>
+      </Grid>
+    );
+  }
+  ```
+- In the EventForm.jsx file:
+  - Receive the setFormOpen props as an argument from EventDashboard parent component and destructure it
+    - `export default function EventForm({ setFormOpen }) { ... }`
+  - In the 'Cancel' button element
+    - Add an onClick event and execute the setFormOpen() method inside an arrow function and pass in false as an argument
+    ```javascript
+    <Button
+      onClick={() => setFormOpen(false)}
+      type='submit'
+      floated='right'
+      content='Cancel'
+    />
+    ```
+
+
+## S4: 
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
