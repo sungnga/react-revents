@@ -8,24 +8,6 @@
 
 
 ## PROJECT SETUP
---------------------------
-### Folder Structure:
-- /src
--   /app
--     /layout
--       App.jsx
--   /features
--     /events
--       /eventDashboard
--         EventDashboard.jsx
--         EventFilters
--       /eventList
--         EventList.jsx
--         EventListItem.jsx
--         EventListAttendee.jsx
--     /nav
--       NavBar.jsx
-
 ### Semantic UI React
 - Website: www.react.semantic-ui.com
 - Semantic UI React and Semantic UI CSS
@@ -33,7 +15,7 @@
 - In index.js file:
   - Import the semantic min css just above the styles.css file: `import 'semantic-ui-css/semantic.min.css';`
 
-**Hot Module Replacement**
+### Hot Module Replacement
 - The hot module replacement prevents a full page reload when we make changes to our code
 - In index.js file:
   ```javascript
@@ -68,7 +50,6 @@
 
 
 ## REACT CONCEPTS
----------------------
 - Components
 - Virtual DOM
 - One way binding
@@ -109,7 +90,7 @@
 - Note that we're not allowed to use the word 'class' inside JSX because the word 'class' is a reserved word in Javascript. Instead we use className to style our component
 
 
-## S3: OUR FIRST COMPONENT - EventDashboard
+## S3: EVENT DASHBOARD PAGE LAYOUT
 **1. Building our first component - EventDashboard**
 - This component renders two columns, a 10-column grid and a 6-column grid, using Semantic Grid component
 - In src/features/events/eventDashboard folder, create a component/file called EventDashboard.jsx
@@ -117,22 +98,22 @@
   - Import React: `import React from 'react';`
   - Import semantic Grid component: `import { Grid } from 'semantic-ui-react';`
   - Write an EventDashboard functional component
-    - Return JSX of the Semantic UI Grid for now
+    - Render the Semantic UI Grid in JSX for now
     - Semantic UI uses a 16-column grid system
-    ```javascript
-    export default function EventDashboard() {
-      return (
-        <Grid>
-          <Grid.Column width={10}>
-            <h2>Left Column</h2>
-          </Grid.Column>
-          <Grid.Column width={6}>
-            <h2>Right Column</h2>
-          </Grid.Column>
-        </Grid>
-      );
-    }
-    ```
+  ```javascript
+  export default function EventDashboard() {
+    return (
+      <Grid>
+        <Grid.Column width={10}>
+          <h2>Left Column</h2>
+        </Grid.Column>
+        <Grid.Column width={6}>
+          <h2>Right Column</h2>
+        </Grid.Column>
+      </Grid>
+    );
+  }
+  ```
 - In App.jsx file:
   - Import React: `import React from 'react';`
   - Import the EventDashboard component: `import EventDashboard from '../../features/events/eventDashboard/EventDashboard';`
@@ -150,54 +131,55 @@
   ```
 
 **2. NavBar component**
+- Create Navigation menu
 - In features/nav folder, create a component/file called NavBar.jsx
 - In NavBar.jsx file:
   - Import React: `import React from 'react';`
   - Import Semantic Button, Container, and Menu: `import { Button, Container, Menu } from 'semantic-ui-react';`
   - Write a NavBar functional component that renders the navigation menu using Semantic UI components
-    ```javascript
-    export default function NavBar() {
-      return (
-        <Menu inverted fixed='top'>
-          <Container>
-            <Menu.Item header>
-              <img src='/assets/logo.png' alt='logo' style={{ marginRight: 15 }} />
-              Revents
-            </Menu.Item>
-            <Menu.Item name='Events' />
-            <Menu.Item>
-              <Button positive inverted content='Create Event' />
-            </Menu.Item>
-            <Menu.Item position='right'>
-              <Button basic inverted content='Login' />
-              <Button
-                basic
-                inverted
-                content='Register'
-                style={{ marginLeft: '0.5em' }}
-              />
-            </Menu.Item>
-          </Container>
-        </Menu>
-      );
-    }
-    ```
+  ```javascript
+  export default function NavBar() {
+    return (
+      <Menu inverted fixed='top'>
+        <Container>
+          <Menu.Item header>
+            <img src='/assets/logo.png' alt='logo' style={{ marginRight: 15 }} />
+            Revents
+          </Menu.Item>
+          <Menu.Item name='Events' />
+          <Menu.Item>
+            <Button positive inverted content='Create Event' />
+          </Menu.Item>
+          <Menu.Item position='right'>
+            <Button basic inverted content='Login' />
+            <Button
+              basic
+              inverted
+              content='Register'
+              style={{ marginLeft: '0.5em' }}
+            />
+          </Menu.Item>
+        </Container>
+      </Menu>
+    );
+  }
+  ```
 - In App.jsx file:
   - Import the NavBar component: `import NavBar from '../../features/nav/NavBar';`
   - Import Semantic Container: `import { Container } from 'semantic-ui-react';` 
   - Render the NavBar component just above the EventDashboard component. Also wrap the EventDashboard component in a container so we can apply styles to it
-    ```javascript
-    export default function App() {
-      return (
-        <>
-          <NavBar />
-          <Container className='main'>
-            <EventDashboard />
-          </Container>
-        </>
-      );
-    }
-    ```
+  ```javascript
+  export default function App() {
+    return (
+      <>
+        <NavBar />
+        <Container className='main'>
+          <EventDashboard />
+        </Container>
+      </>
+    );
+  }
+  ```
 - In styles.css file:
   - Apply background color styles to the nav menu
   - Apply styles for the main container so that there's a space between the navbar and the main content
@@ -220,9 +202,94 @@
   }
   ```
 
+**3. Event List Items: Create EventList, EventListItem, and EventListAttendee components**
+- In the EventDashboard 10-column grid section, create and display the details of event list item that includes the title of the event, who is hosting the event, date, venue, description of the event, a button to view the event detail, and list of attendees
+- In features/events/eventDashboard folder, create a component/file called EventList.jsx
+- In EventList.jsx file:
+  - Import React: `import React from 'react';`
+  - Import the EventListItem component: `import EventListItem from './EventListItem';`
+  - Write an EventList functional component that renders the EventListItem component several times
+  ```javascript
+  export default function EventList() {
+    return (
+      <>
+        <EventListItem />
+        <EventListItem />
+        <EventListItem />
+        <EventListItem />
+      </>
+    );
+  }
+  ```
+- In features/events/eventDashboard folder, create a component/file called EventListItem.jsx
+- In EventListItem.jsx file:
+  - Import React: `import React from 'react';`
+  - Import Semantic components: `import { Button, Icon, Item, List, Segment } from 'semantic-ui-react';`
+  - Import the EventListAttendee component: `import EventListAttendee from './EventListAttendee';`
+  - Write an EventListItem functional component that renders the list item details using Semantic UI
+    - Render several EventListAttendee components
+  ```javascript
+  export default function EventListItem() {
+    return (
+      <Segment.Group>
+        <Segment>
+          <Item.Group>
+            <Item>
+              <Item.Image size='tiny' circular src='/assets/user.png' />
+              <Item.Content>
+                <Item.Header content='Event Title' />
+                <Item.Description>Hosted by Bob</Item.Description>
+              </Item.Content>
+            </Item>
+          </Item.Group>
+        </Segment>
 
+        <Segment>
+          <span>
+            <Icon name='clock' /> Date
+            <Icon name='marker' />
+            Venue
+          </span>
+        </Segment>
 
+        <Segment secondary>
+          <List horizontal>
+            <EventListAttendee />
+            <EventListAttendee />
+            <EventListAttendee />
+          </List>
+        </Segment>
 
+        <Segment clearing>
+          <div>Description of event</div>
+          <Button color='teal' floated='right' content='View' />
+        </Segment>
+      </Segment.Group>
+    );
+  }
+  ```
+- In features/events/eventDashboard folder, create a component/file called EventListAttendee.jsx
+- In EventListAttendee.jsx file:
+  - Import React: `import React from 'react';`
+  - Import Semantic Image and List components: `import { Image, List } from 'semantic-ui-react';`
+  - Write an EventListAttendee functional component that renders list items of users
+  ```javascript
+  export default function EventListAttendee() {
+    return (
+      <List.Item>
+        <Image size='mini' circular src='/assets/user.png' />
+      </List.Item>
+    );
+  }
+  ```
+- In the EventDashboard.jsx file:
+  - Import the EventList component: `import EventList from './EventList';`
+  - Render the EventList component inside the 10-column Grid component: `<EventList />`
+  ```javascript
+  <Grid.Column width={10}>
+    <EventList />
+  </Grid.Column>
+  ```
 
 
 
