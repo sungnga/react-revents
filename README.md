@@ -1,12 +1,38 @@
-# STEP TO BUILDING THE REVENTS WEB APP
+# STEPS TO BUILDING THE REVENTS WEB APP
 
-**CREATE-REACT-APP**
+### CREATE-REACT-APP
 - Run in command line. The --use-npm flag is to ensure that we're using the npm package manager: `npx create-react-app react-revents --use-npm`
 - Once the React app has been successfully created, cd into the directory: `cd react-revents`
 - Then run: `npm start`
 - Can view the react-revents app in the browser: `http://localhost:3000`
 
+
 ## PROJECT SETUP
+--------------------------
+### Folder Structure:
+- /src
+-   /app
+-     /layout
+-       App.jsx
+-   /features
+-     /events
+-       /eventDashboard
+-         EventDashboard.jsx
+-         EventFilters
+-       /eventList
+-         EventList.jsx
+-         EventListItem.jsx
+-         EventListAttendee.jsx
+-     /nav
+-       NavBar.jsx
+
+### Semantic UI React
+- Website: www.react.semantic-ui.com
+- Semantic UI React and Semantic UI CSS
+  - Run to install both: `npm i semantic-ui-react semantic-ui-css`
+- In index.js file:
+  - Import the semantic min css just above the styles.css file: `import 'semantic-ui-css/semantic.min.css';`
+
 **Hot Module Replacement**
 - The hot module replacement prevents a full page reload when we make changes to our code
 - In index.js file:
@@ -26,13 +52,7 @@
   render();
   ```
 
-
-
-
-
-
-
-## VSCode extensions:
+### VSCode extensions used:
 - Auto Import - steoates
   - Configure the setting by going to preferences -> settings
   - Type in the search bar, autoimport. Under File to Scan, also add js and jsx to the list
@@ -47,6 +67,46 @@
 - Live Server - Ritwick Dey
 
 
+## REACT CONCEPTS
+---------------------
+- Components
+- Virtual DOM
+- One way binding
+- JSX
+
+**Components**
+- Traditional web page: HTML, JS, CSS
+- React: components which made up of JS, HTML, CSS
+
+**React uses a Virtual DOM**
+- React -> Virtual DOM -> Actual DOM
+- Any updates we make are going to be stored inside a virtual representation of Document Object Model, and only those changes are going to be applied to the actual DOM
+- This makes React pretty fast
+
+**What is a Virtual DOM**
+- Tree of JS Objects that represent the actual DOM itself
+- We write the code as if we are recreating the entire DOM on every update and we rely on React to make the changes on our behalf
+- Developer returns the DOM they wish to see
+- React takes care of the transformation behind the scenes
+
+**One way binding**
+- Other libraries use 2 way bindings
+  - Model updated in the DOM updates the component
+- React bindings only go from component to Virtual DOM which updates the actual DOM
+- This makes the code predictable and easy to debug
+
+**Performance**
+- The Virtual DOM:
+  - Efficient diffing algorithms. React is going to take care of deciding what's necessary to update in the DOM
+  - Update subtrees, the different parts of the DOM simultaneously 
+  - Batch updates to the DOM
+- Result = easy to use and optimized way to build web apps
+
+**JSX**
+- When we're writing code of React, what we're effectively doing is just creating Javascript functions that return JSX
+- JSX adds an XML Syntax to Javascript, which makes React more elegant
+- JSX tags have a tag name, attributes and children. Whilst it looks very similar to HTML, there are a few slight differences
+- Note that we're not allowed to use the word 'class' inside JSX because the word 'class' is a reserved word in Javascript. Instead we use className to style our component
 
 
 
@@ -55,72 +115,16 @@
 
 
 
+## LIBRARIES AND PACKAGES USED IN THIS PROJECT
+- Semantic UI React and Semantic UI CSS
+  - Website: www.react.semantic-ui.com
+  - Install: `npm i semantic-ui-react semantic-ui-css`
+  - Import in index.js file. Above the styles.css import: `import 'semantic-ui-css/semantic.min.css';`
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
 
-In the project directory, you can run:
 
-### `npm start`
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
