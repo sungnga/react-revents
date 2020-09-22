@@ -852,6 +852,7 @@
 **3. Using NavLinks and Links**
 - `<NavLink>` is a special version of the `<Link>` that will add styling attribute to the rendered element when it matches the current URL. It adds an activeClass and applies styles to a link
 - In NavBar.jsx file:
+  - Import the NavLink component: `import { NavLink } from 'react-router-dom';`
   - For Semantic UI components, we can use an 'as' property and give its value the name of another component that we want the Semantic component to act as
   - In our case, we want the Semantic `<Menu.Item>` to act as a `<NavLink>` component. Then we can pass in properties that the `<NavLink>` is expecting, such as the 'to' property pathname and 'exact'
   - Note that we no longer use the onClick event for the 'Create Event' button to direct user to the EventForm. We can use the NavLink instead
@@ -950,7 +951,55 @@
     </Button>
     ```
 
-
+**5. Adding menus for authenticated and unauthenticated users**
+- We're not going to implement any user authentication at this point. We're just going to give the user the ability to fake a login or not login for now
+- In features/nav folder, create components/files called SignedInMenu.jsx and SignedOutMenu.jsx
+- In SignedOutMenu.jsx file:
+  - Import React: `import React from 'react';`
+  - Import Semantic components: `import { Button, Menu } from 'semantic-ui-react';`
+  - Write a SignedOutMenu functional component that renders the 'Login' and 'Register' buttons
+    - Cut and paste the 'Login' and 'Register' Button elements from NavBar.jsx file
+    ```javascript
+    export default function SignedOutMenu() {
+      return (
+        <Menu.Item position='right'>
+          <Button basic inverted content='Login' />
+          <Button
+            basic
+            inverted
+            content='Register'
+            style={{ marginLeft: '0.5em' }}
+          />
+        </Menu.Item>
+      );
+    }
+    ```
+- In SignedInMenu.jsx file:
+  - Import React: `import React from 'react';`
+  - Import Link component: `import { Link } from 'react-router-dom';`
+  - Import Semantic compontnets: `import { Dropdown, Image, Menu } from 'semantic-ui-react';`
+  - Write a SignedInMenu functional component that renders a user already signed in dropdown menu. Usee Semantic UI
+    ```javascript
+    export default function SignedInMenu() {
+      return (
+        <Menu.Item position='right'>
+          <Image avatar spaced='right' src="/assets/user.png" />
+          <Dropdown pointing='top left' text='Bob'>
+            <Dropdown.Menu>
+              <Dropdown.Item as={Link} to='/createEvent' text='Create Event' icon='plus' />
+              <Dropdown.Item text='My profile' icon='user' />
+              <Dropdown.Item text='Sign out' icon='power' />
+            </Dropdown.Menu>
+          </Dropdown>
+        </Menu.Item>
+      );
+    }
+    ```
+- In NavBar.jsx file:
+  - Import the SignedOutMenu component: `import SignedOutMenu from './SignedOutMenu';`
+  - Import the SignedInMenu component: `import SignedInMenu from './SignedInMenu';`
+  - Call the SignedOutMenu component in the render section: `<SignedOutMenu />`
+  - Call the SignedInMenu component in the render section: `<SignedInMenu />`
 
 
 
