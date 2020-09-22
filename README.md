@@ -866,6 +866,104 @@
   </Menu.Item>
   ```
 
+**4. Home page styling**
+- We don't want the NavBar to show when we're on home page. We want something that takes up the entire screen and provide a button that takes us to the events page
+- In HomePage.jsx file:
+  - Add content and styles to the page using Semantic UI
+  ```javascript
+  export default function HomePage() {
+    return (
+      <Segment inverted textAlign='center' vertical className='masthead'>
+        <Container>
+          <Header as='h1' inverted>
+            <Image
+              size='massive'
+              src='/assets/logo.png'
+              style={{ marginBottom: 12 }}
+            />
+            Re-vents
+          </Header>
+          <Button size='huge' inverted>
+            Get started
+            <Icon name='right arrow' inverted />
+          </Button>
+        </Container>
+      </Segment>
+    );
+  }
+  ```
+- In styles.css file:
+  - Add styles to the home page
+  ```css
+  .masthead {
+    display: flex;
+    align-items: center;
+    background-image: linear-gradient(
+      135deg,
+      rgb(24, 42, 115) 0%,
+      rgb(33, 138, 174) 69%,
+      rgb(32, 167, 172) 89%
+    ) !important;
+    height: 100vh;
+  }
+
+  .masthead h1.ui.header {
+    font-size: 4em;
+  }
+  ```
+- In App.jsx file:
+  - For the HomePage to appear outside of the NavBar and Container components, we need create another route that renders the NavBar and Container separately from the HomePage
+  - This new route takes a path with an expression that says, anything after the / forward slash plus something else, render it differently
+  - This new route also takes a render property rather an a component property. This render property takes a function. And inside this function, we can render the NavBar and the Container components. Wrap it inside a fragment tag because it only allows one child component
+  ```javascript
+	return (
+		<>
+			<Route path='/' exact component={HomePage} />
+			<Route
+				path={'/(.+)'}
+				render={() => (
+					<>
+						<NavBar setFormOpen={handleCreateFormOpen} />
+						<Container className='main'>
+							<Route path='/' exact component={HomePage} />
+							<Route path='/events' exact component={EventDashboard} />
+							<Route path='/events/:id' exact component={EventDetailedPage} />
+							<Route path='/createEvent' exact component={EventForm} />
+						</Container>
+					</>
+				)}
+			/>
+		</>
+	);
+  ```
+- Since the HomePage component is inside a `<Route>`, we have access to the routing properties. This is props being passed down to the HomePage component. One of these props is the history object. We can use the history.push() method to push another route onto the history object and push the user to that particular route
+- In HomePage.jsx file:
+  - Receive the history object props as an argument and destructure it
+    - `export default function HomePage({ history }) {...}`
+  - In the 'Get started' Button element:
+    - Add an onClick event property and execute the history.push() method to direct user to a different route when the button is clicked
+    - Call the history.push() method inside an arrow function and pass in the pathname as the argument
+    ```javascript
+    <Button onClick={() => history.push('/events')} size='huge' inverted>
+      Get started
+      <Icon name='right arrow' inverted />
+    </Button>
+    ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
