@@ -1035,10 +1035,29 @@
     - So when the 'Sign out' dropdown is clicked, the 'Create Event' button will not show on the NavBar and switch to the SignedOutMenu
     - `<Dropdown.Item onClick={() => setAuthenticated(false)} text='Sign out' icon='power' />`
 
-
-
-
-
+**7. Using the useHistory hook**
+- Since the NavBar component is not in a Route component, it doesn't have access to the browser history object. So we can't use the history.push() method to push the user to a new route. React-router comes with a useHistory hook that we can utilize
+- When the authenticated user clicks the 'Sign out' button, it'll direct them to the homepage
+- In NavBar.jsx file:
+  - Import useHistory hook: `import { useHistory } from 'react-router-dom';`
+  - Create a history using the useHistory() hook
+    - `const history = useHistory();`
+  - And now we have access to the history object, just like a routed component does
+  - Write a handleSignOut method that logs out the user
+    - This method sets the authenticated state to false using the setAuthenticated() method
+    - And push the user to home page using the history.push() method
+    ```javascript
+    function handleSignOut() {
+      setAuthenticated(false);
+      history.push('/');
+    }
+    ```
+  - Pass down this handleSignOut method as signOut props to the SignedInMenu child component
+    - `<SignedInMenu signOut={handleSignOut} />`
+- In SignedInMenu.jsx file:
+  - Receive the signOut method props from the NavBar parent component and destructure it
+  - In the 'Sign out' DropDown.Item, call the signOut method on the onClick event property. We don't need to use the setAuthenticated() method anymore
+  - `<Dropdown.Item onClick={signOut} text='Sign out' icon='power' />`
 
 
 
