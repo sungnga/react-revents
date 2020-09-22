@@ -849,9 +849,22 @@
   </Container>
   ```
 
-
-
-
+**3. Using NavLinks and Links**
+- `<NavLink>` is a special version of the `<Link>` that will add styling attribute to the rendered element when it matches the current URL. It adds an activeClass and applies styles to a link
+- In NavBar.jsx file:
+  - For Semantic UI components, we can use an 'as' property and give its value the name of another component that we want the Semantic component to act as
+  - In our case, we want the Semantic `<Menu.Item>` to act as a `<NavLink>` component. Then we can pass in properties that the `<NavLink>` is expecting, such as the 'to' property pathname and 'exact'
+  - Note that we no longer use the onClick event for the 'Create Event' button to direct user to the EventForm. We can use the NavLink instead
+  ```javascript
+  <Menu.Item as={NavLink} exact to='/' header>
+    <img src='/assets/logo.png' alt='logo' style={{ marginRight: 15 }} />
+    Revents
+  </Menu.Item>
+  <Menu.Item as={NavLink} to='/events' name='Events' />
+  <Menu.Item as={NavLink} to='/createEvent'>
+    <Button positive inverted content='Create Event' />
+  </Menu.Item>
+  ```
 
 
 
