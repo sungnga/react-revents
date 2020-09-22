@@ -1001,10 +1001,39 @@
   - Call the SignedOutMenu component in the render section: `<SignedOutMenu />`
   - Call the SignedInMenu component in the render section: `<SignedInMenu />`
 
-
-
-
-
+**6. Adding fake authentication**
+- For now, we'll use local states in our NavBar component to check if a user is authenticated or not. If the user is authenticated, they get to see the 'Create Event' button and the SignedInMenu appears. If not authenticated, they won't see the 'Create Event' button and the SignedOutMenu appears
+- In NavBar.jsx file:
+  - Create an authenticated state and set it to false as its initial value state
+    - `const [authenticated, setAuthenticated] = useState(false);`
+  - In the render section:
+    - Write a ternary operator to check if a user is authenticated
+      - If authenticated, show the `<SignedInMenu />` component
+      - If not authenticated, show the `<SignedOutMenu />` component
+      - `{authenticated ? <SignedInMenu /> : <SignedOutMenu />}`
+    - Use the && operator to show the 'Create Event' Button/Link only if the user is authenticated
+      ```javascript
+      {authenticated && (
+        <Menu.Item as={NavLink} to='/createEvent'>
+          <Button positive inverted content='Create Event' />
+        </Menu.Item>
+      )}
+      ```
+  - Pass down the setAuthenticated method as setAuthenticated props to both SignedInMenu and SignedOutMenu components
+    - `<SignedInMenu setAuthenticated={setAuthenticated} />`
+    - `<SignedOutMenu setAuthenticated={setAuthenticated} />`
+- In the SignedOutMenu.jsx file:
+  - Receive the setAuthenticated props from the NavBar parent component and destructure it
+  - In the 'Login' Button element:
+    - Add an onClick event property and execute the setAuthenticated() method and set it to true
+    - When the 'Login' button is clicked, the 'Create Event' button appears on the NavBar and switch to the SignedInMenu
+    - `<Button onClick={() => setAuthenticated(true)} />`
+- In the SignedInMenu.jsx file:
+  - Receive the setAuthenticated props from the NavBar parent component and destructure it
+  - In the 'Sign out' Dropdown.Item:
+    - Add an onClick event property and execute the setAuthenticated() method and set it to false
+    - So when the 'Sign out' dropdown is clicked, the 'Create Event' button will not show on the NavBar and switch to the SignedOutMenu
+    - `<Dropdown.Item onClick={() => setAuthenticated(false)} text='Sign out' icon='power' />`
 
 
 
