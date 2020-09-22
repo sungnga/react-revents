@@ -555,7 +555,7 @@
       setValues({ ...values, [name]: value });
     }
     ```
-  - Write a handleFormSubmit method updates the events state with the input values
+  - Write a handleFormSubmit method creates an event
     - Console log the values state for now
     ```javascript
     function handleFormSubmit() {
@@ -563,12 +563,54 @@
     }
     ```
 
-
-
-
-
-
-
+**2. Creating an event**
+- We create a new event by updating the events state with the new event. Do this by creating a method and pass in the values state which comes from the form input values
+- In EventDashboard.jsx file:
+  - Write a handleCreateEvent method that adds a new event received to the events state using the setEvents() method
+    - It takes event as an argument
+    - Note that the events state is an array. So when we call the setEvents(), we add the new event to an array
+    ```javascript
+    function handleCreateEvent(event) {
+      setEvents([...events, event]);
+    }
+    ```
+  - Then pass down this handleCreateEvent method as createEvent props to the EventForm child component
+    - `<EventForm createEvent={handleCreateEvent} />`
+- In EventForm.jsx file:
+  - Receive the createEvent props as an argument from EventDashboard parent component and destructure it
+    - `export default function EventForm({ createEvent }) { ... }`
+  - In the handleFormSubmit() method
+    - Execute the createEvent method and pass in the values state as argument
+    ```javascript
+    function handleFormSubmit() {
+      createEvent(values);
+    }
+    ```
+- Now, when we hit form submit to create a new event, we will run into 2 errors
+  - First is, we don't have a unique event id. In the EventList component, when we're mapping over the events array, it's expecting to find an event.id for eachh event
+  - Second is, our values object state does not have an attendees property. Since the attendees array is not defined and the .map() method is called on it, we get an error
+  - Solution: need to provide the event an id and an array of attendees
+- Install a cuid package, a unique identifier: `npm install cuid`
+- In EventForm.jsx file:
+  - Import the cuid: `import cuid from 'cuid';`
+  - In the handleFormSubmit() method:
+    - What we provide to the createEvent() method is the existing values state object, plus an id property with the cuid value
+      - Also add a hostedBy property. Set a default string value for now
+      - Also add an attendees property. Set it to an empty array for now
+      - Also add a hostPhotoURL property. Set it to a static image for now
+    - Lastly, once the form has been submitted to create an event, we want to close the form. Do this by calling the setFormOpen() method and set it to false 
+    ```javascript
+    function handleFormSubmit() {
+      createEvent({
+        ...values,
+        id: cuid(),
+        hostedBy: 'Bob',
+        attendees: [],
+        hostPhotoURL: '/assets/user.png'
+      });
+      setFormOpen(false);
+    }
+    ```
 
 
 
@@ -583,8 +625,10 @@
 - Semantic UI React and Semantic UI CSS
   - Website: www.react.semantic-ui.com
   - Install: `npm i semantic-ui-react semantic-ui-css`
-  - Import in index.js file. Above the styles.css import: `import 'semantic-ui-css/semantic.min.css';`
-
+  - Import in index.js file. Above the styles.css, import: `import 'semantic-ui-css/semantic.min.css';`
+- cuid, a unique identifier
+  - Install: `npm i cuid`
+  - Import in EventForm.jsx file: `import cuid from 'cuid';`
 
 
 
