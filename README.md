@@ -545,7 +545,7 @@
       />
     </Form.Field>
     ```
-  - Write a handleInputChange method updates the values state with the input values
+  - Write a handleInputChange method that updates the values state with the input values
     - It takes the input event as argument
     - Each input element has name and value properties, so we can destructure those from e.target
     - Update the values state with the input values based on its name and value properties
@@ -555,7 +555,7 @@
       setValues({ ...values, [name]: value });
     }
     ```
-  - Write a handleFormSubmit method creates an event
+  - Write a handleFormSubmit method that creates an event
     - Console log the values state for now
     ```javascript
     function handleFormSubmit() {
@@ -815,18 +815,39 @@
 - In features folder, create a new folder called home. In home folder, create a component/file called HomePage.jsx
 - In HomePage.jsx file:
   - Import React: `import React from 'react';`
-  - Write a HomePage functional component
-
+  - Write a HomePage functional component that renders a 'Homeage' text for now
 - In features/events folder, create a new folder called eventDetailed. In eventDetailed folder, create a component/file called EventDetailedPage.jsx
 - In EventDetailedPage.jsx file:
   - Import React: `import React from 'react';`
-  - Write a EventDetailedPage functional component
+  - Write a EventDetailedPage functional component that render a 'Event Detailed Page' text for now
   
-
-
-
-
-
+**2. Routing configuration**
+- Website: https://reactrouter.com/web/guides/quick-start
+- In index.js file:
+  - Import BrowserRouter component: `import { BrowserRouter } from 'react-router-dom';`
+  - Wrap the App component inside the BrowserRouter component
+  ```javascript
+  function render() {
+    ReactDOM.render(
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>,
+      rootEl
+    );
+  }
+  ```
+- So now our App component has routing capability. We can setup the routes inside there
+- In App.jsx file:
+  - Import the Route component: `import { Route } from 'react-router-dom';`
+  - Create routes using the Route component for HomePage, EventDashboard, EventDetailedPage, and EventForm components. Each route has a unique path
+  ```javascript
+  <Container className='main'>
+    <Route path='/' exact component={HomePage} />
+    <Route path='/events' exact component={EventDashboard} />
+    <Route path='/events/:id' exact component={EventDetailedPage} />
+    <Route path='/createEvent' exact component={EventForm} />
+  </Container>
+  ```
 
 
 
