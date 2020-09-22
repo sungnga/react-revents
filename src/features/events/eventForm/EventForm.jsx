@@ -6,27 +6,30 @@ export default function EventForm({
 	setFormOpen,
 	setEvents,
 	createEvent,
-	selectedEvent
+	selectedEvent,
+	updateEvent
 }) {
 	const initialValues = selectedEvent ?? {
 		title: '',
 		category: '',
 		description: '',
 		city: '',
-		venu: '',
+		venue: '',
 		date: ''
 	};
 
 	const [values, setValues] = useState(initialValues);
 
 	function handleFormSubmit() {
-		createEvent({
-			...values,
-			id: cuid(),
-			hostedBy: 'Bob',
-			attendees: [],
-			hostPhotoURL: '/assets/user.png'
-		});
+		selectedEvent
+			? updateEvent({ ...selectedEvent, ...values })
+			: createEvent({
+					...values,
+					id: cuid(),
+					hostedBy: 'Bob',
+					attendees: [],
+					hostPhotoURL: '/assets/user.png'
+			  });
 		setFormOpen(false);
 	}
 
@@ -79,8 +82,8 @@ export default function EventForm({
 					<input
 						type='text'
 						placeholder='Venue'
-						name='venu'
-						value={values.venu}
+						name='venue'
+						value={values.venue}
 						onChange={(e) => handleInputChange(e)}
 					/>
 				</Form.Field>

@@ -703,10 +703,43 @@
   - In the Header element, add a conditional to display one or the other
   - `<Header content={selectedEvent ? 'Edit the event' : 'Create new event'} />`
 
-
-
-
-
+**5. Updating an event**
+- We can update an event in the events state by check the updatedEvent id with the event id in the events state. If it matches, we can update the event with the new values. Write a method to handle the update event
+- In EventDashboard.jsx file:
+  - Write a handleUpdateEvent method that updates an event in the events state based on the event id. Also sets the selectedEvent back to null and closes the form
+    - Use the setEvents() method to set the events state with the updated event, if the updatedEvent id matches with the event id in the events state
+    - Use the selectEvent() method to set the selectedEvent state back to null
+    ```javascript
+    function handleUpdateEvent(updatedEvent) {
+      setEvents(
+        events.map((evt) => (evt.id === updatedEvent.id ? updatedEvent : evt))
+      );
+      selectEvent(null);
+    }
+    ```
+  - Pass down this handleUpdateEvent method as updateEvent props to the EventForm child component
+    - `<EventForm updateEvent={handleUpdateEvent} />`
+- In EventForm.jsx file:
+  - Receive the updateEvent props as an argument from EventDashboard parent component and destructure it
+    - `export default function EventForm({ updateEvent }) {...}`
+  - In the handleFormSubmit() method:
+    - Use a ternary operator to check if selectedEvent state is not null
+    - If it's not null, call the updateEvent() method. What we give to the method is the all the current values in selectedEvent state, plus the updated values that's replacing the values in selectedEvent state
+    - If it's null, then call the createEvent() method
+    ```javascript
+    function handleFormSubmit() {
+      selectedEvent
+        ? updateEvent({ ...selectedEvent, ...values })
+        : createEvent({
+            ...values,
+            id: cuid(),
+            hostedBy: 'Bob',
+            attendees: [],
+            hostPhotoURL: '/assets/user.png'
+          });
+      setFormOpen(false);
+    }
+    ```
 
 
 
