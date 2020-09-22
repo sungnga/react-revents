@@ -1059,8 +1059,48 @@
   - In the 'Sign out' DropDown.Item, call the signOut method on the onClick event property. We don't need to use the setAuthenticated() method anymore
   - `<Dropdown.Item onClick={signOut} text='Sign out' icon='power' />`
 
+**8. EventDetailedPage structure**
+- The Event Detailed Page is significant and will have many features and functionalities. We'll break these into smaller components and render them onto the EventDetailedPage component
+- In the features/events/eventDetailed folder, create the following components/files:
+  - EventDetailedHeader.jsx
+  - EventDetailedInfo.jsx
+  - EventDetailedChat.jsx
+  - EventDetailedSidebar.jsx
+- Write a simple functional component for each of the above and render a simple title text
+- In EventDetailedPage.jsx file:
+  - Import Semantic Grid component: `import { Grid } from 'semantic-ui-react';`
+  - Create the page layout using the Semantic UI Grid and place in the above components
+  ```javascript
+  export default function EventDetailedPage() {
+    return (
+      <Grid>
+        <Grid.Column width={10}>
+          <EventDetailedHeader />
+          <EventDetailedInfo />
+          <EventDetailedChat />
+        </Grid.Column>
 
-
+        <Grid.Column width={6}>
+          <EventDetailedSidebar />
+        </Grid.Column>
+      </Grid>
+    );
+  }
+  ```
+- Now in the EventListItem component, when a user clicks on the 'View' event button, we can direct them to the EventDetailedPage of that event using the Link component
+- In EventListItem.jsx file:
+  - Import the Link component: `import { Link } from 'react-router-dom';`
+  - Use the 'as' property to make the Button element act as a Link
+  - Use the 'to' property to set the pathname of the link
+  ```javascript
+  <Button
+    as={Link}
+    to={`/events/${event.id}`}
+    color='teal'
+    floated='right'
+    content='View'
+  />
+  ```
 
 
 
