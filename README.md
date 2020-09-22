@@ -491,7 +491,7 @@
   - Receive the setFormOpen props as an argument from EventDashboard parent component and destructure it
     - `export default function EventForm({ setFormOpen }) { ... }`
   - In the 'Cancel' button element
-    - Add an onClick event and execute the setFormOpen() method inside an arrow function and pass in false as an argument
+    - Add an onClick event and execute the setFormOpen() method inside an arrow function and set it to false
     ```javascript
     <Button
       onClick={() => setFormOpen(false)}
@@ -563,7 +563,7 @@
     }
     ```
 
-**2. Creating an event**
+**2. Creating an event, cuid**
 - We create a new event by updating the events state with the new event. Do this by creating a method and pass in the values state which comes from the form input values
 - In EventDashboard.jsx file:
   - Write a handleCreateEvent method that adds a new event received to the events state using the setEvents() method
@@ -612,10 +612,81 @@
     }
     ```
 
+**3. Selecting an event to read**
+- When we click on the 'View' button on an event, it opens up the event form and populates the values from the event inside the form as well. We need to create a selectedEvent state to store the selected event values. And depending on the condition of this state, we can either show an empty form or a form with the values from the event
+- In App.jsx file:
+  - Create a selectedEvent state and give its initial value of null
+    - `const [selectedEvents, setSelectedEvent] = useState(null);`
+  - Write a handleSelectEvent method that sets the selectedEvent state to the event and opens the EventForm
+    - It takes event as an argument
+  - Write a handleCreateFormOpen method that sets the selectedEvent to null and opens the EventForm
+    - It doesn't take any arguments
+  - Pass down the handleCreateFormOpen method as setFormOpen props to the NavBar child component
+  - For the EventDashboard child component, we pass down the handleSelectEvent method and the selectedEvent state as props
+  ```javascript
+  export default function App() {
+    const [formOpen, setFormOpen] = useState(false);
+    const [selectedEvent, setSelectedEvent] = useState(null);
 
+    function handleSelectEvent(event) {
+      setSelectedEvent(event);
+      setFormOpen(true);
+    }
 
+    function handleCreateFormOpen() {
+      setSelectedEvent(null);
+      setFormOpen(true);
+    }
 
-
+    return (
+      <>
+        <NavBar setFormOpen={handleCreateFormOpen} />
+        <Container className='main'>
+          <EventDashboard
+            formOpen={formOpen}
+            setFormOpen={setFormOpen}
+            selectEvent={handleSelectEvent}
+            selectedEvent={selectedEvent}
+          />
+        </Container>
+      </>
+    );
+  }
+  ```
+- In EventDashboard.jsx file:
+  - Receive the selectEvent and selectedEvent props as an argument from App parent component and destructure them
+    - `export default function EventDashboard({ selectEvent, selectedEvent }) {...}`
+  - Pass down the selectEvent method as selectEvent props to the EventList child component
+    - `<EventList events={events} selectEvent={selectEvent} />`
+  - Pass down the selectedEvent state as selectedEvent props to the EventForm child component. This way we can see the selected form
+    - `<EventForm selectedEvent={selectedEvent} />`
+- In EventList.jsx file:
+  - Receive the selectEvent props as an argument from EventDashboard parent component and destructure it
+    - `export default function EventList({ events, selectEvent }) {...}`
+  - Pass down this props as selectEvent props to the EventListItem child component
+    - `<EventListItem event={event} key={event.id} selectEvent={selectEvent} />`
+- In EventListItem.jsx file:
+  - Receive the selectEvent props as an argument from EventList parent component and destructure it
+    - `export default function EventListItem({ event, selectEvent }) {...}`
+  - In the 'View' button element:
+    - Add an onClick event property and execute the selectEvent() method inside an arrow function and pass in event as argument
+- In EventForm.jsx file:
+  - Receive the selectedEvent props as an argument from EventDashboard parent component and destructure it
+    - `export default function EventForm({ selectedEvent }) {...}`
+  - We're going to use the ?? null conditional operator to check if the selectedEvent state is null
+    - If selectedEvent state is null, then we pass anything to the right of ??. This means that the initialValues is set to the empty-string object
+    - If selectedEvent state is NOT null, then the initialValues is set to the selectedEvent state values
+    - Remember that when the 'View' button is clicked, the setSelectedEvent() method is called to set the event values to the selectedEvent state
+  ```javascript
+	const initialValues = selectedEvent ?? {
+		title: '',
+		category: '',
+		description: '',
+		city: '',
+		venu: '',
+		date: ''
+	};
+  ```
 
 
 
