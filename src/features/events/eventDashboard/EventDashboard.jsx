@@ -4,9 +4,13 @@ import EventForm from '../eventForm/EventForm';
 import EventList from './EventList';
 import { sampleData } from '../../../app/api/sampleData';
 
-export default function EventDashboard({ formOpen, setFormOpen, selectEvent, selectedEvent }) {
+export default function EventDashboard({
+	formOpen,
+	setFormOpen,
+	selectEvent,
+	selectedEvent
+}) {
 	const [events, setEvents] = useState(sampleData);
-
 
 	function handleCreateEvent(event) {
 		setEvents([...events, event]);
@@ -24,6 +28,7 @@ export default function EventDashboard({ formOpen, setFormOpen, selectEvent, sel
 						setEvents={setEvents}
 						createEvent={handleCreateEvent}
 						selectedEvent={selectedEvent}
+						key={selectedEvent ? selectedEvent.id : null}
 					/>
 				)}
 			</Grid.Column>

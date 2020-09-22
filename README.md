@@ -688,6 +688,33 @@
 	};
   ```
 
+**4. Controlled components with a key: EventForm**
+- The current problem we have is that when we click on the 'View' button to view a different event or click on the 'Create Event' button to create a new event, nothing causes the page to rerender so nothing happens. Behind the scene, however, the EventForm component does have the correct information in props when one of those buttons are clicked
+- When we send new props to a component, it does not cause the component to be rerendered. The work-around solution is to use the special React attibute called key. We can add a key property to a component. So when the key changes, the component will be recreated with a freshly initialized state
+- So we're going to give our EventForm component a key
+- In EventDashboard.jsx file:
+  - For the EventForm child component, add a key property
+  - For the key value, we first check to see if we have a selected event in selectedEvent state, if selectedEvent is not null
+    - If it's not null, set the key value to selectedEvent.id
+    - If it's null, then set the key to be null itself
+  - `<EventForm key={selectedEvent ? selectedEvent.id : null} />`
+- Lastly, if the selected event form is opened, we want the form title to say 'Edit the event'. If it's a new event form, the form title should say 'Create new event'
+- In EventForm.jsx file:
+  - In the Header element, add a conditional to display one or the other
+  - `<Header content={selectedEvent ? 'Edit the event' : 'Create new event'} />`
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
