@@ -698,8 +698,8 @@
   ```
 
 **4. Controlled components with a key: EventForm**
-- The current problem we have is that when we click on the 'View' button to view a different event or click on the 'Create Event' button to create a new event, nothing causes the page to rerender so nothing happens. Behind the scene, however, the EventForm component does have the correct information in props when one of those buttons are clicked
-- When we send new props to a component, it does not cause the component to be rerendered. The work-around solution is to use the special React attibute called key. We can add a key property to a component. So when the key changes, the component will be recreated with a freshly initialized state
+- The current problem we have is that when we click on the 'View' button to view a different event or click on the 'Create Event' button to create a new event, nothing causes the page to re-render so nothing happens. Behind the scene, however, the EventForm component does have the correct information in props when one of those buttons are clicked
+- When we send new props to a component, it does not cause the component to be re-rendered. The work-around solution is to use the special React attibute called key. We can add a key property to a component. So when the key changes, the component will be recreated with a freshly initialized state
 - So we're going to give our EventForm component a key
 - In EventDashboard.jsx file:
   - For the EventForm child component, add a key property
@@ -786,6 +786,57 @@
     ```
 
 
+## S5: ROUTING IN REACT
+- We will be using React Route 5
+- React Router is broken into 3 packages:
+  - react-router
+  - react-router-dom
+  - react-router-native
+- React-router-dom and react-router-native re-export all of react-router. React-router contains all of the main functionality. So we only need to install react-router-dom and we get all of the react-router functionality
+- The Router
+  - `<BrowserRouter>`
+    - Handle dynamic requests
+  - `<HashRouter>`
+    - Static websites
+  - Can only have a single child component
+  - Surround our `<App />` to work with this limitation
+- History
+  - The history object is part of the browser. Every browser has a history object
+  - The way the routing system works is it uses a history object which:
+    - Keeps track of the current location
+    - Re-renders whenever that changes
+  - The history object comes with a number of methods
+    - What we typically do is use the push() method to push a new route into history and this will cause the component to re-render and display what it is we're routing to on the page
+  
+**Install react-router-dom**
+  - Install: `npm i react-router-dom`
+
+**1. Adding some additional components to route to**
+- In features folder, create a new folder called home. In home folder, create a component/file called HomePage.jsx
+- In HomePage.jsx file:
+  - Import React: `import React from 'react';`
+  - Write a HomePage functional component
+
+- In features/events folder, create a new folder called eventDetailed. In eventDetailed folder, create a component/file called EventDetailedPage.jsx
+- In EventDetailedPage.jsx file:
+  - Import React: `import React from 'react';`
+  - Write a EventDetailedPage functional component
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## LIBRARIES AND PACKAGES USED IN THIS PROJECT
 - Semantic UI React and Semantic UI CSS
@@ -795,7 +846,8 @@
 - cuid, a unique identifier
   - Install: `npm i cuid`
   - Import in EventForm.jsx file: `import cuid from 'cuid';`
-
+- React Router 5
+  - Install: `npm i react-router-dom`
 
 
 
