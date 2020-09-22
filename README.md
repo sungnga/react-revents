@@ -1102,7 +1102,12 @@
   />
   ```
 
-
+**9. EventDetailedPage content**
+- Add content and styles to the following components:
+  - EventDetailedHeader.jsx
+  - EventDetailedInfo.jsx
+  - EventDetailedChat.jsx
+  - EventDetailedSidebar.jsx
 
 
 
