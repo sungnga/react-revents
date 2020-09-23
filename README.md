@@ -1419,7 +1419,7 @@
     }
     ```
 - In eventReducer.js file:
-  - Import the sample data: `import sampleData from '../../app/api/sampleData';`
+  - Import the sample data: `import { sampleData } from '../../app/api/sampleData';`
   - Import the action constants: `import { CREATE_EVENT, DELETE_EVENT, UPDATE_EVENT } from './eventConstants';`
   - Create an initial state. This initialState is an object. Initialize the value of the events state property to the sampleData for now
     ```javascript
@@ -1462,6 +1462,43 @@
     }
     ```
 
+**3. Creating a root reducer**
+- Even though we can only have a single store in our application, we can have as many reducers as we like. Think of each reducer as a way to access a piece of the store state. We can combine all the reducers into a single rootReducer and pass that to the createStore() method in the configureStore() function
+- In app/store folder, create a file called rootReducer.js
+- In rootReducer.js file:
+  - Import the combineReducers function: `import { combineReducers } from 'redux';`
+  - Import the eventReducer: `import eventReducer from '../../features/events/eventReducer';`
+  - Import the testReducer: `import testReducer from '../../features/sandbox/testReducer';`
+  - Create a rootReducer by calling the combineReducers() function
+    - The combineReducers() takes an object as an argument
+    - In this object, we can assign different reducers to this object properties
+    ```javascript
+    const rootReducer = combineReducers({
+      test: testReducer,
+      event: eventReducer
+    });
+
+    export default rootReducer;
+    ```
+- In configureStore.js file:
+  - Import the rootReducer: `import rootReducer from './rootReducer';`
+  - Pass in the rootReducer as the first argument to the createStore() method
+  ```javascript
+  export function configureStore() {
+    return createStore(rootReducer, devToolsEnhancer());
+  }
+  ```
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1480,6 +1517,9 @@
   - Install: `npm i react-router-dom`
 - Redux and React-Redux
   - Install: `npm i redux react-redux`
+- Redux Dev Tools
+  - Install: `npm i redux-devtools-extension --save-dev`
+  - Import in configureStore.js file: `import { devToolsEnhancer } from 'redux-devtools-extension';`
 
 
 
