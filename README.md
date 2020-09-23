@@ -1472,6 +1472,7 @@
   - Create a rootReducer by calling the combineReducers() function
     - The combineReducers() takes an object as an argument
     - In this object, we can assign different reducers to this object properties
+    - NOTE THAT THE PROPERTY NAME WE ASSIGN TO EACH REDUCER WILL BECOME THE PROPERTY NAME IN THE STORE AND WE ACCESS A PARTICULAR STATE IN THE STORE BY CALLING THE NAME OF THE REDUCER. For example, to access the events array object in the store, we use state.event, because event is the property name we gave to the eventReducer. And the event property is a state object that has the events property
     ```javascript
     const rootReducer = combineReducers({
       test: testReducer,
@@ -1489,9 +1490,39 @@
   }
   ```
 
-
-
-
+**4. Getting events from the Redux store**
+- Instead of getting events from the local state of a component, we can get the events from the Redux store using the useSelector() hook. useSelector() hook comes with React-Redux library
+- In EventDashboard.jsx file:
+  - Import the useSelector() hook: ``
+  - Get the events property from store using the useSelector() hook
+    - The useSelector() hook takes a selector function as an argument
+    - The selector function is called with the store state and returns the result value based on the name of the reducer used. We get the events property from the store using state.event and event is the name of the reducer
+    - Destructure the events property from the store
+    - `const { events } = useSelector((state) => state.event);`
+- Next, we want to populate the event information onto the event detailed page. We can get an event info from the store using the useSelector() hook. Since the EventDetailedPage component is a routed component, we can get the event id from the route params. Weuse this event id to retreive the event from the store. The event id lives inside the params property and it's inside the match props. match.params.id
+- In EventDetailedPage.jsx file:
+  - Destructure the match props to get access to the params
+    - `export default function EventDetailedPage({ match }) {...}`
+  - Use the useSelector() hook to get an event from the store based on the event id
+    ```javascript
+    const event = useSelector((state) =>
+      state.event.events.find((e) => e.id === match.params.id)
+    );
+    ```
+  - Pass down the event object as event props to the EventDetailedHeader and EventDetailedInfo child components
+    - `<EventDetailedHeader event={event} />`
+    - `<EventDetailedInfo event={event} />`
+  - Pass down the event.attendees array as attendees props to the EventDetailedSidebar child component
+    - `<EventDetailedSidebar attendees={event.attendees} />`
+- In both EventDetailedHeader.jsx and EventDetailedInfo.jsx files:
+  - Receive the event props from the EventDetailedPage parent component and destructure it
+  - In the render section, we can populate the event info dynamically based on the event id in the route params
+- In EventDetailedSidebar.jsx file:
+  - Receive the attendees props from the EventDetailedPage parent component and destructure it
+  - Use `attendees.length` to show the total number of people attending
+  - Use a ternary operator to if attendees.length is greater than 1 to whether display 'People' or 'Person'
+  - `{attendees.length} {attendees.length > 1 ? 'People' : 'Person'} Going`
+  - Call .map() method on attendees array to display each attendee onto the page
 
 
 
