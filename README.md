@@ -1161,6 +1161,7 @@
     }
   }
   ```
+
 - **Store:**
   - Holds application store
   - Allows access to state via getState()
@@ -1181,6 +1182,166 @@
 - Create a root reducer
 - Add the store to the index.js file. Then we pass the store via the Provider to our application
 
+**Install Redux and React-Redux**
+- Run: `npm i redux react-redux`
+
+**Install Redux Dev Tools**
+- Install: `npm i redux-devtools-extension --save-dev`
+- In configureStore.jsx file:
+  - Import the devToolsEnhencer method: `import { devToolsEnhancer } from 'redux-devtools-extension';`
+  - Pass in the devToolsEnhancer to the createStore() method as 2nd argument
+  ```javascript
+  export function configureStore() {
+    return createStore(testReducer, devToolsEnhancer());
+  }
+  ```
+- Now whenever a React app uses Redux, you can see the store state changes based on the actions using the dev tools
+
+------------------------------------------------------------------------
+
+### A TASTE OF REDUX
+**The Reducer Function**
+- The reducer function takes two arguments:
+  - 1st arg is the initial state in the store
+  - Note that a state can be an object or an array. Our initialState is an object. Hence, the initial state that we pass in to the reducer function is a state object
+  - 2nd arg is the action
+  - An action is an object and it has a type and payload properties
+  - We can destructure the type and payload properties from the action in the 2nd arg
+- The reducer function usually uses a switch statement to check for the action type. It tries to find that particular action type and returns with the updated state
+  - Now, we never want to change the state itself. Instead, we return the initial state and only update a property in the state. In this case, we want to increase or decrease the data state based on the type of action we send to the reducer
+- Also in a reducer function, we always want to return a default state, because we might not find an action type we're looking for
+  ```javascript
+  const initialState = {
+    data: 42
+  };
+
+  export default function testReducer(state = initialState, {type, payload}) {
+    switch (type) {
+      case INCREMENT_COUNTER:
+        return {
+          ...state,
+          data: state.data + payload
+        };
+      case DECREMENT_COUNTER:
+        return {
+          ...state,
+          data: state.data - payload
+        };
+      default:
+        return state;
+    }
+  }
+  ```
+
+**Action Createor**
+- Is a function that takes in a payload data as an argument and returns the action object
+  ```javascript
+  // Action constant
+  const INCREMENT_COUNTER = 'INCREMENT_COUNTER';
+  const DECREMENT_COUNTER = 'DECREMENT_COUNTER';
+
+  // Action creator
+  export function increment(amount) {
+    return {
+      type: INCREMENT_COUNTER,
+      payload: amount
+    };
+  }
+  ```
+- In our React component, when we dispatch an action by calling the dispatch() method, we can pass in this action creator function to the dispatch() method and provide the payload data
+
+**In testReducer.jsx file:**
+  ```javascript
+  // Action constant
+  const INCREMENT_COUNTER = 'INCREMENT_COUNTER';
+  const DECREMENT_COUNTER = 'DECREMENT_COUNTER';
+
+  // Action creator
+  export function increment(amount) {
+    return {
+      type: INCREMENT_COUNTER,
+      payload: amount
+    };
+  }
+
+  // Action creator
+  export function decrement(amount) {
+    return {
+      type: DECREMENT_COUNTER,
+      payload: amount
+    };
+  }
+
+  // Initial State
+  const initialState = {
+    data: 42
+  };
+
+  // Reducer function
+  // 1st arg is initial state
+  // 2nd arg is the action. Here, destructuring the properties from action object
+  // Returning a default state
+  export default function testReducer(state = initialState, {type, payload}) {
+    switch (type) {
+      case INCREMENT_COUNTER:
+        return {
+          ...state,
+          data: state.data + payload
+        };
+      case DECREMENT_COUNTER:
+        return {
+          ...state,
+          data: state.data - payload
+        };
+      default:
+        return state;
+    }
+  }
+  ```
+
+**React component**
+- Use the **useSelector()** hook to get a state from the redux store
+  - The hook takes a selector function as an argument
+  - The selector function is called with the store state and returns a particular state. In our case, we want the data state
+  - `const data = useSelector((state) => state.data);`
+  - Data is a property of the state object. We access the data state using the `state.data` notation. When we initialize the state in the reducer function, we initialized the state as an object. State can also be an array
+- Use the **useDispatch()** hook to create a dispatch function. We can then use this dispatch() function to dispatch an action object or an action creator to the reducer
+  - `const dispatch = useDispatch();`
+- When the 'Increment' button is clicked, the dispatch() function is executed, sending an action to the reducer
+  - The dispatch() function takes an action creator function as an argument
+  - The action creator function is called with the payload data being passed in
+  - `onClick={() => dispatch(increment(10))}` 
+- In Sandbox.jsx file:
+  ```javascript
+  import React from 'react';
+  import { useSelector, useDispatch } from 'react-redux';
+  import { Button } from 'semantic-ui-react';
+  import { decrement, increment } from './testReducer';
+
+  export default function SandBox() {
+    const dispatch = useDispatch();
+    const data = useSelector((state) => state.data);
+    return (
+      <>
+        <h1>Testing</h1>
+        <h3>The data is: {data}</h3>
+        <Button
+          onClick={() => dispatch(increment(10))}
+          content='Increment'
+          color='green'
+        />
+        <Button
+          onClick={() => dispatch(decrement(20))}
+          content='Decrement'
+          color='red'
+        />
+      </>
+    );
+  }
+  ```
+------------------------------------------------------------------------------
+
+
 **1. Setting up Redux**
 - **Install Redux and React-Redux:**
   - Install: `npm i redux react-redux`
@@ -1188,11 +1349,10 @@
   - In app folder, create a folder called store. In store folder, create a file called configureStore.js
   - In configureStore.js file:
     - Import createStore function from Redux: `import { createStore } from 'redux';`
-    - Write a configureStore function that returns the createStore
+    - Write a configureStore function that returns a store using the createStore() method
       - The createStore() method takes a reducer as an argument
       ```javascript
       export function configureStore() {
-        // The createStore method takes a reducer as an argument
         return createStore();
       }
       ```
@@ -1205,20 +1365,21 @@
     - Then create a store by calling the configureStore() method that we wrote earlier
     - Pass in this store to the Provider
     - Now our React app is connect to the Redux store
-      ```javascript
-      const store = configureStore();
+    ```javascript
+    const store = configureStore();
 
-      function render() {
-        ReactDOM.render(
-          <Provider store={store}>
-            <BrowserRouter>
-              <App />
-            </BrowserRouter>
-          </Provider>,
-          rootEl
-        );
-      }
-      ```
+    function render() {
+      ReactDOM.render(
+        <Provider store={store}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </Provider>,
+        rootEl
+      );
+    }
+    ```
+
 
 
 
