@@ -1110,6 +1110,124 @@
   - EventDetailedSidebar.jsx
 
 
+## S6: INTRO TO REDUX
+**What is Redux?**
+- Predictable State Container for Javascript apps. This allows us to store our applications states centrally in a Redux store 
+- Not specific to React
+  - Can be use with other view libraries and JS frameworks (Angular, Vue)
+- It's small - 2kb (including dependencies)
+- It's like having a local database in the client
+- Gives us access to time travel debugging
+
+**Redux Trade Offs - it asks use to:**
+- Describe application state as plain objects and arrays. We can add complex objects to our store. It's not relational database on the client-side. It's a simple state management system
+- Describe changes in the system as plain objects. So when we want to make a change to our store, then we send Redux, a plain object with the information inside it, that we want it to change
+- Describle the logic for handling changes as *pure functions*. This will keep our code clean!
+
+**Pure Functions**
+- Given the same input, will always return the same output
+- Produces no side effects
+
+**Redux Terminology**
+- **Actions:** are simple objects. Typically when we create an action, we create a constant and this constant is going to describe what the action is going to do
+  ```javascript
+  const ADD_TODO = 'ADD_TODO'
+
+  {
+    type: ADD_TODO,
+    text: 'build my first Redux app'
+  }
+  ```
+- **Action Creators:** a function that returns an action. We wrap an action inside an action creator
+  ```javascript
+  function addTodo(text) {
+    return {
+      type: ADD_TODO,
+      text
+    }
+  }
+  ```
+- **Reducers:** specifies how the application state changes in response to actions sent to the store. We send our action to the reducer. Actions, themselves, they only describe what's happen, but don't describe how the application state changes
+  - Reducers usually uses a switch statement to change the store state
+  ```javascript
+  function todoApp(state = initialState, action) {
+    switch(action.type) {
+      case SET_VISIBILITY_FILTER:
+        return Object.assign({}, state, {
+          visibilityFilter: action.filter
+        })
+      default:
+        return state
+    }
+  }
+  ```
+- **Store:**
+  - Holds application store
+  - Allows access to state via getState()
+  - Allows state to be updated via actions
+  - One store per application
+
+**React Redux**
+- Redux on its own has no relation to React
+- Redux can be used with Angular, Ember, jQuery or plain JS
+- React-Redux library provides bindings for use with React
+  - Provider, which provides a store to a React application
+- It also provides React-Redux hooks:
+  - useSelector() - listening to changes in the store and notifies the React component
+  - useDispatch() - dispatches an action to the reducer
+
+**Setting up Redux**
+- Configure the Store
+- Create a root reducer
+- Add the store to the index.js file. Then we pass the store via the Provider to our application
+
+**1. Setting up Redux**
+- **Install Redux and React-Redux:**
+  - Install: `npm i redux react-redux`
+- **Configure the store:**
+  - In app folder, create a folder called store. In store folder, create a file called configureStore.js
+  - In configureStore.js file:
+    - Import createStore function from Redux: `import { createStore } from 'redux';`
+    - Write a configureStore function that returns the createStore
+      - The createStore() method takes a reducer as an argument
+      ```javascript
+      export function configureStore() {
+        // The createStore method takes a reducer as an argument
+        return createStore();
+      }
+      ```
+  - So when we initialize our store, we're going to tell about our reducer and our store is going to have some initialState
+- **Connecting the React app to the Redux store:**
+  - Now we what need to do is tell our React application about our new Redux store and to do that we use the React-Redux library
+  - In index.js file:
+    - Import the Provider from React-Redux: `import { Provider } from 'react-redux';`
+    - Wrap the Provider around the App component, including the BrowserRouter
+    - Then create a store by calling the configureStore() method that we wrote earlier
+    - Pass in this store to the Provider
+    - Now our React app is connect to the Redux store
+      ```javascript
+      const store = configureStore();
+
+      function render() {
+        ReactDOM.render(
+          <Provider store={store}>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </Provider>,
+          rootEl
+        );
+      }
+      ```
+
+
+
+
+
+
+
+
+
 
 
 ## LIBRARIES AND PACKAGES USED IN THIS PROJECT
@@ -1122,8 +1240,8 @@
   - Import in EventForm.jsx file: `import cuid from 'cuid';`
 - React Router 5
   - Install: `npm i react-router-dom`
-
-
+- Redux and React-Redux
+  - Install: `npm i redux react-redux`
 
 
 
