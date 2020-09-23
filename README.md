@@ -1208,7 +1208,7 @@
   - An action is an object and it has a type and payload properties
   - We can destructure the type and payload properties from the action in the 2nd arg
 - The reducer function usually uses a switch statement to check for the action type. It tries to find that particular action type and returns with the updated state
-  - Now, we never want to change the state itself. Instead, we return the initial state and only update a property in the state. In this case, we want to increase or decrease the data state based on the type of action we send to the reducer
+  - Now, we never want to mutate the state itself. Instead, we return the initial state and only update a property in the state. In this case, we want to increase or decrease the data state based on the type of action we send to the reducer
 - Also in a reducer function, we always want to return a default state, because we might not find an action type we're looking for
   ```javascript
   const initialState = {
@@ -1380,10 +1380,87 @@
     }
     ```
 
-
-
-
-
+**2. Creating the event reducer**
+- In features/events folder, create eventActions.js, eventConstants.js, and eventReducer.js files
+- In eventConstants.js file:
+  - Create constants for create event, update event, and delete event
+    ```javascript
+    export const CREATE_EVENT = 'CREATE_EVENT';
+    export const DELETE_EVENT = 'DELETE_EVENT';
+    export const UPDATE_EVENT = 'UPDATE_EVENT';
+    ```
+- In eventActions.js file:
+  - Import the action constants: `import { CREATE_EVENT, DELETE_EVENT, UPDATE_EVENT } from './eventConstants';`
+  - Write a createEvent action creator function that takes an event as an argument and returns the create action object
+    ```javascript
+    export function createEvent(event) {
+      return {
+        type: CREATE_EVENT,
+        payload: event
+      };
+    }
+    ```
+  - Write an updateEvent action creator function that takes an event as an argument and returns the update action object
+    ```javascript
+    export function updateEvent(event) {
+      return {
+        type: UPDATE_EVENT,
+        payload: event
+      };
+    }
+    ```
+  - Write a deleteEvent action creator function that takes an eventId as an argument and returns the delete action object
+    ```javascript
+    export function deleteEvent(eventId) {
+      return {
+        type: DELETE_EVENT,
+        payload: eventId
+      };
+    }
+    ```
+- In eventReducer.js file:
+  - Import the sample data: `import sampleData from '../../app/api/sampleData';`
+  - Import the action constants: `import { CREATE_EVENT, DELETE_EVENT, UPDATE_EVENT } from './eventConstants';`
+  - Create an initial state. This initialState is an object. Initialize the value of the events state property to the sampleData for now
+    ```javascript
+    const initialState = {
+      events: sampleData
+    };
+    ```
+  - Write an eventReducer function that updates the store state based on the given actions
+    - 1st arg is the state. Assign its default value to the intialState
+    - 2nd arg is the action. Destructure the type and payload properties from the action object
+    - Note that the state is an object. events is a state property and it's an array of objects. Each item in the array is an event
+    - Use switch statment to find the type of action, update the store state based on the action type, and return the updated state
+    - Now, when updating the store state, we never want to mutate the state itself. Rather, we can use the spread operator(`...`) to create a new object or new array of the state and update that state instead
+    - In this case, we return a state object and spread in the initial state using the spread operator(`return { ...state, }`). Then specify the state property we want to update, which in this case, the events state property. Note that the events state is an array of objects. So to update the events state, we use an array to spread in the intial events state followed by the thing we want to update(`events: [...state.events, payload]`)
+    - The last case in the switch statement is the default case, which returns the current state
+    ```javascript
+    export default function eventReducer(state = initialState, { type, payload }) {
+      switch (type) {
+        case CREATE_EVENT:
+          return {
+            ...state,
+            events: [...state.events, payload]
+          };
+        case UPDATE_EVENT:
+          return {
+            ...state,
+            events: [
+              ...state.events.filter((evt) => evt.id !== payload.id),
+              payload
+            ]
+          };
+        case DELETE_EVENT:
+          return {
+            ...state,
+            events: [...state.events.filter((evt) => evt.id !== payload)]
+          };
+        default:
+          return state;
+      }
+    }
+    ```
 
 
 
