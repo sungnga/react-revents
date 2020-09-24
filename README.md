@@ -1609,7 +1609,7 @@
 - In EventForm.jsx file:
   - Import Formik: `import Formik from 'formik';`
   - In the render section:
-    - Wrap the `<Formik>` component around the entire `<Form>` element
+    - Wrap the `<Formik />` component around the entire `<Form />` element
     - In the `<Formik>` component, add the following properties
       ```javascript
 			<Formik
@@ -1633,10 +1633,58 @@
       - We can swap the old handleFormSubmit method for handleSubmit coming from Formik
       - Swap the handleInputChange method for all of the input elements for handleChange
 
+**2. Formik with less code**
+- We can use some Formik's helper components:
+  - `<Form />`: Form is a small wrapper around an HTML `<form>` element that automatically hooks into Formik's `handleSubmit` and `handleReset`. All other props are passed directly through to the DOM node
+  - `<Field />`: Field will automatically hook up inputs to Formik. It uses the `name` attribute to match up with Formik state. `<Field />` will default to an HTML `<input />` element 
+- In EventForm.jsx file:
+  - Import Formik's Form and Field components. And delete the Semantic UI Form component: `import { Formik, Form, Field } from 'formik';`
+  - Since we're still using Semantic UI to style our form, we can add the className to the Form element `className='ui form'`
+  - For the Semantic UI `<Form.Field />` elements, we can switch it to Semantic UI `FormField` element to style the fields
+    - Import: `import { FormField } from 'semantic-ui-react';`
+  - We'll use `<Field />` from Formik for our `<input />` field elements  
+  - Our event form structure using Formik:
+    ```javascript
+    <Formik
+      initialValues={initialValues}
+      onSubmit={(values) => console.log(values)}
+    >
+      <Form className='ui form'>
+        <FormField>
+          <Field name='title' placeholder='Event title' />
+        </FormField>
 
+        <FormField>
+          <Field name='category' placeholder='Category' />
+        </FormField>
 
+        <FormField>
+          <Field name='description' placeholder='Description' />
+        </FormField>
 
+        <FormField>
+          <Field name='city' placeholder='City' />
+        </FormField>
 
+        <FormField>
+          <Field name='venue' placeholder='Venue' />
+        </FormField>
+
+        <FormField>
+          <Field name='date' placeholder='Event date' type='date' />
+        </FormField>
+
+        <Button type='submit' floated='right' positive content='Submit' />
+        <Button
+          as={Link}
+          to='/events'
+          type='submit'
+          floated='right'
+          content='Cancel'
+        />
+      </Form>
+    </Formik>
+    ```
 
 
 
