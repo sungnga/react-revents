@@ -1592,7 +1592,46 @@
   - Use the ScrollToTop component just above the App component: `<ScrollToTop />`
 
 
+## FORMS REVISITED
+- React does not provide a Form solution
+- Formik is a popular forms solution for React: https://formik.org/docs/api/formik
+- A Forms package helps keep track of:
+  - values
+  - errors
+  - visited fields
+  - validation
+  - handling submission
+- Our goal is to create reusable fields, with validation that can be used in any project
 
+**1. Setting up Formik**
+- Website: https://formik.org/docs/api/formik
+- Install package: `npm i formik`
+- In EventForm.jsx file:
+  - Import Formik: `import Formik from 'formik';`
+  - In the render section:
+    - Wrap the `<Formik>` component around the entire `<Form>` element
+    - In the `<Formik>` component, add the following properties
+      ```javascript
+			<Formik
+				initialValues={initialValues}
+				onSubmit={values => console.log(values)}
+			>
+      ```
+    - Next thing we want to do is pass down the handleChange, handleSubmit, and the values themselves as props from Formik to the Form element. And the way we do that is use render props
+    - Just above the Form element, render an arrow function that contains the props that we want to pass down. Also, we can destructure the props objects that we're passing down to Form element. And what this arrow function returns is everything that is inside the Form element itself
+      ```javascript
+			<Formik
+				initialValues={initialValues}
+				onSubmit={values => console.log(values)}
+			>
+				{({ values, handleChange, handleSubmit }) => (
+					<Form> ...</Form>
+			)}
+			</Formik>
+      ```
+    - Then, inside the Form element:
+      - We can swap the old handleFormSubmit method for handleSubmit coming from Formik
+      - Swap the handleInputChange method for all of the input elements for handleChange
 
 
 
@@ -1652,6 +1691,10 @@
 - Redux Dev Tools
   - Install: `npm i redux-devtools-extension --save-dev`
   - Import in configureStore.js file: `import { devToolsEnhancer } from 'redux-devtools-extension';`
+- Formik
+  - Website: https://formik.org/docs/api/formik
+  - Install: `npm i formik`
+
 
 
 
