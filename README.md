@@ -1686,8 +1686,29 @@
     </Formik>
     ```
 
-
-
+**3. Form validation**
+- Source: https://formik.org/docs/guides/validation
+- Formik Validation: Formik is designed to manage forms with complex validation with ease. Formik supports synchronous and asynchronous form-level and field-level validation. Furthermore, it comes with baked-in support for schema-based form-level validation through Yup
+- Install Yup: `npm i yup`
+- Another Formik helper component we will use:
+  - `<ErrorMessage />`: is a component that renders the error message of a given field if that field has been visited (i.e. `touched[name] === true`) (and there is an `error` message present). It expects that all error messages are stored for a given field as a string. Like `<Field />`, `<FastField />`, and `<FieldArray >`, lodash-like dot path and bracket syntax is supported
+- In EventForm.jsx file:
+  - Import Yup: `import * as Yup from 'yup';`
+  - Import Formik ErrorMessage component: `import { Formik, Form, Field, ErrorMessage } from 'formik';`
+  - Use Yup.object() to create a validationSchema  
+    ```javascript
+    const validationSchema = Yup.object({
+      title: Yup.string().required()
+    });
+    ```
+  - In the `<Formik />` component, add a validationSchema property and set it to the validationSchema we've just created
+    ```javascript
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={(values) => console.log(values)}
+    >
+    ```
 
 
 
@@ -1742,7 +1763,8 @@
 - Formik
   - Website: https://formik.org/docs/api/formik
   - Install: `npm i formik`
-
+- Yup works with Formik validation
+  - Install: `npm i yup`
 
 
 
