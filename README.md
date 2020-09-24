@@ -1567,6 +1567,71 @@
   - Specify the key property on the route that contains the EventForm component
     - `<Route path={['/createEvent', '/manage/:id']} component={EventForm} key={key} />`
 
+**7. Scroll to top: ScrollToTop component**
+- Currently, when we go to a different page, it doesn't automatically take us to the top of the page
+- In app/layout folder, create a component/file called ScrollToTop.jsx
+- In ScrollToTop.jsx file:
+  - Import useEffect hook: `import { useEffect } from 'react';`
+  - Import useLocation hook: `import { useLocation } from 'react-router-dom';`
+  - Get the pathname property from the browser's location object using the useLocation hook
+    - `const { pathname } = useLocation();`
+  - Use useEffect() hook to execute the window.scrollTo() method to scroll to the top of the window when the location pathname property changes
+    ```javascript
+    export default function ScrollToTop() {
+      const { pathname } = useLocation();
+
+      useEffect(() => {
+        window.scrollTo(0, 0);
+      }, [pathname]);
+
+      return null;
+    }
+    ```
+- In the index.js file:
+  - Import the ScrollToTop component: `import ScrollToTop from './app/layout/ScrollToTop';`
+  - Use the ScrollToTop component just above the App component: `<ScrollToTop />`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
