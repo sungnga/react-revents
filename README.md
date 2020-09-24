@@ -1805,7 +1805,17 @@
     >
     ```
 
-
+**6. Creating a reusable text area: MyTextArea component**
+- A textarea field gives you a larger text area than an input field does. This reusable component will have the exact same functionality as the MyTextInput component does. The only difference is instead of an `<input />` element, it uses a `<textarea />` element
+- In src/app/common/form folder, create a component/file called MyTextArea.jsx
+- In MyTextArea.jsx file:
+  - Copy the code from MyTextInput.jsx component and change the `<input />` element to `<textarea />` element
+- In EventForm.jsx file:
+  - Import the MyTextArea component: `import MyTextArea from '../../../app/common/form/MyTextArea';`
+  - For the 'Description' input field, use the MyTextArea component instead of the MyTextInput component
+    - We can specify the number of rows the textarea will display using the rows property 
+    - `<MyTextArea name='description' placeholder='Description' rows={3} />`
+  
 
 
 
