@@ -1686,7 +1686,7 @@
     </Formik>
     ```
 
-**3. Form validation**
+**3. Form validation with Formik validationSchema**
 - Source: https://formik.org/docs/guides/validation
 - Formik Validation: Formik is designed to manage forms with complex validation with ease. Formik supports synchronous and asynchronous form-level and field-level validation. Furthermore, it comes with baked-in support for schema-based form-level validation through Yup
 - Install Yup: `npm i yup`
@@ -1710,8 +1710,40 @@
     >
     ```
 
+**4. Creating a reusable text input**
+- Let's create a reusable text input field component that has input error handling and styling. Use Semantic UI for styling and Formik Field props for error handling
+- In src/app/common/form folder, create a component/file called MyTextInput.jsx
+- In MyTextInput.jsx file:
+  - Import React: `import React from 'react';`
+  - Import useField hook from Formik: `import { useField } from 'formik';`
+  - Import Semantic UI FormField component: `import { FormField } from 'semantic-ui-react';`
+  - Create a MyTextInput functional component that renders a form input field with error handling message
+    - This component receives props from Formik
+      - `export default function MyTextInput({ label, ...props }) {...}`
+    - Use useField() hook to extract field and meta properties from Formik Field component
+      - `const [field, meta] = useField(props);`
+    - Render the form input field using Semantic UI
+      ```javascript
+      export default function MyTextInput({ label, ...props }) {
+        const [field, meta] = useField(props);
 
-
+        return (
+          <FormField error={meta.touched && !!meta.error}>
+            <label>{label}</label>
+            <input {...field} {...props} />
+            {meta.touched && meta.error ? (
+              <Label basic color='red'>
+                {meta.error}
+              </Label>
+            ) : null}
+          </FormField>
+        );
+      }
+      ```
+- In EventForm.jsx file:
+  - Import the MyTextInput component: `import MyTextInput from '../../../app/common/form/MyTextInput';`
+  - Inside the `<Form />` component, instantiate the MyTextInput component and give it a name and placeholder properties
+    - `<MyTextInput name='title' placeholder='Event title' />`
 
 
 
