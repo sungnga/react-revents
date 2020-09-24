@@ -1550,8 +1550,22 @@
     - To update an event, call the dispatch() function and pass in the updateEvent() action creator function as an argument
     - To create an event, call the dispatch() function and pass in the createEvent() action creator function as an argument
     
-
-
+**6. Clean up code**
+- After the user submitted the form to update an event, we want to direct them to the events list page
+- In EventForm.jsx file:
+  - Add the history props to the EventForm component
+    - `export default function EventForm({ match, history }) {...}`
+  - In the handleFormSubmit() method, use history.push() method and pass in the pathname to redirect the user
+    - `history.push('/events');`
+- Another issue we have at the moment is when we redirect user to create a new event, the data is still populated in the form and doesn't clear out. The reason for this is we're not giving our component a key, because we're not unmounting the component when we redirect to a new form or manage a new event
+- To ensure that we create a new instance of a component, we need to give it a key property. We want to give a key property to our EventForm component. We can do this in the App component because that is where we created the route for the EventForm component
+- When we are routed to different pages in our application, the location key value gets updated in the browser's location object. Since the App component is not a routed component, it has no access to the browser's location object. We can use the useLocation() hook from react-router-dom to have access to the location object and the key property
+- In App.jsx file:
+  - Import the useLocation hook: `import { Route, useLocation } from 'react-router-dom';`
+  - Create a location key using the useLocation() hook. Destructure the key property
+    - `const { key } = useLocation();`
+  - Specify the key property on the route that contains the EventForm component
+    - `<Route path={['/createEvent', '/manage/:id']} component={EventForm} key={key} />`
 
 
 
