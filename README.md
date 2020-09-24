@@ -1501,7 +1501,7 @@
     - `const { events } = useSelector((state) => state.event);`
 - Next, we want to populate the event information onto the event detailed page. We can get an event info from the store using the useSelector() hook. Since the EventDetailedPage component is a routed component, we can get the event id from the route params. Weuse this event id to retreive the event from the store. The event id lives inside the params property and it's inside the match props. match.params.id
 - In EventDetailedPage.jsx file:
-  - Destructure the match props to get access to the params
+  - Destructure the match props to get access to the route params
     - `export default function EventDetailedPage({ match }) {...}`
   - Use the useSelector() hook to get an event from the store based on the event id
     ```javascript
@@ -1524,10 +1524,32 @@
   - `{attendees.length} {attendees.length > 1 ? 'People' : 'Person'} Going`
   - Call .map() method on attendees array to display each attendee onto the page
 
-
-
-
-
+**5. Dispatching event actions**
+- In EventListItem.jsx file:
+  - Import the useDispatch hook: `import { useDispatch } from 'react-redux';`
+  - Import the deleteEvent action: `import { deleteEvent } from '../eventActions';`
+  - Create a dispatch function using the useDispatch() hook
+    - `const dispatch = useDispatch();`
+  - In the 'Delete' Button element
+    - When the button is clicked, execute the dispatch() method and pass in the deleteEvent() action creator as an argument to dispatch the action to the reducer. Pass in the event.id to the deleteEvent() action method
+    - `onClick={() => dispatch(deleteEvent(event.id))}`
+- In the EventForm.jsx file:
+  - Import useSelector and useDispatch hooks: `import { useSelector, useDispatch } from 'react-redux';`
+  - Import the createEvent and updateEvent actions: `import { updateEvent, createEvent } from '../eventActions';`
+  - Destructure the match props to get access to the route params
+    - `export default function EventForm({ match }) {...}`
+  - Use the useSelector() hook to get an event from the store based on the event id
+    ```javascript
+    const selectedEvent = useSelector((state) =>
+      state.event.events.find((e) => e.id === match.params.id)
+    );
+    ```
+  - Create a dispatch function using the useDispatch() hook
+    - `const dispatch = useDispatch();`
+  - In the handleFormSubmit() method:
+    - To update an event, call the dispatch() function and pass in the updateEvent() action creator function as an argument
+    - To create an event, call the dispatch() function and pass in the createEvent() action creator function as an argument
+    
 
 
 
