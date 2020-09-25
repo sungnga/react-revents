@@ -2292,10 +2292,75 @@
       }
     }
     ```
-- In rooteReducer.js file:
+- In rootReducer.js file:
   - Import the authReducer: `import authReducer from '../../features/auth/authReducer';`
   - Add the authReducer as auth property to the combineReducers() function. This will give us access to the auth state
     - `auth: authReducer`
+
+**15. Hooking up the LoginForm**
+- When we submit the LoginForm, we want to dispatch the signInUser() action with the login data. We also want to close the modal after we submitted
+- In LoginForm.jsx file:
+  - Import the useDispatch() hook: `import { useDispatch } from 'react-redux';`
+  - Import signInUser action: `import { signInUser } from './authActions';`
+  - Import closeModal action: `import { closeModal } from '../../app/common/modals/modalReducer';`
+  - Create a dispatch method using the useDispatch() hook
+    - `const dispatch = useDispatch();`
+  - One problem we have is when the 'Submit' button is clicked, the loading spinner never stops. The way Formik works is when we submit, the submitting status is always set to true and after our action is completed, it's up to us to set the submitting status back to false. What we can do is destructure the setSubmitting property from Formik and use it to set the submitting status manually to false after we've submitted our values
+  - On onSubmit event property:
+    - Use an arrow function to handle submit
+    - The function takes 2 arguments. 1st arg is the values we provide. 2nd arg is the setSubmitting property we destructure from Formik 
+    - Inside the callback, execute the dispatch() method pass in the signInUser() action and provide it the values
+    - Then call the setSubmitting() method to set the submitting status to false
+    - Then call another dispatch() method to close the modal using the closeModel() action
+    ```javascript
+    onSubmit={(values, { setSubmitting }) => {
+      dispatch(signInUser(values));
+      setSubmitting(false);
+      dispatch(closeModal());
+    }}
+    ```
+- In our NavBar component, instead of using the local state to check if a user is authenticated, we can now use our Redux store to see if they're authenticated or not
+- In NavBar.jsx file:
+  - Import the useSelector() hook: `import { useSelector } from 'react-redux';`
+  - Get the authenticated state from the Redux store using the useSelector() hook. Destructure the authenticated property from the auth state object
+    - `const { authenticated } = useSelector((state) => state.auth);`
+  - The authenticated state is either true or false. So in the NavBar, if the user is authenticated, they can see the 'Create Event' button and the `<SignedInMenu />` component is rendered
+- In the SignedInMenu component, when the user clicks 'Sign out' we can dispatch the signOutUser() action and redirect them to homepage. Also, once they're successfully signed in, we want to display the currentUser info from our Redux store
+- In SignedInMenu.jsx file:
+  - Import useSelector() and useDispatch() hooks: `import { useSelector, useDispatch } from 'react-redux';`
+  - Import useHistory() hook: `import { useHistory } from 'react-router-dom';`
+  - Import signOutUser action: `import { signOutUser } from './authActions';`
+  - Creat a dispatch method using the useDispatch() hook
+    - `const dispatch = useDispatch();`
+  - Get the browser history object using the useHistory() hook
+    - `const history = useHistory();`
+  - When the 'Sign out' dropdown item is clicked, we want to do two things. Call the signOutUser() action to signout the user and redirect user to home page
+    - On the onClick event, use an arrow function to execute the dispatch() method and call the signOutUser() action
+    - Then use the history.push() method to direct use to homepage
+    ```javascript
+    <Dropdown.Item
+      onClick={() => {
+        dispatch(signOutUser());
+        history.push('/');
+      }}
+      text='Sign out'
+      icon='power'
+    />
+    ```
+  - We also want to get the currentUser property from the auth state. Once the user is logged-in, we can populate their info
+    - `const { currentUser } = useSelector((state) => state.auth);`
+  - For the user profile image, set the image source to `currentUser.photoURL` or the default user static image
+    - `src={currentUser.photoURL || '/assets/user.png'}`
+  - For the user's name, set it to their email
+    - `<Dropdown pointing='top left' text={currentUser.email}>`
+
+
+
+
+
+
+
+
 
 
 

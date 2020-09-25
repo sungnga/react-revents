@@ -2,7 +2,6 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 import { openModal } from '../../app/common/modals/modalReducer';
-import TestModal from './TestModal';
 import { decrement, increment } from './testReducer';
 
 export default function SandBox() {
