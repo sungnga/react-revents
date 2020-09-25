@@ -1986,7 +1986,7 @@
   - Create a modalReducer function
     - 1st arg is the state. Set the default state to initialState
     - 2nd arg is the action. Destructure the type and payload properties from the action object
-    - Use a switch statement based on the type
+    - Use a switch statement to base on the type
       - In the case of OPEN_MODAL,
         - destructure modalType and modalProps that we're going to get from the payload
         - then return the modalType and modalProps inside the object
@@ -2032,7 +2032,7 @@
     ```
 - In rootReducer.js file:
   - Import the modalReducer: `import modalReducer from '../common/modals/modalReducer';`
-  - Add the modalReducer property to the combineReducers() function
+  - Add the modalReducer as modals property to the combineReducers() function. This will give us access to the modals state
     - `modals: modalReducer`
 - Next, we want to create a modal wrapper around any content that we want to put inside the modal itself
 - In src/app/common/modals folder, create a component/file called ModalWrapper.jsx
@@ -2216,16 +2216,86 @@
     />
     ```
 
-
-
-
-
-
-
-
-
-
-
+**14. Adding an authReducer**
+- Let's create an authReducer so we can store our authentication state in Redux store
+- In src/features/auth folder, create authConstants.js, authActions.js, and authReducer.js files
+- In authConstants.js file:
+  - Create constants for SIGN_IN_USER and SIGN_OUT_USER
+  ```javascript
+  export const SIGN_IN_USER = 'SIGN_IN_USER';
+  export const SIGN_OUT_USER = 'SIGN_OUT_USER';
+  ```
+- In authActions.js file:
+  - Import action constants: `import { SIGN_IN_USER, SIGN_OUT_USER } from './authConstants';`
+  - Write a signInUser action creator function that returns the action object
+    - This function takes payload as an argument
+    ```javascript
+    export function signInUser(payload) {
+      return {
+        type: SIGN_IN_USER,
+        payload
+      };
+    }
+    ```
+  - Write a signOutUser action creator function that returns the action object
+    - This function doesn't take any arguments
+    ```javascript
+    export function signOutUser() {
+      return {
+        type: SIGN_OUT_USER
+      };
+    }
+    ```
+- In authReducer.js file:
+  - Import the constants: `mport { SIGN_IN_USER, SIGN_OUT_USER } from './authConstants';`
+  - Create an initialState object
+    ```javascript
+    const initialState = {
+      authenticated: false,
+      currentUser: null
+    };
+    ```
+  - Write an authReducer function that updates the state in the store based on the action type
+    - 1st arg is the state. Set the default state to initialState object
+    - 2nd arg is the action. Destructure the type and payload properties from the action object
+    - Use a switch statement to base on the type
+      - In the case of SIGN_IN_USER, we want to return an object with
+        - the original state
+        - set the authenticated property to true
+        - set the currentUser property to an object which contains the user's email and photoURL. The email value comes from the payload props and set the photoURL to a static image for now
+      - In the case of SIGN_OUT_USER, we want to return an object with
+        - the original state
+        - set authenticated to false
+        - set currentUser to null
+      - Default case,
+        - return state
+    ```javascript
+    export default function authReducer(state = initialState, { type, payload }) {
+      switch (type) {
+        case SIGN_IN_USER:
+          return {
+            ...state,
+            authenticated: true,
+            currentUser: {
+              email: payload.email,
+              photoURL: '/assets/user.png'
+            }
+          };
+        case SIGN_OUT_USER:
+          return {
+            ...state,
+            authenticated: false,
+            currentUser: null
+          };
+        default:
+          return state;
+      }
+    }
+    ```
+- In rooteReducer.js file:
+  - Import the authReducer: `import authReducer from '../../features/auth/authReducer';`
+  - Add the authReducer as auth property to the combineReducers() function. This will give us access to the auth state
+    - `auth: authReducer`
 
 
 
