@@ -1922,7 +1922,65 @@
     - Replace the `{event.id}` Javascript date object with the format version
     - `{format(event.date, 'MMMM d, yyyy h:mm a')}`
 
-  
+**10. Formik props: control the submit and cancel buttons in event form**
+- In our event form, we want to disable the 'Submit' button if the user hasn't completed the form correctly. To do that, we need to look into other properties/props from Formik to pass down to our form
+- We're going to pass properties down to our form from Formik via 'render' props. The way we do that is:
+  - Inside the `<Formik />` component, use render props. Render props starts with curly braces and uses an arrow function
+  - Inside the render curly bracket, use an arrow function and destructure the props we want from Formik as an argument. Then have the `<Form />` component render inside render props
+    ```javascript
+    <Formik>
+      {({ props, props, props }) => (
+        <Form>
+          ...
+        </Form>
+      )}
+    </Formik>
+    ```
+- In EventForm.jsx file:
+  - Extract the isSubmitting, dirty, and isValid properties from Formik and pass them down to our `<Form />` via render props
+  - Our `<Form />` component will render inside render props. This way our form has access to those props
+    ```javascript
+    {({ isSubmitting, dirty, isValid }) => (
+      <Form className='ui form'>
+        ...
+      </Form>
+    )}    
+    ```
+  - We want to disable the 'Submit' button if:
+    - the form is loading -> isSubmitting
+    - the form is not valid -> !isValid
+    - the input value hasn't changed from the initial value -> !dirty
+    - the form is submitting -> isSubmitting
+  - In the 'Submit' Button element, specify the following properties:
+    ```javascript
+    <Button
+      loading={isSubmitting}
+      disabled={!isValid || !dirty || isSubmitting}
+      type='submit'
+      floated='right'
+      positive
+      content='Submit'
+    />
+    ```
+  - In the 'Cancel' Button element, disable the button if the form is submitting
+    ```javascript
+    <Button
+      disabled={isSubmitting}
+      as={Link}
+      to='/events'
+      type='submit'
+      floated='right'
+      content='Cancel'
+    />
+    ```
+
+
+
+
+
+
+
+
 
 
 
@@ -1954,6 +2012,11 @@
   - Import in EventForm.jsx file: `import * as Yup from 'yup';`
 - React Datepicker
   - Install: `npm i react-datepicker`
+- Date-fns
+  - Website: https://date-fns.org/
+  - Run to see the version react-datepicker is using: `npm ls date-fns`
+  - Install: `npm i date-fns@2.16.1`
+  - Import: `import { format } from 'date-fns';`
 
 
 
