@@ -2114,6 +2114,117 @@
   - Instantiate the ModalManager component as the first item in the render section. This will ensure that whenever we open a modal, it's guaranteed to be visible
     - `<ModalManager />`
 
+**13. Creating a sign-in form: LoginForm component**
+- On the NavBar, when the user clicks on the 'Login' button, a sign-in modal opens on the page and the user can provide their email and password to login. We'll create a LoginForm component which has the modal content that can be rendered inside the ModalWrapper as children. The ModalManger will look for the type of modal to be displayed. The LoginForm will have validation as well
+- In src/features/auth folder, create a component/file called LoginForm.jsx
+- In LoginForm.jsx file:
+  - Import the following:
+    ```javascript
+    import React from 'react';
+    import { Formik, Form } from 'formik';
+    import { Button } from 'semantic-ui-react';
+    import * as Yup from 'yup';
+    import ModalWrapper from '../../app/common/modals/ModalWrapper';
+    import MyTextInput from '../../app/common/form/MyTextInput';
+    ```
+  - Write a LoginForm functional component that renders a login form using Formik
+    - In the render section, instantiate the ModalWrapper component: `<ModalWrapper />`
+      - Provide the size and header properties to the ModalWrapper component
+      - `<ModalWrapper size='mini' header='Sign in to Re-vents'>`
+    - Inside the `<ModalWrapper />` component, create the login form using `<Formik />` component
+    - Provide the following properties to the Formik component:
+      - initialValues property and set it to an empty-string email and password object
+      - validationSchema property to validate the email and password input fields. Use the Yup library
+      - onSubmit property to submit the values. Console log the values for now
+      ```javascript
+      <Formik
+        initialValues={{ email: '', password: '' }}
+        validationSchema={Yup.object({
+          email: Yup.string().required().email(),
+          password: Yup.string().required()
+        })}
+        onSubmit={values => {
+          console.log(values)
+        }}
+      >
+      ```
+    - Inside the Formik tag, we'll pass down some render props to our form via render props: `{({props, props}) => (<Form> ... </Form>)}`
+      - The props we want to pass are isSubmitting, isValid and dirty. Destructure them
+      - Then render the `<Form />` component inside render props
+    - Inside the Form tag, 
+      - we'll use the MyTextInput components to render the email and password text input fields
+      - also add a 'Submit' Button
+      - then use the Formik props to apply validation logic to the 'Submit' button
+    ```javascript
+    export default function LoginForm() {
+      return (
+        <ModalWrapper size='mini' header='Sign in to Re-vents'>
+          <Formik
+            initialValues={{ email: '', password: '' }}
+            validationSchema={Yup.object({
+              email: Yup.string().required().email(),
+              password: Yup.string().required()
+            })}
+            onSubmit={(values) => {
+              console.log(values);
+            }}
+          >
+            {({ isSubmitting, isValid, dirty }) => (
+              <Form className='ui form'>
+                <MyTextInput name='email' placeholder='Email Address' />
+                <MyTextInput
+                  name='password'
+                  placeholder='Password'
+                  type='password'
+                />
+                <Button
+                  loading={isSubmitting}
+                  disabled={!isValid || !dirty || isSubmitting}
+                  type='submit'
+                  fluid
+                  size='large'
+                  color='teal'
+                  content='Login'
+                />
+              </Form>
+            )}
+          </Formik>
+        </ModalWrapper>
+      );
+    }
+    ```
+- In ModalManger.jsx file:
+  - We need to tell the ModalManger about the LoginForm modal
+  - Import the LoginForm component: `import LoginForm from '../../../features/auth/LoginForm';`
+  - Then pass in the LoginForm component to the modalLookup object
+    - `const modalLookup = { TestModal, LoginForm };`
+- In SignedOutMenu.jsx file:
+  - When the 'Login' button is clicked, a login form modal opens
+  - Import useDispatch() hook: `import { useDispatch } from 'react-redux';`
+  - Import openModel action creator method: `import { openModal } from '../../app/common/modals/modalReducer';`
+  - Create a dispatch method using the useDispatch() hook
+    - `const dispatch = useDispatch();`
+  - In the 'Login' Button:
+    - When the button is clicked, execute the dispatch() method and pass in the openModal() method
+    - The openModal() method takes an object as argument. And inside the object, we can provide a modalType property with the value of 'LoginForm', which is the LoginForm component
+    ```javascript
+    <Button
+      onClick={() => dispatch(openModal({ modalType: 'LoginForm' }))}
+      basic
+      inverted
+      content='Login'
+    />
+    ```
+
+
+
+
+
+
+
+
+
+
 
 
 
