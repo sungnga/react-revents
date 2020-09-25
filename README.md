@@ -1233,7 +1233,7 @@
   }
   ```
 
-**Action Createor**
+**Action Creator**
 - Is a function that takes in a payload data as an argument and returns the action object
   ```javascript
   // Action constant
@@ -1974,10 +1974,10 @@
     />
     ```
 
-**11. Create modals**
+**11. Modals: create a modalReducer and ModalWrapper component**
 - When a user clicks on the 'Login' or 'Register' button, we want to display a modal on the screen to allow them to enter login details or register to the application
 - Semantic UI has modals that we can use
-- We'll use Redux to store the state of the modal. So we'll need a modelReducer
+- We'll use Redux to store the state of the modal. So we'll need a modalReducer
 - In src/app/common/modals folder, create a file called modalReducer.js
 - In modalReducer.js file:
   - Create OPEN_MODAL and CLOSE_MODAL constants
@@ -1990,7 +1990,7 @@
       - In the case of OPEN_MODAL,
         - destructure modalType and modalProps that we're going to get from the payload
         - then return the modalType and modalProps inside the object
-      - In the case of closing the model, CLOSE_MODAL,
+      - In the case of CLOSE_MODAL,
         - simply return null
       - Default case,
         - return state
@@ -2033,7 +2033,7 @@
 - In rootReducer.js file:
   - Import the modalReducer: `import modalReducer from '../common/modals/modalReducer';`
   - Add the modalReducer property to the combineReducers() function
-    - `models: modalReducer`
+    - `modals: modalReducer`
 - Next, we want to create a modal wrapper around any content that we want to put inside the modal itself
 - In src/app/common/modals folder, create a component/file called ModalWrapper.jsx
 - In ModalWrapper.jsx file:
@@ -2067,10 +2067,52 @@
     }
     ```
 
+**12. Adding a Modal Manager: ModalManager component**
+- Now that we have a a modalReducer and a modalWrapper that we can use around any modals that we create, what we need to do is have a way to select a specific modal and display it on the page
+- In src/app/common/modals folder, create a component/file called ModalManager.jsx
+- In ModalManager.jsx file:
+  - Import React: `import React from 'react';`
+  - Import useSelector() hook: `import { useSelector } from 'react-redux';`
+  - Create a ModalManager functional component that renders the modal content to be displayed inside a ModalWrapper. This component is the "`{children}`" being passed to the ModaWrapper component and rendered inside the `<ModalWrapper />` component
+  - In ModalManager component:
+    - Create a modalLookup object that's going to allow us to check what type of modal we want to open. Set it to an empty object for now
+      - `const modalLookup = {};`
+    - We also want to check what's our current modal actually is in our Redux store. We can use the useSelector() hook to find out
+      - `const currentModal = useSelector((state) => state.modals);`
+    - Create a renderedModal variable and not have any value for now
+      - `let renderedModal;`
+    - If we have a modal open, then the modalType and modalProps are going to be what stored in the currentModal state
+    - Use an if statement to check if there's a currentModal in the state. If there is,
+      - we can destructure the modalType and modalProps from the currentModal object. In our modalReducer, when OPEN_MODAL, we return the modalType and modalProps in an object, hence we can destructure those properties
+      - create a ModalComponent from the modalLookup object with the modalType we want to display on the page
+      - set the renderedModal to render a `<ModalComponent />` with the modalProps that we have available for this particular modal
+      ```javascript
+      if (currentModal) {
+        const { modalType, modalProps } = currentModal;
+        const ModalComponent = modalLookup[modalType];
+        renderedModal = <ModalComponent {...modalProps} />;
+      }
+      ```
+    - Then return the renderedModal in a span element to display the modal onto the page
+    ```javascript
+    export default function ModalManager() {
+      const modalLookup = {};
+      const currentModal = useSelector((state) => state.modals);
+      let renderedModal;
 
+      if (currentModal) {
+        const { modalType, modalProps } = currentModal;
+        const ModalComponent = modalLookup[modalType];
+        renderedModal = <ModalComponent {...modalProps} />;
+      }
 
-
-
+      return <span>{renderedModal}</span>;
+    }
+    ```
+- In App.jsx file:
+  - Import the ModalManager component: `import ModalManager from '../common/modals/ModalManager';`
+  - Instantiate the ModalManager component as the first item in the render section. This will ensure that whenever we open a modal, it's guaranteed to be visible
+    - `<ModalManager />`
 
 
 
