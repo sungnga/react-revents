@@ -1974,9 +1974,98 @@
     />
     ```
 
+**11. Create modals**
+- When a user clicks on the 'Login' or 'Register' button, we want to display a modal on the screen to allow them to enter login details or register to the application
+- Semantic UI has modals that we can use
+- We'll use Redux to store the state of the modal. So we'll need a modelReducer
+- In src/app/common/modals folder, create a file called modalReducer.js
+- In modalReducer.js file:
+  - Create OPEN_MODAL and CLOSE_MODAL constants
+  - Create 2 action creator functions, one for openModal and another for closeModal. Each returns the action object
+  - Create an initialState and set it to null
+  - Create a modalReducer function
+    - 1st arg is the state. Set the default state to initialState
+    - 2nd arg is the action. Destructure the type and payload properties from the action object
+    - Use a switch statement based on the type
+      - In the case of OPEN_MODAL,
+        - destructure modalType and modalProps that we're going to get from the payload
+        - then return the modalType and modalProps inside the object
+      - In the case of closing the model, CLOSE_MODAL,
+        - simply return null
+      - Default case,
+        - return state
+    ```javascript
+    // Constants
+    const OPEN_MODAL = 'OPEN_MODAL';
+    const CLOSE_MODAL = 'CLOSE_MODAL';
 
+    // Action creator
+    export function openModal(payload) {
+      return {
+        type: OPEN_MODAL,
+        payload
+      };
+    }
 
+    // Action creator
+    export function closeModal() {
+      return {
+        type: CLOSE_MODAL
+      };
+    }
 
+    // State
+    const initialState = null;
+
+    // Modal reducer
+    export default function modalReducer(state = initialState, { type, payload }) {
+      switch (type) {
+        case OPEN_MODAL:
+          const { modalType, modalProps } = payload;
+          return { modalType, modalProps };
+        case CLOSE_MODAL:
+          return null;
+        default:
+          return state;
+      }
+    }
+    ```
+- In rootReducer.js file:
+  - Import the modalReducer: `import modalReducer from '../common/modals/modalReducer';`
+  - Add the modalReducer property to the combineReducers() function
+    - `models: modalReducer`
+- Next, we want to create a modal wrapper around any content that we want to put inside the modal itself
+- In src/app/common/modals folder, create a component/file called ModalWrapper.jsx
+- In ModalWrapper.jsx file:
+  - Import the following:
+    ```javascript
+    import React from 'react';
+    import { useDispatch } from 'react-redux';
+    import { Modal } from 'semantic-ui-react';
+    import { closeModal } from './modalReducer';
+    ```
+  - Write a ModalWrapper functional component that renders a modal using Semantic UI
+    - It receives children, size, and header props as an argument. Destructure it
+    - Create a dispatch function using react-redux useDispatch() hook
+    - Render the modal using Semantic UI Modal component. Specify these following  properties to the Modal component:
+      - set open property to true
+      - on onClose event, execute the dispatch() method to dispatch the closeModal() action creator function, which doesn't take any arguments
+      - set size property to size
+    - Inside the Modal component:
+      - Check to see if there's a header. If there is, render the modal header inside the `<Modal.Header />`
+      - Render the `{children}` inside the `<Modal.Content />` 
+    ```javascript
+    export default function ModalWrapper({ children, size, header }) {
+      const dispatch = useDispatch();
+
+      return (
+        <Modal open={true} onClose={() => dispatch(closeModal())} size={size}>
+          {header && <Modal.Header>{header}</Modal.Header>}
+          <Modal.Content>{children}</Modal.Content>
+        </Modal>
+      );
+    }
+    ```
 
 
 
