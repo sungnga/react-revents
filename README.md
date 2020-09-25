@@ -1711,6 +1711,7 @@
     ```
 
 **4. Creating a reusable text input: MyTextInput component**
+- DOC for useField() hook: https://formik.org/docs/api/useField 
 - Let's create a reusable text input field component that has input error handling and styling. Use Semantic UI for styling and Formik Field props for error handling
 - In src/app/common/form folder, create a component/file called MyTextInput.jsx
 - In MyTextInput.jsx file:
@@ -1810,24 +1811,45 @@
 - In src/app/common/form folder, create a component/file called MyTextArea.jsx
 - In MyTextArea.jsx file:
   - Copy the code from MyTextInput.jsx component and change the `<input />` element to `<textarea />` element
+  - `<textarea {...field} {...props} />`
 - In EventForm.jsx file:
   - Import the MyTextArea component: `import MyTextArea from '../../../app/common/form/MyTextArea';`
   - For the 'Description' input field, use the MyTextArea component instead of the MyTextInput component
     - We can specify the number of rows the textarea will display using the rows property 
     - `<MyTextArea name='description' placeholder='Description' rows={3} />`
   
+**7. Creating a reusable select input: MySelectInput component**
+- This component will have the same error handling functionality as the MyTextInput and MyTextArea components
+- DOC for useField() hook: https://formik.org/docs/api/useField 
+- In src/app/common/form folder, create a component/file called MySelectInput.jsx
+- In MySelectInput.jsx file:
+  - Copy and paste the code from MyTextInput component as a starter
+  - Import Semantic Select component: `import { FormField, Label, Select } from 'semantic-ui-react';`
+  - Bring in the 'helpers' property from useField(props) 
+  - We'll use `<Select />` form from Semantic UI
+    ```javascript
+    <Select
+      clearable
+      value={field.value || null}
+      onChange={(event, data) => helpers.setValue(data.value)}
+      onBlur={() => helpers.setTouched(true)}
+      {...props}
+    />
+    ```
+- In src/app/api folder, create a file called categoryOptions.js file
+- In categoryOptions.js file:
+  - This file contains the categoryData that the user can choose from in the category select input options in an event form when they want to create or update an event
+- In EventForm.jsx file:
+  - Import the MySelectInput component: `import MySelectInput from '../../../app/common/form/MySelectInput';`
+  - Import the categoryData: `import { categoryData } from '../../../app/api/categoryOptions';`
+  - For the 'category' input field, swap to use the MySelectInput component instead of the MyTextInput component
+    - Add the 'options' property to the component and set its value to categoryData. The categoryOptions.js file contains the select options data
+    - `<MySelectInput name='category' placeholder='Category' options={categoryData} />`
 
 
 
 
-
-
-
-
-
-
-
-
+					
 
 
 
@@ -1861,6 +1883,7 @@
   - Install: `npm i formik`
 - Yup works with Formik validation
   - Install: `npm i yup`
+  - Import in EventForm.jsx file: `import * as Yup from 'yup';`
 
 
 
