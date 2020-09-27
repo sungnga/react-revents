@@ -2355,7 +2355,47 @@
     - `<Dropdown pointing='top left' text={currentUser.email}>`
 
 
+## GOOGLE MAPS INTEGRATION
+- Places Autocomplete
+  - Provides dropdown and lookup for locations
+  - Can provide different levels: countries, cities, businesses, etc
+- Google Maps Integration
+  - Provides a map of an area with given co-ordinations
+  Takes a Lat/Lng
 
+- **1. Enable Google Maps APIs and generate API key**
+  - Go to Google Developer Console site and login with Google account
+    - https://console.developers.google.com/
+  - Click on the 'New Project' button to create a new project. Name the project
+  - In the APIs & Services menu, select Library. In the search bar, find these 3 APIs and enable them
+    - Maps Javascript API
+    - Geocoding API
+    - Places API
+  - We need to manually set the requests limit for all of these API services, so that we won't get charged no matter what. We are required to provide billing info to use Google Maps. In the IAM & Admin menu, select Quotas:
+    - In the Quotas section, there's a dropdown menu that will have the 3 APIs
+    - Go into each one and set the requests limit to 100
+  - In the APIs & Services menu, select Credentials
+    - Click the '+ CREATE CREDENTIALS' button at the top. This will generate the API key
+
+**2. Setting up places autocomplete**
+- Source: https://github.com/hibiken/react-places-autocomplete
+- Install: `npm i react-places-autocomplete`
+- Add this script to index.html file and replace the api key you get from Google APIs for this project
+  - `<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>`
+- Later on when we deploy the project, we will restrict the API key to our project site only
+- **Testing out Google Places:**
+- In sandbox folder, create a component/file called TestPlaceInput.jsx
+- In TestPlaceInput.jsx file, copy and paste the demo code from the above github website. Then make the following changes:
+  - Change from class component to functinal component
+  - Delete the constructor and add address state using useState() hook:
+    - `const [address, setAddress] = useState('');`
+  - Change the arrow event handler functions to regular functions
+  - Remove all 'this' keyword
+  - In the handleSelect() function, call setAddress method to set the address as the last thing. So when a place is selected from the auto-suggest list, the selected place will show up in the input field
+- In Sandbox.jsx file:
+  - Import the TestPlaceInput component
+  - Instantiate the component in the render section: `<div><TestPlaceInput /></div>`
+- When typing in the input field, it should give an auto-suggest list of places. And when a place is selected, that selected place will show up in the input field. The lat/long of the place will print in the console
 
 
 
@@ -2394,6 +2434,8 @@
   - Run to see the version react-datepicker is using: `npm ls date-fns`
   - Install: `npm i date-fns@2.16.1`
   - Import: `import { format } from 'date-fns';`
-
-
-
+- React Places Autocomplete
+  - Source: https://github.com/hibiken/react-places-autocomplete
+  - Install: `npm i react-places-autocomplete`
+  - Add this script to index.html file and replace the api key you get from Google APIs for this project
+    - `<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>`
