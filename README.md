@@ -2478,7 +2478,7 @@
                 <Segment loading={loading} style={{ marginTop: 0, position: 'absolute', zIndex: 1000, width: '100%' }}>
                   <List selection>
                     {suggestions.map(suggestion => (
-                      <List.Item>
+                      <List.Item {...getSuggestionItemProps(suggestion)} key={suggestion.placeId}>
                         <List.Header>
                           {suggestion.formattedSuggestion.mainText}
                         </List.Header>
@@ -2497,12 +2497,65 @@
     }
     ```
 
-
-
-
-
-
-
+**4. Using the place input**
+- In EventForm.jsx file:
+  - Import the MyPlaceInput component: `import MyPlaceInput from '../../../app/common/form/MyPlaceInput';`
+  - For 'City' and 'Venue' input fields, use `<MyPlaceInput />` component
+- In the const initialValues object, We need to set the initial values for the city and venue properties as objects, not strings. Because in the PlacesAutocomplete component, we call setValue() to set the value state with an object that has the address and latLng properties in it
+  ```javascript
+	const initialValues = selectedEvent ?? {
+		title: '',
+		category: '',
+		description: '',
+		city: {
+			address: '',
+			latLng: null
+		},
+		venue: {
+			address: '',
+			latLng: null
+		},
+		date: ''
+	};
+  ```
+- Because we've changed the values for city and venue fields/properties into objects, we need to update this change in our validationSchema as well. We need to validate with a Yup.object() instead of Yup.string()
+  ```javascript
+  city: Yup.object().shape({
+    address: Yup.string().required('City is required')
+  }),
+  venue: Yup.object().shape({
+    address: Yup.string().required('Venue is required')
+  }),
+  ```
+- In MyPlaceInput.jsx file:
+  - When we're handling the FormField validation error, the error is no longer a string. It's going to an object error that has the properties for the address and latLng. So when there's a field error, we want to specify that we want the address error out of the error object by using the bracket[] notation
+    ```javascript
+    {meta.touched && meta.error ? (
+      <Label basic color='red'>
+        {meta.error['address']}
+      </Label>
+    ) : null}
+    ```
+  - Another issue we're having is when a user starts typing in the field and leaves the field, we want to make sure that we have the latLng coordinates value. We need to check on the field.onBlur event, which recognizes if someone has touched the field and moved out of it. We want to write an event handler to handle the onBlur event
+    - Check if there's no value in the field.value.latLng. If there isn't, reset the city object property to be empty again
+    ```javascript
+    function handleBlur(e) {
+      field.onBlur(e);
+      if (!field.value.latLng) {
+        helpers.setValue({ address: '', latLng: null });
+      }
+    }
+    ```
+  - Then on the onBlur event in the input element, call the handleBlur function in an arrow function
+    ```javascript
+    <input
+      {...getInputProps({
+        name: field.name,
+        onBlur: (e) => handleBlur(e),
+        ...props
+      })}
+    />
+    ```
 
 
 

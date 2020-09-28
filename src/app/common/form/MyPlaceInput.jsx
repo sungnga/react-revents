@@ -1,5 +1,8 @@
 import React from 'react';
-import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
+import PlacesAutocomplete, {
+	geocodeByAddress,
+	getLatLng
+} from 'react-places-autocomplete';
 import { useField } from 'formik';
 import { FormField, Label, List, Segment } from 'semantic-ui-react';
 
@@ -13,6 +16,13 @@ export default function MyPlaceInput({ label, options, ...props }) {
 			.catch((error) => helpers.setError(error));
 	}
 
+	function handleBlur(e) {
+		field.onBlur(e);
+		if (!field.value.latLng) {
+			helpers.setValue({ address: '', latLng: null });
+		}
+	}
+
 	return (
 		<PlacesAutocomplete
 			value={field.value['address']}
@@ -22,28 +32,45 @@ export default function MyPlaceInput({ label, options, ...props }) {
 		>
 			{({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
 				<FormField error={meta.touched && !!meta.error}>
-					<input {...getInputProps({name: field.name, ...props})} />
+					<input
+						{...getInputProps({
+							name: field.name,
+							onBlur: (e) => handleBlur(e),
+							...props
+						})}
+					/>
 					{meta.touched && meta.error ? (
 						<Label basic color='red'>
-							{meta.error}
+							{meta.error['address']}
 						</Label>
-          ) : null}
-          {suggestions?.length > 0 && (
-            <Segment loading={loading} style={{ marginTop: 0, position: 'absolute', zIndex: 1000, width: '100%' }}>
-              <List selection>
-                {suggestions.map(suggestion => (
-                  <List.Item>
-                    <List.Header>
-                      {suggestion.formattedSuggestion.mainText}
-                    </List.Header>
-                    <List.Description>
-                      {suggestion.formattedSuggestion.secondaryText}
-                    </List.Description>
-                  </List.Item>
-                ))}
-              </List>
-            </Segment>
-          )}
+					) : null}
+					{suggestions?.length > 0 && (
+						<Segment
+							loading={loading}
+							style={{
+								marginTop: 0,
+								position: 'absolute',
+								zIndex: 1000,
+								width: '100%'
+							}}
+						>
+							<List selection>
+								{suggestions.map((suggestion) => (
+									<List.Item
+										{...getSuggestionItemProps(suggestion)}
+										key={suggestion.placeId}
+									>
+										<List.Header>
+											{suggestion.formattedSuggestion.mainText}
+										</List.Header>
+										<List.Description>
+											{suggestion.formattedSuggestion.secondaryText}
+										</List.Description>
+									</List.Item>
+								))}
+							</List>
+						</Segment>
+					)}
 				</FormField>
 			)}
 		</PlacesAutocomplete>
