@@ -389,7 +389,7 @@
           <span>
             <Icon name='clock' /> {event.date}
             <Icon name='marker' />
-            {event.venue}
+            {event.venue.address}
           </span>
         </Segment>
 
@@ -2497,7 +2497,7 @@
     }
     ```
 
-**4. Using the place input**
+**4. Using the place input: MyPlaceInput component**
 - In EventForm.jsx file:
   - Import the MyPlaceInput component: `import MyPlaceInput from '../../../app/common/form/MyPlaceInput';`
   - For 'City' and 'Venue' input fields, use `<MyPlaceInput />` component
@@ -2557,9 +2557,28 @@
     />
     ```
 
-
-
-
+**5. Narrowing the place input search results: EventForm**
+- What we want to do next is when we select a specific city, we want to see venues that are located in that area
+- In EventForm.jsx file:
+  - In render props, pass down the values props to our form
+    - `{({ isSubmitting, dirty, isValid, values }) => ( ... )}`
+  - In the 'venue' `<MyPlaceInput />` component, we need to pass two additional properties to the component:
+    - the disabled property. We want to disable the venue input field if there's no city latLng value
+    - the options property. We want to narrow down the venue results based on the type, radius, and location of a latLng/city
+    - add this at the top of the file, because our component doesn't know about the google maps script in index.html file
+      - `/* global google */`
+    ```javascript
+    <MyPlaceInput
+      name='venue'
+      placeholder='Venue'
+      disabled={!values.city.latLng}
+      options={{
+        location: new google.maps.LatLng(values.city.latLng),
+        radius: 1000,
+        types: ['establishment']
+      }}
+    />
+    ```
 
 
 
