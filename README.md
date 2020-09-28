@@ -2655,7 +2655,71 @@
   }
   ```
 
-  
+**7. Adding the map to the EventDetailedPage: EventDetailedMap component**
+  - On the EventDetailedPage, when we click on the 'Show Map' button, we get to see a map of where the event is taking place
+  - In src/features/events/eventDetailed folder, create a component/file called EventDetailedMap.jsx
+  - In EventDetailedMap.jsx file:
+    - Import React: `import React from 'react';`
+    - Import googleMapReact component: `import GoogleMapReact from 'google-map-react';`
+    - Import Semantic UI components: `import { Icon, Segment } from 'semantic-ui-react';`
+    - Write a EventDetailedMap functional component to display a map of where the event takes place
+      - This component receives (event venue) latLng props from the EventDetailedInfo parent component
+      - Instantiate the `<GoogleMapReact />` component and specify the bootstrapURLKeys, center, and zoom properties
+    - Write a Marker functional component to display a marker icon using Semantic UI
+    - Use the `<Marker />` component inside the `<GoogleMapReact />` component and pass down the lat and lng props. This will display the marker on the map
+    ```javascript
+    function Marker() {
+      return <Icon name='marker' size='big' color='red' />;
+    }
+
+    export default function EventDetailedMap({ latLng }) {
+      const zoom = 14;
+      return (
+        <Segment attached='bottom' style={{ padding: 0 }}>
+          <div style={{ height: 300, width: '100%' }}>
+            <GoogleMapReact
+              bootstrapURLKeys={{ key: 'GOOGLE_MAPS_API_KEY' }}
+              center={latLng}
+              zoom={zoom}
+            >
+              <Marker lat={latLng.lat} lng={latLng.lng} />
+            </GoogleMapReact>
+          </div>
+        </Segment>
+      );
+    }
+    ```
+- In EventDetailedInfo.jsx file:
+  - Import the EventDetailedMap component: `import EventDetailedMap from './EventDetailedMap';`
+  - The last item inside the `<Segment.Group>` component, use the EventDetailedMap component and pass down the latLng props
+    - `<EventDetailedMap latLng={event.venue.latLng} />`
+  - Next, we only want to show the map on the EventDetailedPage when the 'Show Map' is clicked. So we need to create local state to control whether the map is being open
+  - Create a mapOpen state using useState() hook and set the initial value to false
+    - `const [mapOpen, setMapOpen] = useState(false);`
+  - For the 'Show Map' Button element, we want to toggle the 'Show Map' and 'Hide Map' button depending on the mapOpen state
+    - On onClick event, switch the mapOpen state using the setMapyOpenToggle() method
+    - Then for the Button content, if mapOpen state is true, show 'Hide Map'. If mapOpen is false, show 'Show Map'
+    ```javascript
+    <Button
+      onClick={() => setMapOpenToggle(!mapOpen)}
+      color='teal'
+      size='tiny'
+      content={mapOpen ? 'Hide Map' : 'Show Map'}
+    />
+    ```
+  - Then in the render section, write a condition to only show the map if mapOpen state is true
+    - `{mapOpen && <EventDetailedMap latLng={event.venue.latLng} />}`
+
+
+
+
+
+
+
+
+
+
+
 
 
 

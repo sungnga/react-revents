@@ -74,8 +74,7 @@ export default function EventForm({ match, history }) {
 						<MyTextInput name='title' placeholder='Event title' />
 						<MySelectInput
 							name='category'
-							disabled={!values.city.latLng}
-							placeholder='Category'
+							placeholder='Event category'
 							options={categoryData}
 						/>
 						<MyTextArea name='description' placeholder='Description' rows={3} />
