@@ -2884,6 +2884,48 @@
     />
     ```
 
+**4. Adding toast notifications: react-toastify library**
+- Let's add the ability to notify the user when there's a problem. We'll use a toast notification library called react-toastify
+- Install: `npm i react-toastify`
+- Toasts, like modals, they need to appear anywhere in our application. For that, we use toasts at the top of the application inside the App.jsx file
+- In App.jsx file:
+  - Import the react-toastify ToastContainer component: `import { ToastContainer } from 'react-toastify';`
+  - Instantiate the `<ToastContainer />` component right after the `<ModalManager />` component
+    - Specify the position property and set it to 'bottom-right'
+    - Add the hideProgressBar property. This will hide the progress bar when toast notification pops up
+    - `<ToastContainer position='bottom-right' hideProgressBar />`
+- In index.js file:
+  - Import the react-toastify css stylesheet right after the Semantic UI stylesheet
+    - `import 'react-toastify/dist/ReactToastify.min.css';`
+  - Note: the order of these stylesheets is important
+- In testReducer.js file:
+  - Import toast: `import { toast } from 'react-toastify';`
+  - In the catch block, call the toast.error() method and pass in the error received from the catch block
+    - `toast.error(error)`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2936,3 +2978,7 @@
   - Import in configureStore.js file: 
     - `import thunk from 'redux-thunk';`
     - `import { applyMiddleware } from 'redux';`
+- Toast notifications
+  - Install: `npm i react-toastify`
+  - Import the ToastContainer component in App.jsx file: `import { ToastContainer } from 'react-toastify';`
+  - Import toast in file: ``
