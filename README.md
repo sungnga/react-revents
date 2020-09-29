@@ -2823,7 +2823,7 @@
   - Import the delay function: `import { delay } from '../../app/common/util/util';`
   - Inside the increment action creator function:
     - We can return an asynchronous function. This will allow us to dispatch multiple actions inside the increment function
-    - This async function takes a dispatch as an argument
+    - This async function takes a dispatch as an argument. It is a dispatch() method coming from react-redux to dispatch actions
     - Then in this async function,
       - dispatch the asyncActionStart() action
       - since we're using an async function, use the 'await' keyword and call the delay() function to delay the request for 2 seconds
@@ -2903,12 +2903,87 @@
   - In the catch block, call the toast.error() method and pass in the error received from the catch block
     - `toast.error(error)`
 
+**5. Adding a mock API**
+- Instead of displaying a static events coming from a sampleData file on the EventDashboard page, we can write a fetch-events asynchronous action to fetch the events and store it in the Redux store and then display the events coming from the store. Later on we can fetch the data from a database, like Firestore, and display it on the page
+- In src/app/api folder, create a file called mockApi.js
+- In mockApi.js file:
+  - Import the delay util function: `import { delay } from '../common/util/util';`
+  - Import sampleData file: `import { sampleData } from '../api/sampleData';`
+  - Write a fetchSampleData function that delays for 1 second and then returns the sampleData
+    ```javascript
+    export function fetchSampleData() {
+      return delay(1000).then(function () {
+        return Promise.resolve(sampleData);
+      });
+    }
+    ```
+- **Asynchronous action creator function structure:**
+  ```javascript
+  export function loadEvents() {
+    return async function(dispatch) {
+      try {
 
+      } catch (error) {
 
-
-
-
-
+      }
+    }
+  }
+  ```
+- We're going to create a fetch-event action that loads events
+- In eventConstants.js file:
+  - Add a fetch event constant
+    - `export const FETCH_EVENTS = 'FETCH_EVENTS';`
+- In eventActions.js file:
+  - Import the fetch-event constant: `import { FETCH_EVENTS } from './eventConstants';`
+  - Import the async actions: `import { asyncActionError, asyncActionFinish, asyncActionStart } from '../../app/async/asyncReducer';`
+  - Import the fetchSampleData function: `import { fetchSampleData } from '../../app/api/mockApi';`
+  - Write a loadEvents function that fetches the events from sampleData and dispatches the FETCH_EVENTS action asychronously
+    - This function returns an async function
+    - The async function takes a dispatch as an argument. It is a dispatch() method coming from react-redux to dispatch actions
+    - It first dispatches the asyncActonStart() action
+    - Then in the try/catch block:
+      - It calls the fetchSampleData() method to get the data from sampleData file and assigns the data to the events variable. The 'await' keyword is in front of this method because it will wait for this method to complete and have the data returned before moving forward. If this operation fails, it will not move on and will throw an error and the catch block will catch it
+      - Once the data is stored in the events variable, the function dispatches the FETCH_EVENTS action with the payload of the events. The eventReducer will look for this FETCH_EVENTS action and will store the events in the Redux store
+      - Then it dispatches the asyncActionFinish() action
+      - If there's a problem occurred in this process, the catch block will catch the error and the asyncActionError() action is dispatched to received this error
+    ```javascript
+    export function loadEvents() {
+      return async function (dispatch) {
+        dispatch(asyncActionStart());
+        try {
+          const events = await fetchSampleData();
+          dispatch({ type: FETCH_EVENTS, payload: events });
+          dispatch(asyncActionFinish());
+        } catch (error) {
+          dispatch(asyncActionError(error));
+        }
+      };
+    }
+    ```
+- In eventReducer.js file:
+  - Import the FETCH_EVENTS constant: `import { FETCH_EVENTS } from './eventConstants';`
+  - For the initialState, set the events property to an empty array instead. We no longer need the sampleData
+    ```javascript
+    const initialState = {
+      events: []
+    };
+    ```
+  - Inside the eventReducer function:
+    - Add a case for FETCH_EVENTS action
+    - It returns as an object, the original state and the events property that is set to payload. Payload contains the events array because the loadEvents() event action function was invoked and triggered the fetchSampleData() method
+      ```javascript
+      case FETCH_EVENTS:
+        return {
+          ...state,
+          events: payload
+        };
+      ```
+- In index.js file:
+  - Import the loadEvents() action: `import { loadEvents } from './features/events/eventActions';`
+  - This file contains the store variable
+  - To load events from the store onto the EventDashboard page, we can call the loadEvents() action using the store.dispatch() method
+    - `store.dispatch(loadEvents());`
+  - Notice that this is an asynchronous action and there's a slight delay before the events load onto the page
 
 
 
