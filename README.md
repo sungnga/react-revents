@@ -2985,8 +2985,30 @@
     - `store.dispatch(loadEvents());`
   - Notice that this is an asynchronous action and there's a slight delay before the events load onto the page
 
-
-
+**6. Adding a LoadingComponent**
+- In src/app/layout folder, create a component/file called LoadingComponent.jsx
+- In LoadingComponent.jsx file:
+  - Import React: `import React from 'react';`
+  - Import Semantic components: `import { Dimmer, Loader } from 'semantic-ui-react';`
+  - Write a LoadingComponent functional component that renders a Loader using Semantic UI
+    - This component takes some default-value properties
+    - The Dimmer Semantic component dims the background page while it is loading
+    ```javascript
+    export default function LoadingComponent({ inverted = true, content = 'Loading...' }) {
+      return (
+        <Dimmer inverted={inverted} active={true}>
+          <Loader content={content} />
+        </Dimmer>
+      )
+    }
+    ```
+- In EventDashboard.jsx file:
+  - Import the LoadingComponent component: `import LoadingComponent from '../../../app/layout/LoadingComponent';`
+  - What we want to do is find out if we're loading. We can find that out from our asyncReducer using the useSelector() hook. Destructure the loading property
+    - `const { loading } = useSelector((state) => state.async);`
+  - Then check if we're loading. If we are, we want to return the `<LoadingComponent />` component
+    - `if (loading) return <LoadingComponent />;`
+  - If we are not, then we want to return the JSX
 
 
 
