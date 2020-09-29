@@ -2861,9 +2861,28 @@
     />
     ```
 
-
-
-
+**3. Isolating the loading indicators: increment/decrement counter**
+- Right now both of the increment and decrement button loading indicators are loading when one button is clicked. So first we need to identify which button is actually clicked. We can specify a name property for each button. We can then get this name on the onClick event handler by calling event.target.name
+- Sandbox.jsx file:
+  - Create a target local state using the useState() hook and initialize its value to null
+    - `const [target, setTarget] = useState(null);`
+  - Inside each of the increment and decrement Button element:
+    - Specify the button name property and set the value to 'increment'
+    - On the onClick event handler, dispatch the increment action and also set the target state to e.target.name inside the arrow function
+    - So when we click the button, we're setting the target state to the name of the button
+    - Then we can use the target state to control the loading indicator. We show the loading indicator only if the target state is equal to the button name
+    ```javascript
+    <Button
+      name='increment'
+      loading={loading && target === 'increment'}
+      onClick={(e) => {
+        dispatch(increment(10));
+        setTarget(e.target.name);
+      }}
+      content='Increment'
+      color='green'
+    />
+    ```
 
 
 
