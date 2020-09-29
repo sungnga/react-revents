@@ -2711,18 +2711,97 @@
     - `{mapOpen && <EventDetailedMap latLng={event.venue.latLng} />}`
 
 
+## ASYNCHRONOUS CODE
+**Redux Thunk**
+- A thunk is a function that wraps an expression to delay its evaluation
+- Allows Action Creators to return a function instead of a plain object
+- Receives the store's dispatch method which is used to dispatch regular synchronous action when the async operations have completed
+- Acts as middleware that we add to our store. This middleware allows us to use the store's dispatch function inside our Action Creators
 
+**Async/Await**
+- ES2017 feature
+- Built on top of promises - cannot be used with plain callbacks
+- Cleaner code
 
+**Install Redux Thunk**
+- Install: `npm i redux-thunk`
 
+**1. Set up Redux Thunk and create an asyncReducer**
+- In configureStore.js file:
+  - The createStore() method takes 3 params: a reducer, a preloadedState, and an enhancer
+  - The only store enhancer that ships with Redux is applyMiddleware(). The middleware that we're going to apply is the Redux thunk, but we've also got a devToolEnhancer(). So in order to use both of the devToolEnhancer() and Redux thunk, we're going to bring in the composeWithDevTools() method from redux-devtools-extension. The composeWithDevTools() is already come with the devToolEnhancer()
+    - `import { composeWithDevTools } from 'redux-devtools-extension';`
+  - Import Redux thunk: `import thunk from 'redux-thunk';`
+  - Also import the applyMiddleware method: `import { createStore, applyMiddleware } from 'redux';`
+  - In the createStore() method, we're going to pass in the composeWithDevTools() method as a 2nd param. Then call the applyMiddleware() method and pass in thunk
+    - `return createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));`
+  - Now we have both the devToolEnhancer() and applyMiddleware(thunk) enhancers
+- Next is we want to create a reducer for async functions. This particular reducer is going to control the loading state of what's going on in our application
+- In src/app/async folder, create a file called asyncReducer.js
+- In asyncReducer.js file:
+  - We'll create the async constants, action creators, and reducer in one file
+  ```javascript
+  // Constants
+  const ASYNC_ACTION_START = 'ASYNC_ACTION_START';
+  const ASYNC_ACTION_FINISH = 'ASYNC_ACTION_FINISH';
+  const ASYNC_ACTION_ERROR = 'ASYNC_ACTION_ERROR';
 
+  // Action creator
+  export function asyncActionStart() {
+    return {
+      type: ASYNC_ACTION_START
+    };
+  }
 
+  // Action creator
+  export function asyncActionFinish() {
+    return {
+      type: ASYNC_ACTION_FINISH
+    };
+  }
 
+  // Action creator
+  export function asyncActionERROR(error) {
+    return {
+      type: ASYNC_ACTION_ERROR,
+      payload: error
+    };
+  }
 
+  // Initial state
+  const initialState = {
+    loading: false,
+    error: null
+  };
 
-
-
-
-
+  // Async reducer
+  export default function asyncReducer(state = initialState, { type, payload }) {
+    switch (type) {
+      case ASYNC_ACTION_START:
+        return {
+          ...state,
+          loading: true,
+          error: null
+        };
+      case ASYNC_ACTION_FINISH:
+        return {
+          ...state,
+          loading: false
+        };
+      case ASYNC_ACTION_ERROR:
+        return {
+          ...state,
+          loading: false,
+          error: payload
+        };
+      default:
+        return state;
+    }
+  }
+  ```
+- In rootReducer.js file:
+  - Import the asyncReducer: `import asyncReducer from '../async/asyncReducer';`
+  - Add the asyncReducer to the combineReducers() method as the value for async property: `async: asyncReducer`
 
 
 
@@ -2738,8 +2817,11 @@
   - Import in EventForm.jsx file: `import cuid from 'cuid';`
 - React Router 5
   - Install: `npm i react-router-dom`
+  - Import in App.jsx file: `import { Route, useLocation } from 'react-router-dom';`
 - Redux and React-Redux
   - Install: `npm i redux react-redux`
+  - Import in configureStore.js file: `import { createStore } from 'redux';`
+  - The useSelector() and useDispatch() hooks come from react-redux
 - Redux Dev Tools
   - Install: `npm i redux-devtools-extension --save-dev`
   - Import in configureStore.js file: `import { devToolsEnhancer } from 'redux-devtools-extension';`
@@ -2751,6 +2833,9 @@
   - Import in EventForm.jsx file: `import * as Yup from 'yup';`
 - React Datepicker
   - Install: `npm i react-datepicker`
+  - Import in MyDateInput.jsx file:
+    - `import DatePicker from 'react-datepicker';`
+    - `import 'react-datepicker/dist/react-datepicker.css';`
 - Date-fns
   - Website: https://date-fns.org/
   - Run to see the version react-datepicker is using: `npm ls date-fns`
@@ -2761,6 +2846,13 @@
   - Install: `npm i react-places-autocomplete`
   - Add this script to index.html file and replace the api key you get from Google APIs for this project
     - `<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>`
+  - Import in MyPlaceInput.jsx file: `import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';`
 - Google Map React
   - Source: https://www.npmjs.com/package/google-map-react
   - Install: `npm i google-map-react`
+  - Import in EventDetailedMap.jsx file: `import GoogleMapReact from 'google-map-react';`
+- Redux Thunk
+  - Install: `npm i redux-thunk`
+  - Import in configureStore.js file: 
+    - `import thunk from 'redux-thunk';`
+    - `import { applyMiddleware } from 'redux';`
