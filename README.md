@@ -3061,6 +3061,58 @@
     )}
     ```
 
+**8. Adding an event filters component: EventFilters**
+- We want our user to be able to filter the event list based on the filter setting. They can also filter the events by selecting a date on a calendar. These filters will be on the right hand column of the EventDashboard page. We will use a react-calendar widget library for the calendar
+- Install React Calendar widget library:
+  - `npm i react-calendar`
+- In src/features/events/eventDashboard folder, create a component/file called EventFilters.jsx
+- In EventFilters.jsx file:
+  - Import React: `import React from 'react';`
+  - Import Semantic components: `import { Header, Menu } from 'semantic-ui-react';`
+  - Import the Calendar component: `import Calendar from 'react-calendar';`
+  - Write an EventFilters component that renders a filter menu and a select date calendar widget using Semantic UI
+    ```javascript
+    export default function EventFilters() {
+      return (
+        <>
+          <Menu vertical size='large' style={{ width: '100%' }}>
+            <Header icon='filter' attached color='teal' content='Filters' />
+            <Menu.Item content='All Events' />
+            <Menu.Item content="I'm going" />
+            <Menu.Item content="I'm hosting" />
+          </Menu>
+          <Header icon='calendar' attached color='teal' content='Select date' />
+          <Calendar />
+        </>
+      );
+    }
+    ```
+- In EventDashboard.jsx file:
+  - Import the EventFilters component: `import EventFilters from './EventFilters';`
+  - In the 6-width grid column, render the EventFilters component
+    ```javascript
+    <Grid.Column width={6}>
+      <EventFilters />
+    </Grid.Column>
+    ```
+- In index.js file:
+  - Import the react-calendar stylesheet right after the react-toastify stylesheet
+    - `import 'react-calendar/dist/Calendar.css';`
+- In styles.css file:
+  - Style the react-calendar so that it takes up the full width of the column
+  ```javascript
+  .react-calendar {
+    width: 100%;
+    border: none;
+    box-shadow: 0 1px 2px 0 rgba(34, 36, 38, .15);
+  }
+  ```
+
+
+
+
+
+
 
 
 
@@ -3123,5 +3175,12 @@
     - `import { applyMiddleware } from 'redux';`
 - Toast notifications
   - Install: `npm i react-toastify`
+  - In index.js file, import the react-toastify css stylesheet right after the Semantic UI stylesheet
+    - `import 'react-toastify/dist/ReactToastify.min.css';`
   - Import the ToastContainer component in App.jsx file: `import { ToastContainer } from 'react-toastify';`
   - Import toast in file: ``
+- React Calendar widget
+  - Install: `npm i react-calendar`
+  - In index.js file, import the stylesheet right after the react-toastify stylesheet
+    - `import 'react-calendar/dist/Calendar.css';`
+  - Import in EventFilters.jsx file: ``import Calendar from 'react-calendar';``
