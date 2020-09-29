@@ -2355,7 +2355,7 @@
     - `<Dropdown pointing='top left' text={currentUser.email}>`
 
 
-## GOOGLE MAPS INTEGRATION
+## S8: GOOGLE MAPS INTEGRATION
 - Places Autocomplete
   - Provides dropdown and lookup for locations
   - Can provide different levels: countries, cities, businesses, etc
@@ -2711,7 +2711,7 @@
     - `{mapOpen && <EventDetailedMap latLng={event.venue.latLng} />}`
 
 
-## ASYNCHRONOUS CODE
+## S9: ASYNCHRONOUS CODE
 **Redux Thunk**
 - A thunk is a function that wraps an expression to delay its evaluation
 - Allows Action Creators to return a function instead of a plain object
@@ -2802,6 +2802,67 @@
 - In rootReducer.js file:
   - Import the asyncReducer: `import asyncReducer from '../async/asyncReducer';`
   - Add the asyncReducer to the combineReducers() method as the value for async property: `async: asyncReducer`
+
+**2. Using asynchronous functions in action creator functions**
+- In src/app/common/util folder, create a file called util.js. Any functions that don't belong anywhere else that we can apply anywhere in our application go in this file
+- In util.js file:
+  - Write a delay function that delays for a certain amount of time in ms millisecond
+    - In order for something to be able to wait for when this particular function finishes, what we need do is return a new Promise()
+    - The promise returns a resolve or a reject
+    - In this case, we're going to resolve and we're going to call the setTimeout() function, which allows us to add a delay
+    - In the setTimeout() function, we pass in the resolve and the ms millisecond that we get from the delay function as arguments
+    ```javascript
+    export function delay(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+    ```
+- In testReducer.js file:
+  - When we installed Redux thunk, it allows us to return a function inside another function. In our action creator function, we can return an asynchronous function
+  - This async function can take, as a parameter, a dispatch that we get from our store. This will allow us to dispatch additional actions inside our function
+  - Import the async actions: `import { asyncActionStart, asyncActionError, asyncActionFinish } from '../../app/async/asyncReducer';`
+  - Import the delay function: `import { delay } from '../../app/common/util/util';`
+  - Inside the increment action creator function:
+    - We can return an asynchronous function. This will allow us to dispatch multiple actions inside the increment function
+    - This async function takes a dispatch as an argument
+    - Then in this async function,
+      - dispatch the asyncActionStart() action
+      - since we're using an async function, use the 'await' keyword and call the delay() function to delay the request for 2 seconds
+      - after that, we want to dispatch anothat action with the type of INCREMENT_COUNTER and the payload is the amount
+      - lastly, dispatch the asyncActionFinish() action
+      - note that we want to call the delay() function and dispatch the INCREMENT_COUNTER and asyncActionFinish() actions inside a try/catch block. This way, if there's any problem with this asynchronous action, it's going to be caught by whatever is inside the catch block
+      - if we do have an error inside the catch block,  we dispatch the asyncActionError() action and pass in the error received by the catch block. This way we can store the error inside the asyncReducer for the store and we can do whatever we want with that error in the future
+    ```javascript
+    export function increment(amount) {
+      return async function (dispatch) {
+        dispatch(asyncActionStart());
+        try {
+          await delay(2000);
+          dispatch({ type: INCREMENT_COUNTER, payload: amount });
+          dispatch(asyncActionFinish());
+        } catch (error) {
+          dispatch(asyncActionError(error));
+        }
+      };
+    }
+    ```
+  - Do the same thing for the decrement action creator function
+  - So now when the 'Increment' or 'Decrement' button is clicked, it'll delay for the amount of time set, before it will increment or decement the counter
+- We can use the loading state to display a loading indicator to the user that something is happening
+- In Sandbox.jsx file:
+  - Extract and destructure the loading state property from the async reducer using the useSelector() hook
+    - `const { loading } = useSelector((state) => state.async);`
+  - Then in the 'Increment' Button element, specify the loading property and set its value to the loading state. Do the same thing for the 'Decrement' Button
+    ```javascript
+    <Button
+      loading={loading}
+      onClick={() => dispatch(increment(10))}
+      content='Increment'
+      color='green'
+    />
+    ```
+
+
+
 
 
 

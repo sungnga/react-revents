@@ -1,20 +1,39 @@
+import {
+	asyncActionStart,
+	asyncActionError,
+	asyncActionFinish
+} from '../../app/async/asyncReducer';
+import { delay } from '../../app/common/util/util';
+
 // Action constant
 const INCREMENT_COUNTER = 'INCREMENT_COUNTER';
 const DECREMENT_COUNTER = 'DECREMENT_COUNTER';
 
 // Action creator
 export function increment(amount) {
-	return {
-		type: INCREMENT_COUNTER,
-		payload: amount
+	return async function (dispatch) {
+		dispatch(asyncActionStart());
+		try {
+			await delay(2000);
+			dispatch({ type: INCREMENT_COUNTER, payload: amount });
+			dispatch(asyncActionFinish());
+		} catch (error) {
+			dispatch(asyncActionError(error));
+		}
 	};
 }
 
 // Action creator
 export function decrement(amount) {
-	return {
-		type: DECREMENT_COUNTER,
-		payload: amount
+	return async function (dispatch) {
+		dispatch(asyncActionStart());
+		try {
+			await delay(2000);
+			dispatch({ type: DECREMENT_COUNTER, payload: amount });
+			dispatch(asyncActionFinish());
+		} catch (error) {
+			dispatch(asyncActionError(error));
+		}
 	};
 }
 
@@ -27,7 +46,7 @@ const initialState = {
 // 1st arg is initial state
 // 2nd arg is the action. Here, destructuring the properties from action object
 // Returning a default state
-export default function testReducer(state = initialState, {type, payload}) {
+export default function testReducer(state = initialState, { type, payload }) {
 	switch (type) {
 		case INCREMENT_COUNTER:
 			return {
