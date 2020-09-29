@@ -3010,10 +3010,56 @@
     - `if (loading) return <LoadingComponent />;`
   - If we are not, then we want to return the JSX
 
-
-
-
-
+**7. Using the Semantic Placeholder component to improve the UI**
+- Instead of having a loading indictor taking up the entire page while we are waiting for the content to load, we can indicate the loading using a Semantic UI Placeholder component. A placeholder is used to reserve space for content that soon will appear in a layout. So we can design where the EventListItem component is showing that it's loading while we're waiting for its content
+- In src/features/events/eventDashboard folder, create a component/file called EventListItemPlaceholder.jsx
+- In EventListItemPlaceholder.jsx file:
+  - Import React: `import React from 'react';`
+  - Import Semantic components: `import { Segment, Button, Placeholder } from 'semantic-ui-react';`
+  - Write a EventListItemPlaceholder functional component that renders a loading placeholder using Semantic UI
+    ```javascript
+    export default function EventListItemPlaceholder() {
+      return (
+        <Placeholder fluid>
+          <Segment.Group>
+            <Segment style={{ minHeight: 110 }}>
+              <Placeholder>
+                <Placeholder.Header image>
+                  <Placeholder.Line />
+                  <Placeholder.Line />
+                </Placeholder.Header>
+                <Placeholder.Paragraph>
+                  <Placeholder.Line />
+                </Placeholder.Paragraph>
+              </Placeholder>
+            </Segment>
+            <Segment>
+              <Placeholder>
+                <Placeholder.Line />
+                <Placeholder.Line />
+              </Placeholder>
+            </Segment>
+            <Segment secondary style={{ minHeight: 70 }} />
+            <Segment clearing>
+              <Button disabled color='blue' floated='right' content='View' />
+            </Segment>
+          </Segment.Group>
+        </Placeholder>
+      );
+    }
+    ```
+- In EventDashboard.jsx file:
+  - Import the EventListItemPlaceholder component: `import EventListItemPlaceholder from './EventListItemPlaceholder';`
+  - Just above the `<EventList />` component, write a condition that checks if loading state is true
+  - If it is, render the EventListItemPlaceholder component
+    ```javascript
+    {loading && (
+      <>
+        <EventListItemPlaceholder />
+        <EventListItemPlaceholder />
+      </>
+    )}
+    ```
 
 
 
