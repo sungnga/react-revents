@@ -3143,7 +3143,7 @@
   - After installing the Firebase Javascript SDK, we can import various aspects and individual elements of Firebase we want to use in our our app
     ```javascript
     import firebase from 'firebase/app';
-    import 'firebase/firebase';
+    import 'firebase/firestore';
     import 'firebase/database';
     import 'firebase/auth';
     import 'firebase/storage';
@@ -3172,8 +3172,47 @@
     - the Type for an object Field is map
     - the Type for attendees Field is an array. Each item in the array is an object Field
 
-
-
+**3. Listening to Firestore data**
+- Now that we have some data in Firestore, let's implement how we can get the data into our application
+- In src/app/firestore folder, create a file called firestoreService.js. This file stores our Firebase and Firestore queries
+- In firestoreService.js file:
+  - Import firebase from our config: `import firebase from '../config/firebase';`
+  - Access the Firestore db:
+    - `const db = firebase.firestore();`
+  - There are two ways to get data from Firestore. We can either listen to the data or get the data. Use .onSnapshot() method to listen to the data 
+    - The .onSnapshot() method takes an observer as an argument
+  - Write a getEventsFromFirestore function that gets the events collection from Firestore
+    - This function takes an observer as an argument
+    - To get a specific collection from Firestore, use db.collection(), and pass in the name of the collection
+    - The .onSnapshot() method listens to the data on Firestore and it takes an observer as an argument
+    ```javascript
+    export function getEventsFromFirestore(observer) {
+      return db.collection('events').onSnapshot(observer);
+    }
+    ```
+- When we're in a component and we want to do something, such as query an API, we use useEffect() hook from React. This allows us to do something when the component mounts and dismounts
+- In EventDashboard.jsx file:
+  - Import useEffect() hook: `import React, { useEffect } from 'react';`
+  - Call the useEffect() hook:
+    - The useEffect() hook takes a callback function
+    - When it comes to Firestore, we're going to subscribe, so we're listening to the data, and then we're going to unsubscribe. We're going to subscribe when the component mounts and unsubscribe when the component unmounts
+    - In this callback function:
+      - Specify an unsubscribe function variable and set it equal to the getEventsFromstore() function
+      - In this getEventsFromstore() function, we need to pass in an observer. What we get back from this function is:
+        - a `next` handler. And this is going to be what happens next after we received the data back from Firestore, what do we want to do next with it. Now, our data comes back from Firestore as a snapshot. This snapshot is a collection, so it'll return to us an array of documents in the form of `snapshot.docs`. We can use the .map() method to loop over the array to get the individual event, `docSnapshot`. Then inside this `docSnapshot` we can get the data from the events using `docSnapshot.data()`
+        - an error. We're going to console log the error for now
+    - Everything inside this callback function is what's going to happen when the component mounts. And because we're listening to something, we're subscribing to something, and then we want to do something when the component unmounts
+    - In our case, we want to return a function inside this useEffect() hook when the component unmounts. We return the unsubscrible function in order to unsubscribe from listening to the Firestore data when the component unmounts. When the return function is called, this is what is called when the component unmounts. So anything we add inside this return is effectively going to take an action to unsubscribe from listening to the data: `return unsubscribe;`
+    ```javascript
+    useEffect(() => {
+      const unsubscribe = getEventsFromFirestore({
+        next: (snapshot) =>
+          console.log(snapshot.docs.map((docSnapshot) => docSnapshot.data())),
+        error: (error) => console.log(error)
+      });
+      return unsubscribe;
+    });
+    ```
 
 
 
@@ -3222,6 +3261,7 @@
     - `<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>`
   - Import in MyPlaceInput.jsx file: `import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';`
 - Google Map React
+  - Google developer console website: https://console.developers.google.com/
   - Source: https://www.npmjs.com/package/google-map-react
   - Install: `npm i google-map-react`
   - Import in EventDetailedMap.jsx file: `import GoogleMapReact from 'google-map-react';`
@@ -3242,4 +3282,6 @@
     - `import 'react-calendar/dist/Calendar.css';`
   - Import in EventFilters.jsx file: `import Calendar from 'react-calendar';`
 - The Firebase Javascript SDK
+  - Google Firebase website: https://console.firebase.google.com/
   - Install: `npm i firebase`
+  - Import in src/app/config/firebase.js file
