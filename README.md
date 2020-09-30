@@ -3214,6 +3214,102 @@
     });
     ```
 
+**4. Shaping the Firestore data and getting it into Redux store**
+- The data we get back from Firestore has missing document id and the format of the date property is Firestore Timestamp, which is not usable for us. A common thing to do with Firebase and Firestore is shape the data so it's usable in our application. We're going to create a function to help us do that
+- In firestoreService.js file:
+  - Write a dataFromSnapshot function that makes changes to the data from snapshot and returns the new version of data
+    - This function takes snapshot as an argument
+    - First thing we want to check is if snapshot exists
+      - If it doesn't, return undefined
+      - If it does exist, we want to get the data out of the snapshot by calling `snapshot.data()` and assign it to data variable
+    - What we return from this function as an object is: the existing data and the id from snapshot.id 
+    ```javascript
+    export function dataFromSnapshot(snapshot) {
+      // If snapshot doesn't exist, return undefined
+      if (!snapshot.exists) return undefined;
+      // If it does exist, get the data from snapshot
+      const data = snapshot.data();
+
+      // Return the existing data and the id from snapshot.id
+      return {
+        ...data,
+        id: snapshot.id
+      };
+    }
+    ```
+- In EventDashboard.jsx file:
+  - Import the dataFromSnapshot function: `import { dataFromSnapshot } from '../../../app/firestore/firestoreService';`
+  - When mapping through each docSnapshot, we want to call the dataFromSnapshot() function and pass in docSnapshot as an argument
+    - `console.log(snapshot.docs.map((docSnapshot) => dataFromSnapshot(docSnapshot)))`
+  - Now the data we get back should include an id property with the document id
+- Next is we want to convert Firestore timestap date into Javascript date
+- Back in firestoreService.js file and inside the dataFromSnapshot() function:
+  - We want to check to see the type of object we get back inside the data. So we're going to loop over all the properties inside the snapshot data. If a property of the data object is a Firestore Timestamp, then we want to convert it into a Javascript date object
+  - The date property of data object that we get back from snapshot comes with a handful of methods, and one of those methods is .toDate(). This method will convert the timestamp into Javascript date
+  - `for (const prop in data) { ... }` this is going to loop over all the properties/prop inside the data object
+  - The `if (data.hasOwnProperty(prop)) {...}` is checking for the data properties only, excluding other types of properties
+  - Then check to see if the data[prop] is an instance of firebase.firestore.Timestamp. And if it is, we can all the .toDate() method on that data[prop]. And then assign this Javascript date object back to data[prop]
+  ```javascript
+	for (const prop in data) {
+		if (data.hasOwnProperty(prop)) {
+			if (data[prop] instanceof firebase.firestore.Timestamp) {
+				data[prop] = data[prop].toDate();
+			}
+		}
+  }
+  ```
+- Now that we have a data in a format that we can use, we'll create a new action creator in our Redux store, so we can pass the events that we get back from Firestore into the eventReducer
+- In eventActions.js file:
+  - Write a listenToEvents action creator function that returns as an object, a FETCH_EVENTS action and a payload property of events
+    - This function takes events as an argument
+    ```javascript
+    export function listenToEvents(events) {
+      return {
+        type: FETCH_EVENTS,
+        payload: events
+      };
+    }
+    ```
+- In index.js file:
+  - We no longer load events directly from our store anymore. We will load events from Firestore instead
+  - Remove this and the loadEvents import: `store.dispatch(loadEvents());`
+- Back in EventDashboard.jsx file:
+  - Import useDispatch() hook: `import { useDispatch } from 'react-redux';`
+  - Import the listToEvents() action: `import { listenToEvents } from '../eventActions';`
+  - Create a dispatch() method using the useDispatch() hook
+    - `const dispatch = useDispatch();`
+  - Now we can dispatch the listenToEvents() action to get the events from Firestore and store the events in the eventReducer. Note that the listenToEvents() action is using the FETCH_EVENTS action type and the payload of events to store the events from Firestore in Redux store
+    - The listenToEvents() action takes events as an argument. And the events is the snapshot from Firestore
+    ```javascript
+    useEffect(() => {
+      const unsubscribe = getEventsFromFirestore({
+        next: (snapshot) =>
+          dispatch(
+            listenToEvents(
+              snapshot.docs.map((docSnapshot) => dataFromSnapshot(docSnapshot))
+            )
+          ),
+        error: (error) => console.log(error)
+      });
+      return unsubscribe;
+    });
+    ```
+  - Now on the EventDashboard page, we can see the event information is coming from Firestore
+  - A note on the useEffect() hook:
+    - When we use useEffect(), we need to be careful of how many it's going to run. Every time this component receives properties, or the state reload, or something is changing, the component will re-renders and the code inside the useEffect() hook will run as well
+    - When using useEffect() hook, we also need to provide it an array of dependencies as a 2nd argument. This ensures that the component only re-renders when there's a change in the listed dependencies
+    - We only want to listen to the Firestore data when the component mount and unlisten when the component unmounts. We don't want to call this action everytime the component re-renders
+    - In our case, the dependency is the dispatch() method. We can list dispatch as a dependency in the dependency array
+      - `useEffect(callback, [dispatch])`
+
+
+
+
+
+
+
+
+
 
 
 
