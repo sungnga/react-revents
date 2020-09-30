@@ -3158,6 +3158,23 @@
 - Install the Firebase Javascript SDK
   - `npm i firebase`
 
+**2. Firestore document fields**
+- We're going to manually add data to Firestore to get a feel of the database structure
+- There are two types of database we can create. One is the Firebase database and the other is the Firestore database. We want the 'Cloud Firestore' database. Select this in the menu bar
+- Click on the 'Create database' button. Select the 'Start in test mode' option
+- On the Cloud Firestore page, click on the 'Start collection' button and give the Collection an ID. Call it events
+- In the events Collection, 
+  - auto-generate a Document ID
+  - fill out the document with the details of an event we've been using. For example,
+    - a Field is title, with a Type of string, and a Value of Firestore test event
+    - next Field is category, with a Type of string, and a Value of travel
+    - the Type for a date Field is timestamp
+    - the Type for an object Field is map
+    - the Type for attendees Field is an array. Each item in the array is an object Field
+
+
+
+
 
 
 
