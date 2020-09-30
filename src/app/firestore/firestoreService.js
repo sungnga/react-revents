@@ -26,8 +26,7 @@ export function dataFromSnapshot(snapshot) {
 	};
 }
 
-// Get data from Firestore
-// .onSnapshot() is a method that listens to the data on Firestore
-export function getEventsFromFirestore(observer) {
-	return db.collection('events').onSnapshot(observer);
+// Listen to events data from Firestore
+export function listenToEventsFromFirestore() {
+	return db.collection('events');
 }

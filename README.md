@@ -3328,13 +3328,78 @@
     }, [dispatch]);
     ```
 
+**6. Creating a custom hook: useFirestoreCollection() hook**
+- Up until now we've been using other people's hooks to write our application. Our useEffect() hook is getting long with more actions being dispatched. We can write our own custom hook so it can be reusable 
+- In src/app/hooks folder, create a file called useFirestoreCollection.js
+  - By convention, whenever creating a hook, start with 'use'
+- In useFirestoreCollection.js file:
+  - Import dispatch() hook: `import { useDispatch } from "react-redux";`
+  - Import useEffect() hook: `import { useEffect } from "react";`
+  - Import async actions: `import { asyncActionError, asyncActionFinish, asyncActionStart } from "../async/asyncReducer";`
+  - Import the dataFromSnapshot function: `import { dataFromSnapshot } from "../firestore/firestoreService";`
+  - Write a useFirestoreCollection custom hook
+    - This hook takes query, data, and deps as parameters in an object
+      - `export default function useFirestoreCollection({ query, data, deps }) {..}`
+      - The query: the Firestore query we want to use
+      - The data: what to do when we receive the data
+      - The deps: any dependencies that the useEffect() hook need
+    - We can use hooks inside a hook
+    - Create a dispatch method using useDispatch() hook
+      - `const dispatch = useDispatch();`
+    - Call the useEffect() hook:
+      - This hook takes a callback function as 1st arg and an array of dependencies as 2nd arg
+      - Inside the callback function:
+        - Dispatch the asyncActionStart() action
+        - Then create an unsubscribe function that queries Firestore to get the snapshot using query().onSnapshot() methods
+        - The .onSnapshot() takes an observer as an argument
+        - Once the snapshot comes back,
+          - transform the snapshot into a usable format using the dataFromSnapshot() method and assign it to docs variable
+          - set the data property and pass in the docs
+          - dispatch the asyncActionFinish() action
+        - If there's an error, dispatch the asyncActionError() action to store the error
+      - The useEffect() hook returns a callback function and call the unsubscribe() function inside the callback. This will unsubscribe to Firestore when the component unmounts
+      - Lastly, pass in the dependencies this useEffect() hook needs. Now, we're not going to pass the deps inside an array here, but we're going to pass it from the component that uses this custom hook
+        - eslint will throw a warning about this and we can disable the warning
+    ```javascript
+    export default function useFirestoreCollection({ query, data, deps }) {
+      const dispatch = useDispatch();
 
-
-
-
-
-
-
+      useEffect(() => {
+        dispatch(asyncActionStart())
+        const unsubscribe = query().onSnapshot(
+          snapshot => {
+            const docs = snapshot.docs.map(doc => dataFromSnapshot(doc))
+            data(docs)
+            dispatch(asyncActionFinish())
+          },
+          error => dispatch(asyncActionError())
+        )
+        return () => {
+          unsubscribe()
+        }
+      }, deps) //eslint-disable-line react-hooks/exhaustive-deps
+    }
+    ```
+- In firestoreService.js file:
+  - We're going to change the functioning and the name of the getEventsFromFirestore function. This function will be listening to events from Firestore and returns the events collection. It's no longer getting the snapshot as the useFirestoreCollection custom hook will handle that
+    ```javascript
+    export function listenToEventsFromFirestore() {
+      return db.collection('events');
+    }
+    ```
+- In EventDashboard.jsx file:
+  - Import the firestoreService() custom hook: `import useFirestoreCollection from '../../../app/hooks/useFirestoreCollection';`
+  - Import the listenToEvents() action: `import { listenToEvents } from '../eventActions';`
+  - Import the listenToEventsFromFirestore function: `import { listenToEventsFromFirestore } from '../../../app/firestore/firestoreService';`
+  - Instead of using useEffect() hook, we're going to use the firestoreService() hook
+    - This custom hook takes query, data, and deps parameters as an object
+    ```javascript
+    useFirestoreCollection({
+      query: () => listenToEventsFromFirestore(),
+      data: (events) => dispatch(listenToEvents(events)),
+      deps: [dispatch]
+    });
+    ```
 
 
 
