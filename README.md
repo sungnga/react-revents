@@ -3302,8 +3302,31 @@
     - In our case, the dependency is the dispatch() method. We can list dispatch as a dependency in the dependency array
       - `useEffect(callback, [dispatch])`
 
-
-
+**5. Restoring the loading indicator**
+- What happens when we listen to data from Firestore is we don't get a promise from Firestore. We're objserving the data
+- In EventDashboard.jsx file:
+  - Import async actions: `import { asyncActionError, asyncActionFinish, asyncActionStart } from '../../../app/async/asyncReducer';`
+  - Inside useEffect() hook:
+    - Before we start listening to Firestore data, we can turn on the loading indicator by dispatching the asyncActionStart() action
+    - Once we have the data, we can turn off the loading indicator by dispatching the asyncActionFinish() action
+    - Also if there's an error returned, dispatch the asyncActionError() action to store the error in Redux store
+    ```javascript
+    useEffect(() => {
+      dispatch(asyncActionStart());
+      const unsubscribe = getEventsFromFirestore({
+        next: (snapshot) => {
+          dispatch(
+            listenToEvents(
+              snapshot.docs.map((docSnapshot) => dataFromSnapshot(docSnapshot))
+            )
+          );
+          dispatch(asyncActionFinish());
+        },
+        error: (error) => dispatch(asyncActionError(error))
+      });
+      return unsubscribe;
+    }, [dispatch]);
+    ```
 
 
 
