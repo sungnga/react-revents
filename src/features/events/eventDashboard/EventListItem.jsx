@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Icon, Item, List, Segment } from 'semantic-ui-react';
+import { Button, Icon, Item, Label, List, Segment } from 'semantic-ui-react';
 import EventListAttendee from './EventListAttendee';
 import { format } from 'date-fns';
 import { deleteEventInFirestore } from '../../../app/firestore/firestoreService';
@@ -16,6 +16,14 @@ export default function EventListItem({ event }) {
 						<Item.Content>
 							<Item.Header content={event.title} />
 							<Item.Description>Hosted by {event.hostedBy}</Item.Description>
+							{event.isCancelled && (
+								<Label
+									style={{ top: '-40px' }}
+									ribbon='right'
+									color='red'
+									content='This event has been cancelled'
+								/>
+							)}
 						</Item.Content>
 					</Item>
 				</Item.Group>

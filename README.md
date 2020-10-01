@@ -3688,12 +3688,52 @@
     ```
   - In our application, however, the user won't be able to delete an event. They can cancel an event instead
 
-
-
-
-
-
-
+**12. Cancelling an event function**
+- In firestoreService.js file:
+  - Write a cancelEventToggle function that toggles the cancel state of an event
+    - This function takes an event as an argument
+    - We're using the .update() method to toggle the isCancelled property
+    - If isCancelled property is true, then the event is cancelled
+    ```javascript
+    export function cancelEventToggle(event) {
+      return db.collection('events').doc(event.id).update({
+        isCancelled: !event.isCancelled
+      });
+    }
+    ```
+- In EventForm.jsx file:
+  - Import the cancelEventToggle function: `import { cancelEventToggle } from '../../../app/firestore/firestoreService';`
+  - Add a Button element that toggles between 'Reactivate event' and 'Cancel event'
+    - On onClick event handling, execute the cancelEventToggle() function in an arrow function and pass in the selectedEvent
+    - Also, we only want to show this button when a user is managing an event, not when creating an event. We need to write a condition to only show this button when an event is selected
+    ```javascript
+    {selectedEvent && (
+      <Button
+        type='button'
+        floated='left'
+        color={selectedEvent.isCancelled ? 'green' : 'red'}
+        content={
+          selectedEvent.isCancelled
+            ? 'Reactivate Event'
+            : 'Cancel Event'
+        }
+        onClick={() => cancelEventToggle(selectedEvent)}
+      />
+    )}
+    ```
+- Next is, if an event is cancelled, we want to add a label to the event saying that this event has been cancelled
+- In EventListItem.jsx file:
+  - Right after the Item.Description tag, write a condition to see if the event isCancelled. If it is, add a Label element with the content saying 'This event has been cancelled'
+    ```javascript
+    {event.isCancelled && (
+      <Label
+        style={{ top: '-40px' }}
+        ribbon='right'
+        color='red'
+        content='This event has been cancelled'
+      />
+    )}
+    ```
 
 
 
