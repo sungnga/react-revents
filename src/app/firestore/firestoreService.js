@@ -1,3 +1,4 @@
+import cuid from 'cuid';
 import firebase from '../config/firebase';
 
 // This gives us access to Firestore db
@@ -31,7 +32,25 @@ export function listenToEventsFromFirestore() {
 	return db.collection('events');
 }
 
-
 export function listenToEventFromFirestore(eventId) {
 	return db.collection('events').doc(eventId);
+}
+
+// Add an event to Firestore
+export function addEventToFirestore(event) {
+	return db.collection('events').add({
+		...event,
+		hostedBy: 'Diana',
+		hostPhotoURL: 'https://randomuser.me/api/portraits/men/28.jpg',
+		attendees: firebase.firestore.FieldValue.arrayUnion({
+			id: cuid(),
+			displayName: 'Diana',
+			photoURL: 'https://randomuser.me/api/portraits/men/28.jpg'
+		})
+	});
+}
+
+// Update an event in Firestore
+export function updateEventInFirestore(event) {
+	return db.collection('events').doc(event.id).update(event);
 }

@@ -3549,6 +3549,94 @@
   - Write a condition that checks for the error state. If there's an error, return with the Redirect component and set the path to '/error'. The route of this '/error' path will render the ErrorComponent and display the error page
     - `if (error) return <Redirect to='/error' />;`
 
+**10. Creating and updating events in Firestore**
+- In EventForm.jsx file:
+  - Import the following:
+    ```javascript
+    import useFirestoreDoc from '../../../app/hooks/useFirestoreDoc';
+    import { listenToEventFromFirestore } from '../../../app/firestore/firestoreService';
+    import { listenToEvents } from '../eventActions';
+    import LoadingComponent from '../../../app/layout/LoadingComponent';
+    import { Redirect } from 'react-router-dom';
+    import { useSelector, useDispatch } from 'react-redux';
+    ```
+  - Extract the loading and error properties from asyncReducer using useSelect() hook
+    - `const { error, loading } = useSelector((state) => state.async);`
+  - When we want to update an event by clicking on the 'Manage Event' button, it'll route to the update event form and the event information is populated in the input fields. However, when we refesh the page, the event information is no longer there. The data doesn't persist. We need to load the event info from Firestore when the component mounts
+  - Use the useFirestoreDoc() custom hook we wrote for the EventDetailedPage component
+  - Also the conditional logic to display the loading indicator
+  - Also the conditional logic to display the error page
+    ```javascript
+    useFirestoreDoc({
+      query: () => listenToEventFromFirestore(match.params.id),
+      data: (event) => dispatch(listenToEvents([event])),
+      deps: [match.params.id, dispatch]
+    });
+
+    if (loading || (!selectedEvent && !error))
+      return <LoadingComponent content='Loading event...' />;
+
+    if (error) return <Redirect to='/error' />;
+    ```
+- Next is we need to create query functions that will add an event and update an event in Firestore
+- In firestoreService.js file:
+  - Write an addEventToFirestore function that adds an event to Firestore
+    - This function takes an event as an argument
+    - It will first query the events collection and then call the .add() method
+    - The add() method adds a new document to the collection and automatically assigns a document ID. It returns a Promise resolved with a DocumentReference pointing to the newly created document after it has been written to the backend
+    - To add an array, usefirebase.firestore.FieldValue.arrayUnion() method
+    - Since we don't have any users at the moment, we're going to add the data manually
+    ```javascript
+    export function addEventToFirestore(event) {
+      return db.collection('events').add({
+        ...event,
+        hostedBy: 'Diana',
+        hostPhotoURL: 'https://randomuser.me/api/portraits/men/28.jpg',
+        attendees: firebase.firestore.FieldValue.arrayUnion({
+          id: cuid(),
+          displayName: 'Diana',
+          photoURL: 'https://randomuser.me/api/portraits/men/28.jpg'
+        })
+      });
+    }
+    ```
+  - Write an updateEventInFirestore query function that updates an event in Firestore
+    - This function takes an event as an argument
+    - It will first query the events collection, then the event document with the id, and then call the .update() method to update the event
+    ```javascript
+    export function updateEventInFirestore(event) {
+      return db.collection('events').doc(event.id).update(event);
+    }
+    ```
+- In EventForm.jsx file:
+  - Import toast method: `import { toast } from 'react-toastify';`
+  - Import addEventToFirestore and updateEventInFirestore functions: `import { addEventToFirestore, updateEventInFirestore } from '../../../app/firestore/firestoreService';`
+  - In handling the onSubmit form event:
+    - First extract the setSubmitting method from Formik
+    - We'll submit the form in an try/catch block since this is an asynchronous action. This way, we can catch the error if we can't add or update an event in Firestore
+    - If error, call toast.error() method to display a notification with the error message and setSubmitting() to false. When isSubmitting is true, the loading indicator is on and we don't want it to be on forever
+    - Next, instead of dispatching the updateEvent() and the createEvent() actions, we'll use the updateEventInFirestore() and addEventToFirestore() query functions and pass in the values as argument. This will take the values from the EventForm and update or add the event in Firestore
+    - Since this is an async operation, we'll need to turn the arrow function into an async/await function. Add the async keyword in front of the arrow function and add the await keyword in front of the updateEventInFirestore() function and also in front of the addEventToFirestore() function
+    - After adding or updating an event, setSubmitting() back to false. And then direct user to the events page
+    ```javascript
+    onSubmit={async (values, { setSubmitting }) => {
+      try {
+        selectedEvent
+          ? await updateEventInFirestore(values)
+          : await addEventToFirestore(values);
+        setSubmitting(false);
+        history.push('/events');
+      } catch (error) {
+        toast.error(error.message);
+        setSubmitting(false);
+      }
+    }}
+    ```
+
+
+
+
+
 
 
 
