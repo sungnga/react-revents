@@ -6,7 +6,7 @@ import { Button, Header, Segment } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { updateEvent, createEvent, listenToEvents } from '../eventActions';
+import { listenToEvents } from '../eventActions';
 import MyTextInput from '../../../app/common/form/MyTextInput';
 import MyTextArea from '../../../app/common/form/MyTextArea';
 import MySelectInput from '../../../app/common/form/MySelectInput';
@@ -58,12 +58,13 @@ export default function EventForm({ match, history }) {
 	});
 
 	useFirestoreDoc({
+		shouldExecute: !!match.params.id,
 		query: () => listenToEventFromFirestore(match.params.id),
 		data: (event) => dispatch(listenToEvents([event])),
 		deps: [match.params.id, dispatch]
 	});
 
-	if (loading || (!selectedEvent && !error))
+	if (loading)
 		return <LoadingComponent content='Loading event...' />;
 
 	if (error) return <Redirect to='/error' />;

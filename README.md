@@ -3632,12 +3632,37 @@
       }
     }}
     ```
-
-
-
-
-
-
+- We're running into a problem when we click on the 'Create Event' button to create a new event. The useFirestoreDoc() hook runs and tries to find an event document id in Firestore. Obviously when we first try to create a new event, there isn't an event id. When we're creating an new event, we don't want to run the useEffect()/useFirestoreDoc() hook which trigger the query in Firestore. However, we cannot stop running a useEffect() hook and that's the rule
+- To work around this issue, we can write a condition to exit out of the useFirestoreDoc() hook and thus listening to Firestore doesn't start when we're creating a new event
+- In useFirestoreDoc.js file:
+  - Add another parameter shouldExecute and set it to true by default
+    - `export default function useFirestoreDoc({ query, data, deps, shouldExecute = true }) {..}`
+  - Then inside the useEffect() hook, add the conditional logic to exit out of the hook if shouldExecute is false
+    ```javascript
+    useEffect(() => {
+      if (!shouldExecute) return;
+      // rest of code
+    }
+    ```
+- In EventForm.jsx file:
+  - Pass in the shouldExecute parameter to the useFirestoreDoc() hook
+    - And set the match.params.id to a boolean. If there isn't an event id, shouldExecute will set to false. And this will exit out of the useEffect()/useFirestoreDoc() hook
+    ```javascript
+    useFirestoreDoc({
+      shouldExecute: !!match.params.id,
+      query: () => listenToEventFromFirestore(match.params.id),
+      data: (event) => dispatch(listenToEvents([event])),
+      deps: [match.params.id, dispatch]
+    });
+    ```
+- When listing the events on the events page, we can sort the order of listing by date
+- In firestoreService.js file:
+  - Add the .orderBy() method and pass in date
+  ```javascript
+  export function listenToEventsFromFirestore() {
+    return db.collection('events').orderBy('date');
+  }
+  ```
 
 
 

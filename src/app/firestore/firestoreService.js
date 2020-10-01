@@ -29,7 +29,7 @@ export function dataFromSnapshot(snapshot) {
 
 // Listen to events data from Firestore
 export function listenToEventsFromFirestore() {
-	return db.collection('events');
+	return db.collection('events').orderBy('date');
 }
 
 export function listenToEventFromFirestore(eventId) {
