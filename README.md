@@ -3469,8 +3469,37 @@
   - Check to see if it's loading or if there's no event. If one of these cases is true, return the `<LoadingComponent />`
     - `if (loading || !event) return <LoadingComponent content='Loading event...' />;`
 
-
-
+**8. Handling not found documents**
+- When we try to fetch an event from Redux store or from Firestore, we use the event id from the URL params of the EventDetailedPage. When we try to get a document in Firestore based on the event id and it can't find it, Firestore will not return an error. However, it will still return a snapshot object and in the snapshot, there's an exists property that's set to false
+- We can use this exists property to check if a document data is found in Firestore. If this exists property is false, we can dispatch an asynActionError() action and provide a custom code and message about the error
+- In useFirestoreDoc.js file:
+  - Write a condition to check if snapshot.exists property is false
+  - If it is, dispatch the asynActionError() action and provide a custom error code and message
+  - And then return. This means the function will stop executing anything after
+  ```javascript
+  useEffect(() => {
+      dispatch(asyncActionStart());
+      const unsubscribe = query().onSnapshot(
+        (snapshot) => {
+          if (!snapshot.exists) {
+            dispatch(
+              asyncActionError({
+                code: 'not-found',
+                message: 'could not find document'
+              })
+            );
+            return;
+          }
+          data(dataFromSnapshot(snapshot));
+          dispatch(asyncActionFinish());
+        },
+        (error) => dispatch(asyncActionError())
+      );
+      return () => {
+        unsubscribe();
+      };
+    }, deps); //eslint-disable-line react-hooks/exhaustive-deps
+  ```
 
 
 
