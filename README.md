@@ -3664,6 +3664,37 @@
   }
   ```
 
+**11. Deleting an event**
+- In firestoreService.js file:
+  - Write a deleteEventInFirestore function to delete an event in Firestore
+    - This function takes an eventId as an argument
+    ```javascript
+    export function deleteEventInFirestore(eventId) {
+      return db.collection('events').doc(eventId).delete();
+    }
+    ```
+- In EventListItem.jsx file:
+  - Import the deleteEventInFirestore function: `import { deleteEventInFirestore } from '../../../app/firestore/firestoreService';`
+  - In the 'Delete' Button element:
+    - Replace the dispatch deleteEvent() action with the deleteEventInFirestore() function and pass in the event.id
+    - This will remove an event in Firestore
+    ```javascript
+    <Button
+      onClick={() => deleteEventInFirestore(event.id)}
+      color='red'
+      floated='right'
+      content='Delete'
+    />
+    ```
+  - In our application, however, the user won't be able to delete an event. They can cancel an event instead
+
+
+
+
+
+
+
+
 
 
 

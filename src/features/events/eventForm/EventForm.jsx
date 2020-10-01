@@ -1,6 +1,5 @@
 /* global google */
 import React from 'react';
-import cuid from 'cuid';
 import { Link, Redirect } from 'react-router-dom';
 import { Button, Header, Segment } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
