@@ -165,7 +165,7 @@ export default function EventForm({ match, history }) {
 			</Formik>
 			<Confirm
 				content={
-					selectedEvent.isCancelled
+					selectedEvent?.isCancelled
 						? 'This will reactivate the event - are you sure?'
 						: 'This will cancel the event - are you sure?'
 				}

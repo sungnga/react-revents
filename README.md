@@ -3799,8 +3799,67 @@
     ```
 
 
+## S11: AUTHENTICATION
+**Firebase Authentication**
+- Tightly integrated with Firebase services. We use this to secure our application when we create some security rules
+- Token based (JWT). Uses Jason Web Token to pass with every request that goes to Firebase and Firestore. And it is stored in the client's browser for persistence
+- Email and password. We can use email and password for authentication
+- Social logins. Can also utilize social logins like Facebook and Google
+- We will look into 3 options: email/password, Facebook, and Google
 
+**Users**
+- Firestore User properties
+  - Unique ID (uid)
+  - Email address
+  - Name
+  - PhotoURL
+- Cannot add additional properties to the User object directly
+- We're going store user profile which have more flexibility. Can store additional properties in Firestore
 
+**1. Logging in with Firebase**
+- Go to Google Firebase website: https://console.firebase.google.com/
+- Click on Authentication in main menu. Then in Authentication page, select 'Sign-in method' at the top menu bar
+  - It'll list all the different options
+  - Enable Email/Password, the first item on the list
+- Select 'Users' at the top menu bar
+  - Click on 'Add user' button to add a user
+  - Fill in the Email and Pasword for the user
+  - Once a user is created, a user UID is created for this user
+  - All the users are listed in this 'Users' tab
+- In authActions.js file:
+  - Import firebase from config folder to get access to Firebase SDK: `import firebase from '../../app/config/firebase';`
+  - Update the signInUser action function
+    - This function accepts creds as an argument
+    - This function returns an async function that accepts dispatch as an argument
+    - Since this is an async function, we'll use try/catch block
+    - Because this is a form that we're using to signin user, we're going throw the error that we get back to the form itself. Call `throw error`. For example, if the user types an incorrect password, we're going to display that error on the form
+    - In the try block:
+      - Call the firebase.auth().signInWithEmailAndPassword() methods and pass in the email and password. Use the 'await' keyword in front of it because this operation has to complete and we get the result back before moving forward
+      - Once we get the result back, dispatch the SIGN_IN_USER action type and the payload with the result of that user
+      - When we try to login with a user email and password and submit it to firebase, we can see the result for this user that came back in the Redux 
+      devTools console. The result is in the payload property. It contains a whole bunch of information pertaining to this user
+    ```javascript
+    export function signInUser(creds) {
+      return async function (dispatch) {
+        try {
+          const result = await firebase
+            .auth()
+            .signInWithEmailAndPassword(creds.email, creds.password);
+          dispatch({ type: SIGN_IN_USER, payload: result.user });
+        } catch (error) {
+          throw error;
+        }
+      };
+    }
+    ```
+- In authReducer.jsx file:
+  - Set the initialState object
+    ```javascript
+    const initialState = {
+      authenticated: false,
+      currentUser: null
+    };
+    ```
 
 
 
