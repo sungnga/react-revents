@@ -3501,10 +3501,53 @@
     }, deps); //eslint-disable-line react-hooks/exhaustive-deps
   ```
 
+**9. Adding an error component: ErrorComponent**
+- The current problem we're having is if no event document is found, the `<LoadingComponent />` continues to run. So we're going to create an error component to handle errors and redirect user
+- In src/app/common/errors folder, create a component/file called ErrorComponent.jsx
+- In ErrorComponent.jsx file:
+  - Import the following:
+    ```javascript
+    import React from 'react';
+    import { useSelector } from 'react-redux';
+    import { Button, Header, Segment } from 'semantic-ui-react';
+    import { Link } from 'react-router-dom';
+    ```
+  - Write an ErrorComponent functional component that displays an error message and a button that directs the user to the events page
+    - Extract the error property from asyncReducer using useSelector() hook
+      - `const { error } = useSelector((state) => state.async);`
+    ```javascript
+    export default function ErrorComponent() {
+      const { error } = useSelector((state) => state.async);
 
-
-
-
+      return (
+        <Segment placeholder>
+          <Header
+            textAlign='center'
+            content={error?.message || 'Oops - we have an error'}
+          />
+          <Button
+            as={Link}
+            to='/events'
+            primary
+            style={{ marginTop: 20 }}
+            content='Return to events page'
+          />
+        </Segment>
+      );
+    }
+    ```
+- In App.jsx file:
+  - Import the ErrorComponent: `import ErrorComponent from '../common/errors/ErrorComponent';`
+  - Create a route for the ErrorComponent
+    - `<Route path='/error' component={ErrorComponent} />`
+- In EventDetailedPage.jsx file:
+  - Import the Redirect component: `import { Redirect } from 'react-router-dom';`
+  - Extract the error property from asyncReducer using useSelector() hook
+    - `const { loading, error } = useSelector((state) => state.async);`
+  - If loading is true or if there's no event and no error, return with the LoadingComponent
+    - `if (loading || (!event && !error)) return <LoadingComponent content='Loading event...' />;`
+  - Write a condition that checks for the error state. If there's an error, return with the Redirect component and set the path to '/error'. The route of this '/error' path will render the ErrorComponent and display the error page
+    - `if (error) return <Redirect to='/error' />;`
 
 
 

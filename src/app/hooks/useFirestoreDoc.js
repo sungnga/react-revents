@@ -18,7 +18,7 @@ export default function useFirestoreDoc({ query, data, deps }) {
 					dispatch(
 						asyncActionError({
 							code: 'not-found',
-							message: 'could not find document'
+							message: 'Could not find document'
 						})
 					);
 					return;
