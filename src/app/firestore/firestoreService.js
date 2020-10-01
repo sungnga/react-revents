@@ -17,8 +17,8 @@ export function dataFromSnapshot(snapshot) {
 				data[prop] = data[prop].toDate();
 			}
 		}
-  }
-  
+	}
+
 	// Return the existing data and the id from snapshot.id
 	return {
 		...data,
@@ -29,4 +29,9 @@ export function dataFromSnapshot(snapshot) {
 // Listen to events data from Firestore
 export function listenToEventsFromFirestore() {
 	return db.collection('events');
+}
+
+
+export function listenToEventFromFirestore(eventId) {
+	return db.collection('events').doc(eventId);
 }

@@ -3383,6 +3383,7 @@
 - In firestoreService.js file:
   - We're going to change the functioning and the name of the getEventsFromFirestore function. This function will be listening to events from Firestore and returns the events collection. It's no longer getting the snapshot as the useFirestoreCollection custom hook will handle that
     ```javascript
+    // A query function
     export function listenToEventsFromFirestore() {
       return db.collection('events');
     }
@@ -3390,7 +3391,7 @@
 - In EventDashboard.jsx file:
   - Import the firestoreService() custom hook: `import useFirestoreCollection from '../../../app/hooks/useFirestoreCollection';`
   - Import the listenToEvents() action: `import { listenToEvents } from '../eventActions';`
-  - Import the listenToEventsFromFirestore function: `import { listenToEventsFromFirestore } from '../../../app/firestore/firestoreService';`
+  - Import the listenToEventsFromFirestore query function: `import { listenToEventsFromFirestore } from '../../../app/firestore/firestoreService';`
   - Instead of using useEffect() hook, we're going to use the firestoreService() hook
     - This custom hook takes query, data, and deps parameters as an object
     ```javascript
@@ -3400,6 +3401,86 @@
       deps: [dispatch]
     });
     ```
+
+**7. Adding a useFirestoreDoc() hook**
+- We want to get individual documents rather than a collection from Firestore. We need to create another custom hook and a query function to get a document from Firestore
+- In src/app/hooks folder, create a file called useFirestoreDoc.js
+- In useFirestoreDoc.js file:
+  - Import the following:
+    ```javascript
+    import { useEffect } from "react";
+    import { useDispatch } from "react-redux";
+    import { asyncActionError, asyncActionFinish, asyncActionStart } from "../async/asyncReducer";
+    import { dataFromSnapshot } from "../firestore/firestoreService";
+    ```
+  - Write a useFirestoreDoc custom hook that listens to Firestore when component mounts and unsubscribe when the component unmounts
+    - The snapshot that it comes back is a document based on the eventId
+    ```javascript
+    export default function useFirestoreDoc({ query, data, deps }) {
+      const dispatch = useDispatch();
+
+      useEffect(() => {
+        dispatch(asyncActionStart())
+        const unsubscribe = query().onSnapshot(
+          snapshot => {
+            data(dataFromSnapshot(snapshot))
+            dispatch(asyncActionFinish())
+          },
+          error => dispatch(asyncActionError())
+        )
+        return () => {
+          unsubscribe()
+        }
+      }, deps) //eslint-disable-line react-hooks/exhaustive-deps
+    }
+    ```
+- In firestoreService.js file:
+  - Create a listenToEventFromFirestore function that queries the events collection in Firestore and returns a document based on an event id
+    - This function take an eventId as an argument
+    ```javascript
+    export function listenToEventFromFirestore(eventId) {
+      return db.collection('events').doc(eventId);
+    }
+    ```
+- In EventDetailedPage.jsx file:
+  - Import the following:
+    ```javascript
+    import { useDispatch, useSelector } from 'react-redux';
+    import { listenToEventFromFirestore } from '../../../app/firestore/firestoreService';
+    import useFirestoreDoc from '../../../app/hooks/useFirestoreDoc';
+    import { listenToEvents } from '../eventActions';
+    import LoadingComponent from '../../../app/layout/LoadingComponent';
+    ```
+  - Create a dispatch method using useDispatch hook
+    - `const dispatch = useDispatch();`
+  - Use useFirestoreDoc() hook
+    - This custom hook takes query, data, and deps parameters as an object
+    - If there's a change in eventId in the URL params, the component will re-render and what's inside the custom hook will run
+    ```javascript
+    useFirestoreDoc({
+      query: () => listenToEventFromFirestore(match.params.id),
+      data: (event) => dispatch(listenToEvents([event])),
+      deps: [match.params.id, dispatch]
+    });
+    ```
+  - Because we're going to wait for the event to come back from Firestore, we're going to add the loading indicator as well
+  - Extract the loading property from the asyncReducer using useSelector() hook
+    - `const { loading } = useSelector((state) => state.async);`
+  - Check to see if it's loading or if there's no event. If one of these cases is true, return the `<LoadingComponent />`
+    - `if (loading || !event) return <LoadingComponent content='Loading event...' />;`
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
