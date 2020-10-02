@@ -3959,6 +3959,113 @@ In src/app/firestore folder, create a file called firebaseService.js
   - On the onClick event for 'Sign out' Dropdown, call the handleSignOut method
     - `<Dropdown.Item onClick={handleSignOut} text='Sign out' icon='power' />`
 
+**4. Registering new users in Firebase: RegisterForm component**
+- In src/features/auth folder, create a component/file called RegisterForm.jsx
+- In RegisterForm.jsx file:
+  - The RegisterForm is very similar to the the LoginForm. Copy and paste the code as starter
+    - In the Form, add another MyTextInput component for displayName text input field
+    - Add validation to displayName field in the validationSchema as well
+    - Change the Button element to 'Register'
+    - Add the header to say 'Register to Re-vents'
+    ```javascript
+    export default function RegisterForm() {
+      const dispatch = useDispatch();
+
+      return (
+        <ModalWrapper size='mini' header='Register to Re-vents'>
+          <Formik
+            initialValues={{ displayName: '', email: '', password: '' }}
+            validationSchema={Yup.object({
+              displayName: Yup.string().required(),
+              email: Yup.string().required().email(),
+              password: Yup.string().required()
+            })}
+            onSubmit={async (values, { setSubmitting }) => {
+              try {
+                await registerInFirebase(values);
+                setSubmitting(false);
+                dispatch(closeModal());
+              } catch (error) {
+                setSubmitting(false);
+                console.log(error);
+              }
+            }}
+          >
+            {({ isSubmitting, isValid, dirty }) => (
+              <Form className='ui form'>
+                <MyTextInput name='displayName' placeholder='displayName' />
+                <MyTextInput name='email' placeholder='Email Address' />
+                <MyTextInput
+                  name='password'
+                  placeholder='Password'
+                  type='password'
+                />
+                <Button
+                  loading={isSubmitting}
+                  disabled={!isValid || !dirty || isSubmitting}
+                  type='submit'
+                  fluid
+                  size='large'
+                  color='teal'
+                  content='Register'
+                />
+              </Form>
+            )}
+          </Formik>
+        </ModalWrapper>
+      );
+    }
+    ```
+- Since this RegisterForm is a modal, we need to add this component to the modalLookup
+- In ModalManager.jsx file:
+  - Import the RegisterForm component: `import RegisterForm from '../../../features/auth/RegisterForm';`
+  - Add the RegisterForm to the modalLookup object
+    - `const modalLookup = { TestModal, LoginForm, RegisterForm };`
+- In the SignedOutMenu.jsx file:
+  - In the 'Register' Button element:
+    - Add the onClick event handler where the openModal() function is going to dispatch and pass in the modalType of RegisterForm
+    ```javascript
+    <Button
+      onClick={() => dispatch(openModal({ modalType: 'RegisterForm' }))}
+      basic
+      inverted
+      content='Register'
+      style={{ marginLeft: '0.5em' }}
+    />
+    ```
+- In firebaseService.js file:
+  - Write an async registerInFirebase function that registers a new user in Firebase
+    - This function takes creds as an argument
+    - Since this is an async function, we'll run our code in a try/catch block
+    - If there's an error, we'll throw the error back to the register form
+    - Call the firebase.auth()..createUserWithEmailAndPassword() method and pass in the email and password. The result we get back from this method is the user credentials
+    - After this is done, we want to set a displayName property on the user object using the .updateProfile() method
+    ```javascript
+    export async function registerInFirebase(creds) {
+      try {
+        const result = await firebase
+          .auth()
+          .createUserWithEmailAndPassword(creds.email, creds.password);
+        return await result.user.updateProfile({
+          displayName: creds.displayName
+        });
+      } catch (error) {
+        throw error;
+      }
+    }
+    ```
+- In RegisterForm.jsx file:
+  - Import the registerInFirebase method: `import { registerInFirebase } from '../../app/firestore/firebaseService';`
+  - On the onSubmit event handler, call the registerInFirebase() method inside the try block and pass in the values as an argument. Add the 'await' keyword in front of it since this is an async operation
+    - `await registerInFirebase(values);`
+
+
+
+
+
+
+
+
 
 
 
