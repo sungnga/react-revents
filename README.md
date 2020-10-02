@@ -3817,7 +3817,7 @@
 - We're going store user profile which have more flexibility. Can store additional properties in Firestore
 
 **1. Logging in with Firebase**
-- Go to Google Firebase website: https://console.firebase.google.com/
+- Go to Google Firebase console: https://console.firebase.google.com/
 - Click on Authentication in main menu. Then in Authentication page, select 'Sign-in method' at the top menu bar
   - It'll list all the different options
   - Enable Email/Password, the first item on the list
@@ -3826,29 +3826,31 @@
   - Fill in the Email and Pasword for the user
   - Once a user is created, a user UID is created for this user
   - All the users are listed in this 'Users' tab
-- In authActions.js file:
-  - Import firebase from config folder to get access to Firebase SDK: `import firebase from '../../app/config/firebase';`
-  - Update the signInUser action function
-    - This function accepts creds as an argument
-    - This function returns an async function that accepts dispatch as an argument
-    - Since this is an async function, we'll use try/catch block
-    - Because this is a form that we're using to signin user, we're going throw the error that we get back to the form itself. Call `throw error`. For example, if the user types an incorrect password, we're going to display that error on the form
-    - In the try block:
-      - Call the firebase.auth().signInWithEmailAndPassword() methods and pass in the email and password. Use the 'await' keyword in front of it because this operation has to complete and we get the result back before moving forward
-      - Once we get the result back, dispatch the SIGN_IN_USER action type and the payload with the result of that user
-      - When we try to login with a user email and password and submit it to firebase, we can see the result for this user that came back in the Redux 
-      devTools console. The result is in the payload property. It contains a whole bunch of information pertaining to this user
+In src/app/firestore folder, create a file called firebaseService.js
+- In firebaseService.js file:
+  - Import firebase from config folder to get access to Firebase SDK: `import firebase from '../config/firebase';`
+  - Write a signInWithEmail function that signs in a user in Firebase with email and password
+    - This function takes creds as an argument
+    - Call the firebase.auth().signInWithEmailAndPassword() method and pass in the email and password
+    - Once this is submitted to Firebase auth, the result returned is information about this user. The result of this user will be used as a payload when dispatching the signInUser() action
     ```javascript
-    export function signInUser(creds) {
-      return async function (dispatch) {
-        try {
-          const result = await firebase
-            .auth()
-            .signInWithEmailAndPassword(creds.email, creds.password);
-          dispatch({ type: SIGN_IN_USER, payload: result.user });
-        } catch (error) {
-          throw error;
-        }
+    export function signInWithEmail(creds) {
+      return firebase
+        .auth()
+        .signInWithEmailAndPassword(creds.email, creds.password);
+    }
+    ```
+- In authActions.js file:
+  - Update the signInUser action function:
+    - This function accepts user as an argument
+    - This function returns an action object
+      - with action type of SIGN_IN_USER
+      - and payload of user. This payload contains information about this particular user when they signed in to Firebase
+    ```javascript
+    export function signInUser(user) {
+      return {
+        type: SIGN_IN_USER,
+        payload: user
       };
     }
     ```
@@ -3860,6 +3862,72 @@
       currentUser: null
     };
     ```
+
+**2. Persisting the login**
+- What Firebase and Firestore uses to retain information inside the browser to persist things like user login is inside the Application/Storage/IndexedDB/firebaseLocalStorageDb
+- When we login with a user or do anything with authentication, then Firebase gives us a listener for when the authentication state is changed. The `firebase.auth().onAuthStateChanged()` method adds an observer for changes to the user's sign-in state. So when a user logs in or a user logs out, then this particular method is going to listen for that particular status. And then we can take actions when the authentication state is changed
+- We'll use this method and what it returns is a Firebase user object. So we're going to check to see if we have a user. If a user is authenticated, then we have a user object
+- In authActions.js file:
+  - Import firebase from config folder to get access to Firebase SDK: `import firebase from '../../app/config/firebase';`
+  - Write a verifyAuth action function that listens to the firebase authentication state change
+    - This function returns a regular function that takes in a dispatch as an argument
+    - Inside this return function, we're going to call the firebase.auth().onAuthStateChange() method. This method will return a user object
+    - Write an if statement to check if there's a user
+    - If there is a user, dispatch the signInUser() action and pass in the user object
+    - If there isn't a user, dispatch the signOutUser() action. This function sets the authenticated property to false and the currentUser property to null
+    ```javascript
+    export function verifyAuth() {
+      return function (dispatch) {
+        return firebase.auth().onAuthStateChanged((user) => {
+          if (user) {
+            dispatch(signInUser(user));
+          } else {
+            dispatch(signOutUser());
+          }
+        });
+      };
+    }
+    ```
+- We can dispatch this verifyAuth() action directly in our store configuration. So when we initialize our store, we dispatch this action, and we're going to be continuously listening to the authentication state
+- In configureStore.js file:
+  - Import the verifyAuth() action function: `import { verifyAuth } from '../../features/auth/authActions';`
+  - We're going to make an adjustment to the store. We don't want to return the store directly. We want to do something to the store and then return the store
+  - First, create a store variable and assign it to the createStore() method
+  - Then dispatch the veryifyAuth() action to the store
+  - Then return the store
+    ```javascript
+    export function configureStore() {
+      // The createStore method takes a reducer and an enhancer as arguments
+      const store = createStore(
+        rootReducer,
+        composeWithDevTools(applyMiddleware(thunk))
+      );
+
+      store.dispatch(verifyAuth());
+
+      return store;
+    }
+    ```
+- Next is we want add in a loading indicator when the user is logging in
+- In LoginForm.jsx file:
+  - Import the signInWithEmail function: `import { signInWithEmail } from '../../app/firestore/firebaseService';`
+  - Since the signInWithEmail() function is an async function, we need to turn the arrow function that handles the onSubmit event into an async/await function
+  - Also, we need to run the code inside a try/catch block
+  - Call the signInWithEmail() method and pass in the values. Add the 'await' keyword in front of this function because we're waiting for this function to complete
+    ```javascript
+    onSubmit={async (values, { setSubmitting }) => {
+      try {
+        await signInWithEmail(values);
+        setSubmitting(false);
+        dispatch(closeModal());
+      } catch (error) {
+        setSubmitting(false);
+        console.log(error);
+      }
+    }}
+    ```
+
+
 
 
 
