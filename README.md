@@ -3927,9 +3927,37 @@ In src/app/firestore folder, create a file called firebaseService.js
     }}
     ```
 
-
-
-
+**3. Signing out the user in Firebase**
+- When a user clicks on the 'Sign out' button, we want them sign out in Firebase. We need to write a function to do this
+- In firebaseService.js file:
+  - Write a signOutFirebase function that signs out user in Firebase
+    - This function doesn't take any arguments
+    - Call the firebase.auth().signOut() method to sign out the user
+    ```javascript
+    export function signOutFirebase() {
+      return firebase.auth().signOut();
+    }
+    ```
+- In SignedInMenu.jsx file:
+  - Import the signOutFirebase method: `import { signOutFirebase } from '../../app/firestore/firebaseService';`
+  - Import toast: `import { toast } from 'react-toastify';`
+  - Write an async handleSignOut function handler to sign out user in Firebase when the 'Sign out' button is clicked
+    - Since this is an async function we'll run the code inside a try/catch block
+    - If there's any problems with signing out, call the toast.error() method to display a notification of the error
+    - Call the signOutFirebase() method and add the 'await' keyword in front of it
+    - We want to wait for the signOutFirebase() function to complete, signed out in Firebase, before pushing the user to homepage.
+    ```javascript
+    async function handleSignOut() {
+      try {
+        await signOutFirebase();
+        history.push('/');
+      } catch (error) {
+        toast.error(error.message);
+      }
+    }
+    ```
+  - On the onClick event for 'Sign out' Dropdown, call the handleSignOut method
+    - `<Dropdown.Item onClick={handleSignOut} text='Sign out' icon='power' />`
 
 
 
