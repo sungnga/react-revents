@@ -4175,12 +4175,25 @@ In src/app/firestore folder, create a file called firebaseService.js
     <SocialLogin />
     ```
 
-
-
-
-
-
-
+**8. Facebook login setup**
+- Go to: https://developers.facebook.com/
+- Once logged in with Facebook account, click on the 'Add a New project' button
+- Select the 'For Everything Else' option. Give the project a name
+- In Facebook developers dashboard
+  - Click on Facebook Login -> Set Up button. Then select for the Web
+- In the Settings menu on the left, click on Basic tab
+  - Copy the App ID and copy the App Secret
+- Go to Firebase Authentication page and under the 'Sign-in method' tab
+  - Enable Facebook Sign-in
+  - Paste in the App ID and App Secret
+  - Copy the OAuth redirect URI underneath it
+- In the Facebook Login menu on the left, click on Settings tab
+  - We need to provide info for: Valid OAuth Redirect URIs
+  - Paste in the OAuth Redirect URI
+- In the Roles menu on the left, click on Test Users tab
+  - Click on the 'Add' button
+  - Add 2 Number of Test Users to Create
+  - Once the Test Users are listed, change their names and give new passwords
 
 
 
