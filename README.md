@@ -4195,6 +4195,108 @@ In src/app/firestore folder, create a file called firebaseService.js
   - Add 2 Number of Test Users to Create
   - Once the Test Users are listed, change their names and give new passwords
 
+**9. Adding the Facebook login method**
+- In firebaseService.jsx file:
+  - Import the setUserProfileData function : `import { setUserProfileData } from './firestoreService';`
+  - Import toast: `import { toast } from 'react-toastify';`
+  - Write an async socialLogin function that logs in a user with Facebook or Google. If this user logs in for the first time, create a user profile for them in Firestore and Firebase
+    - This function takes a selectedProvider as an argument
+    - First, add a provider variable
+    - Then write an if statement to check if the selectedProivder is equal to facebook or google
+      - If it is, set the provider variable to the new firebase facebook or google auth provider
+    - After that, use a try/catch block to run the code
+    - If there's an error, use toast.error() method to display the error.message
+    - Inside the try block:
+      - Call the firebase.auth().signInWithPopup() method and pass in the provider. Add an 'await' keyword in front of it since this is an async function. Assign the returned result to a result variable
+      - Then write an if statement flag to check if this user is a new user. If it is, execute the setUserProfileData() method and pass in result.user as an argument. If this facebook user is a new user logging into our application, the setUserProfileData() method will create a user profile for them in Firestore and Firebase
+    ```javascript
+    export async function socialLogin(selectedProvider) {
+      let provider;
+      if (selectedProvider === 'facebook') {
+        provider = new firebase.auth.FacebookAuthProvider();
+      }
+      if (selectedProvider === 'google') {
+        provider = new firebase.auth.GoogleAuthProvider();
+      }
+      try {
+        const result = await firebase.auth().signInWithPopup(provider);
+        console.log(result);
+        if (result.additionalUserInfo.isNewUser) {
+          await setUserProfileData(result.user);
+        }
+      } catch (error) {
+        toast.error(error.message);
+      }
+    }
+    ```
+- In SocialLogin.jsx file:
+  - Import useDispatch() hook: `import { useDispatch } from 'react-redux';`
+  - Import closeModal() action: `import {closeModal} from '../../app/common/modals/modalReducer'`
+  - Import socialLogin function: `import { socialLogin } from '../../app/firestore/firebaseService';`
+  - Create a dispatch method using useDispatch() hook
+  - Write a handleSocialLogin function handler
+    - This function takes a provider as an argument
+    - Dispatch a closeModal() action
+    - Call the socialLogin() function and pass in the provider
+      ```javascript
+      function handleSocialLogin(provider) {
+        dispatch(closeModal());
+        socialLogin(provider);
+      }
+      ```
+  - In the 'Login with Google' and 'Login with Facebook' Button elements:
+    - Add an onClick event and call the handleSocialLogin() handler inside an arrow function and pass in 'facebook' for Facebook login and 'google' for Google login as a provider argument
+      ```javascript
+			<Button
+				onClick={() => handleSocialLogin('facebook')}
+				icon='facebook'
+				fluid
+				color='facebook'
+				style={{ marginBottom: 10 }}
+				content='Login with Facebook'
+			/>
+			<Button
+				onClick={() => handleSocialLogin('google')}
+				icon='google'
+				fluid
+				color='google plus'
+				style={{ marginBottom: 10 }}
+				content='Login with Google'
+			/>
+      ```
+- To test the Facebook login functionality:
+  - Go to Facebook developers dashboard and get one of the Test Users email and password
+  - When log in with Facebook. Type in the user email and password
+  - Once the user is logged in,
+    - This user is created and listed in the Firebase Authentication Users list
+    - The user profile is also created for this user in Cloud Firestore in 'users' collection
+  - When they log in for the very first time, the isNewUser property is set to true. When they log in again after that, the isNewUser property is set to false
+- We can also display the user's profile picture once they're logged in
+- In firestoreService.js file:
+  - In the setUserProfileData function:
+    - Add a photoURL property and set it to user.photoURL or null
+    ```javascript
+    export function setUserProfileData(user) {
+      return db.collection('users').doc(user.uid).set({
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL || null,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+    ```
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
