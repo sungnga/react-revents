@@ -4425,10 +4425,53 @@ In src/app/firestore folder, create a file called firebaseService.js
     - `{currentUser.providerId === 'facebook.com' && ( ... )`
     - `{currentUser.providerId === 'google.com' && ( ... )`
 
-
-
-
-
+**13. Adding a password change function**
+- In firebaseService.js file:
+  - Write an updateUserPassword function that updates user password
+    - This function takes creds as an argument. creds is the newPassword1 and newPassword2 values
+    - First, we need to get a reference to our existing user. Assign it to a user variable
+      - `const user = firebase.auth().currentUser;`
+    - Then call the .updatePassword() on the user and pass in creds.newPassword1 as an argument. This returns a promise, so we need to use a loading indicator for this function
+    ```javascript
+    export function updateUserPassword(creds) {
+      const user = firebase.auth().currentUser;
+      return user.updatePassword(creds.newPassword1);
+    }
+    ```
+- In AccountPage.jsx file:
+  - Import the updateUserPassword function: `import { updateUserPassword } from '../../app/firestore/firebaseService';`
+  - In the onSubmit event handler:
+    - Make the arrow function handler an async function by adding the 'async' keyword in front of it
+    - As a 2nd arg, extract the setSubmitting and setErrors props, as an object, from Formik
+    - Since this is an async function, run the code in a try/catch block
+    - If there's an error, call the setErrors() method and set the auth property to error.message
+    - In the try block:
+      - Call the updateUserPassword() method and pass in values as an argument. Add the 'await' in front of it since we need to wait for this function to complete
+      - Call setSubmitting() and set it to false. This will trigger the loading indicator
+    ```javascript
+    onSubmit={async (values, { setSubmitting, setErrors }) => {
+      try {
+        await updateUserPassword(values);
+        setSubmitting(false);
+      } catch (error) {
+        setErrors({ auth: error.message });
+        setSubmitting(false);
+      }
+    }}
+    ```
+  - In the 'Update password' Button element:
+    - Add the loading property and make this button a block element
+    ```javascript
+    <Button
+      style={{ display: 'block' }}
+      loading={isSubmitting}
+      type='submit'
+      disabled={!isValid || !dirty || isSubmitting}
+      size='large'
+      positive
+      content='Update password'
+    />
+    ```
 
 
 
