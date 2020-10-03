@@ -4393,6 +4393,43 @@ In src/app/firestore folder, create a file called firebaseService.js
   - Make this dropdown as a link and set the pathname to '/account'
   - `<Dropdown.Item as={Link} to='/account' text='My account' icon='settings' />`
 
+**12. Adding additional user info into the authReducer**
+- In authReducer.js file:
+  - In the SIGN_IN_USER case, add additional properties to the currentUser object
+    ```javascript
+		case SIGN_IN_USER:
+			return {
+				...state,
+				authenticated: true,
+				currentUser: {
+					email: payload.email,
+					photoURL: payload.photoURL,
+					uid: payload.uid,
+					displayName: payload.displayName,
+					providerId: payload.providerData[0].providerId
+				}
+			};
+    ```
+- In SignedInMenu.jsx file:
+  - Once the user is logged in, we want to display their displayName instead of their email address at the top NavBar
+  - In the Dropdown component, change the text property to currentUser.displayName
+    - `<Dropdown pointing='top left' text={currentUser.displayName}>`
+- In AccountPage.jsx file:
+  - Import useSelector() hook: `import { useSelector } from 'react-redux';`
+  - Extract the currentUser property from authReducer using useSelector() hook
+    - `const { currentUser } = useSelector((state) => state.auth);`
+  - The currentUser.providerId property will tell which provider the user used to log into our application. It's either password, facebook, or google. We only want to display the relevant content based on the provider they used to login
+  - In the render section:
+    - Add conditional logic to display the proper content based on the provider the user used to login. Do this for all three providers
+    - `{currentUser.providerId === 'password' && ( ... )`
+    - `{currentUser.providerId === 'facebook.com' && ( ... )`
+    - `{currentUser.providerId === 'google.com' && ( ... )`
+
+
+
+
+
+
 
 
 
