@@ -4176,7 +4176,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     ```
 
 **8. Facebook login setup**
-- Go to: https://developers.facebook.com/
+- Go to Facebook developers website: https://developers.facebook.com/
 - Once logged in with Facebook account, click on the 'Add a New project' button
 - Select the 'For Everything Else' option. Give the project a name
 - In Facebook developers dashboard
@@ -4238,32 +4238,32 @@ In src/app/firestore folder, create a file called firebaseService.js
     - This function takes a provider as an argument
     - Dispatch a closeModal() action
     - Call the socialLogin() function and pass in the provider
-      ```javascript
-      function handleSocialLogin(provider) {
-        dispatch(closeModal());
-        socialLogin(provider);
-      }
-      ```
+    ```javascript
+    function handleSocialLogin(provider) {
+      dispatch(closeModal());
+      socialLogin(provider);
+    }
+    ```
   - In the 'Login with Google' and 'Login with Facebook' Button elements:
     - Add an onClick event and call the handleSocialLogin() handler inside an arrow function and pass in 'facebook' for Facebook login and 'google' for Google login as a provider argument
-      ```javascript
-			<Button
-				onClick={() => handleSocialLogin('facebook')}
-				icon='facebook'
-				fluid
-				color='facebook'
-				style={{ marginBottom: 10 }}
-				content='Login with Facebook'
-			/>
-			<Button
-				onClick={() => handleSocialLogin('google')}
-				icon='google'
-				fluid
-				color='google plus'
-				style={{ marginBottom: 10 }}
-				content='Login with Google'
-			/>
-      ```
+    ```javascript
+    <Button
+      onClick={() => handleSocialLogin('facebook')}
+      icon='facebook'
+      fluid
+      color='facebook'
+      style={{ marginBottom: 10 }}
+      content='Login with Facebook'
+    />
+    <Button
+      onClick={() => handleSocialLogin('google')}
+      icon='google'
+      fluid
+      color='google plus'
+      style={{ marginBottom: 10 }}
+      content='Login with Google'
+    />
+    ```
 - To test the Facebook login functionality:
   - Go to Facebook developers dashboard and get one of the Test Users email and password
   - When log in with Facebook. Type in the user email and password
@@ -4286,12 +4286,112 @@ In src/app/firestore folder, create a file called firebaseService.js
     }
     ```
 
+**10. Adding Google login**
+- Go to Google Firebase console: https://console.firebase.google.com/
+- Click on Authentication in main menu. Then in Authentication page, select 'Sign-in method' at the top menu bar
+- Enable Google Sign-in. Provide Project support email and click Save. Easy peasy
 
-
-
-
-
-
+**11. Adding an account page: AccountPage component**
+- In src/features/auth folder, create a component/file called AccountPage.jsx
+- In AccountPage.jsx file:
+  - Import the following:
+    ```javascript
+    import React from 'react';
+    import { Form, Formik } from 'formik';
+    import { Link } from 'react-router-dom';
+    import { Button, Header, Label, Segment } from 'semantic-ui-react';
+    import * as Yup from 'yup';
+    import MyTextInput from '../../app/common/form/MyTextInput';
+    ```
+  - Write a AccountPage functional component that renders the user account page using Formik and Semantic UI
+    - This account page allows user to change their password
+    - If they signed in with Facebook or Google, buttons that take them to Facebook or Google website to update their account there
+    ```javascript
+    export default function AccountPage() {
+      return (
+        <Segment>
+          <Header dividing size='large' content='Account' />
+          <div>
+            <Header color='teal' sub content='Change Password' />
+            <p>Use this form to change your password</p>
+            <Formik
+              initialValues={{ newPassword1: '', newPassword2: '' }}
+              validationSchema={Yup.object({
+                newPassword1: Yup.string().required('Password is required'),
+                newPassword2: Yup.string().oneOf(
+                  [Yup.ref('newPassword1'), null],
+                  'Passwords do not match'
+                )
+              })}
+              onSubmit={(values) => {
+                console.log(values);
+              }}
+            >
+              {({ errors, isSubmitting, isValid, dirty }) => (
+                <Form className='ui form'>
+                  <MyTextInput
+                    name='newPassword1'
+                    type='password'
+                    placeholder='New Password'
+                  />
+                  <MyTextInput
+                    name='newPassword2'
+                    type='password'
+                    placeholder='Confirm Password'
+                  />
+                  {errors.auth && (
+                    <Label
+                      basic
+                      color='red'
+                      style={{ marginBottom: 10 }}
+                      content={errors.auth}
+                    />
+                  )}
+                  <Button
+                    type='submit'
+                    disabled={!isValid || !dirty || isSubmitting}
+                    size='large'
+                    positive
+                    content='Update password'
+                  />
+                </Form>
+              )}
+            </Formik>
+          </div>
+          <div>
+            <Header color='teal' sub content='Facebook account' />
+            <p>Please visit Facebook to update your account</p>
+            <Button
+              icon='facebook'
+              color='facebook'
+              as={Link}
+              to='https://facebook.com'
+              content='Go to Facebook'
+            />
+          </div>
+          <div>
+            <Header color='teal' sub content='Google account' />
+            <p>Please visit Google to update your account</p>
+            <Button
+              icon='google'
+              color='google plus'
+              as={Link}
+              to='https://google.com'
+              content='Go to Google'
+            />
+          </div>
+        </Segment>
+      );
+    }
+    ```
+- In App.jsx file:
+  - Import the AccountPage component: `import AccountPage from '../../features/auth/AccountPage';`
+  - Create a route for the AccountPage component. Set the path to '/account'
+    - `<Route path='/account' component={AccountPage} />`
+- In SignedInMenu.jsx file:
+  - Right after the 'My profile' Dropdown.Item, add a 'My account' Dropdown.Item
+  - Make this dropdown as a link and set the pathname to '/account'
+  - `<Dropdown.Item as={Link} to='/account' text='My account' icon='settings' />`
 
 
 
@@ -4358,7 +4458,6 @@ In src/app/firestore folder, create a file called firebaseService.js
   - In index.js file, import the react-toastify css stylesheet right after the Semantic UI stylesheet
     - `import 'react-toastify/dist/ReactToastify.min.css';`
   - Import the ToastContainer component in App.jsx file: `import { ToastContainer } from 'react-toastify';`
-  - Import toast in file: ``
 - React Calendar widget
   - Install: `npm i react-calendar`
   - In index.js file, import the stylesheet right after the react-toastify stylesheet
