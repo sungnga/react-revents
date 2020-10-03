@@ -11,8 +11,8 @@ export default function SignedInMenu({ signOut }) {
 
 	async function handleSignOut() {
 		try {
-			await signOutFirebase();
 			history.push('/');
+			await signOutFirebase();
 		} catch (error) {
 			toast.error(error.message);
 		}

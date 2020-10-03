@@ -4473,6 +4473,82 @@ In src/app/firestore folder, create a file called firebaseService.js
     />
     ```
 
+**14. Fixing our issue with app initialization**
+- When a user is signed in and then visits the My Account page and then refreshes the page, we will run into an error that says Cannot read property 'providerId' of null. That is because we've initialized our app and the auth state is currently null and there's no user object. Certain page or component requires the user visiting the page be authenticated and we wrote a conditional somewhere in the component that is looking for the user object. ProviderId is one of the properties of the user object. When the Account page refreshes it causes the component to re-render. And in the application initialization stage, it's looking for the providerId property but the currentUser object is currently null (no user object), so the application crashes
+- So what we need to take a look at is our application initialization. Our components are going to attempt to dispay as soon as possible and we need to add some control into that and wait until certain things have loaded in our application before we attempt to dispay the components. At the moment, whether we're authenticated or not, there may be other information that we want to load in when we initialize our application before anything else loads up
+- In our case, we're going to do this in the asyncReducer. We want to add an initialized flag into our asyncReducer and anything else that we need to do before our component renders
+- In asyncReducer.js file:
+  - Add another constant
+    - `export const APP_LOADED = 'APP_LOADED';`
+  - Add an additional initialState property of initialized and set it to false:
+    ```javascript
+    const initialState = {
+      laoding: false,
+      error: null,
+      initialized: false
+    };
+    ```
+  - Add another case to the asyncReducer function at the bottom
+    - This function will return as an object, the existing state and set the initialized property to true
+    ```javascript
+		case APP_LOADED:
+			return {
+				...state,
+				initialized: true
+			};
+    ```
+- All of our initialization is taken place in the verifyAuth() action. We want to wait until we've got our current user before we can say our app is now loaded
+- Go to authActions.js file:
+  - Import the APP_LOADED constant: `import { APP_LOADED } from '../../app/async/asyncReducer';`
+  - In the verifyAuth() function:
+    - In this function, we're observing, listening for auth state to change. And we're going to get a user object back or not. If we do get a user, we dispatch the signInUser() action with the user object. This will set the state with the currentUser object
+    - After this is done, we want to dispatch the APP_LOADED action. This is a flag. It's either true or false. When APP_LOADED is called, initialized state property is set to true
+    - If there is no user, dispatch the signOutUser() action and then dispatch the APP_LOADED action. The initialized state property is not set to true after we signed out user
+    ```javascript
+    export function verifyAuth() {
+      return function (dispatch) {
+        return firebase.auth().onAuthStateChanged((user) => {
+          if (user) {
+            // Update the state with currentUser object
+            dispatch(signInUser(user));
+            dispatch({ type: APP_LOADED });
+          } else {
+            dispatch(signOutUser());
+            dispatch({ type: APP_LOADED });
+          }
+        });
+      };
+    }
+    ```
+- Next is, we want to prevent our application component from loading until the APP_LOADED flag is set to true. And we'll do this at the root of our component
+- In App.jsx file:
+  - Import useSelector() hook: `import { useSelector } from 'react-redux';`
+  - Import LoadingComponent component: `import LoadingComponent from './LoadingComponent';`
+  - Get the initialized property from the asyncReducer using useSelector() hook
+    - `const { initialized } = useSelector((state) => state.async);`
+  - Write an if statement to see if initialized property is false. If it is, return the LoadingComponent component. What this means is, we don't attempt to load any of our application until the initialized flag is set to true and by that point, we should have our currentUser object
+    - `if (!initialized) return <LoadingComponent content='Loading app...' />;`
+- In SignedInMenu.jsx file:
+  - When the user clicks the 'Sign out' Dropdown.Item, the handleSignOut() method is executed. We want to push the user to the homepage first, then call the signOutFirebase() method to sign them out in Firebase
+  - In the 
+    ```javascript
+    async function handleSignOut() {
+      try {
+        history.push('/');
+        await signOutFirebase();
+      } catch (error) {
+        toast.error(error.message);
+      }
+    }
+    ```
+
+
+
+
+
+
+
+
 
 
 
