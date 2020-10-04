@@ -4541,6 +4541,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     }
     ```
 
+
 ## S12: USER PROFILES
 **1. Adding a profile page: ProfilePage and ProfileHeader components**
 - In src/features/profiles/profilePage folder, create a component/file called ProfilePage.jsx
@@ -4655,6 +4656,81 @@ In src/app/firestore folder, create a file called firebaseService.js
 - In ProfilePage.jsx file:
   - Import the ProfileContent component: `import ProfileContent from './ProfileContent';`
     - In jsx, instantiate the ProfileContent component right after the ProfileHeader component: `<ProfileContent />`
+
+**3. Creating the redux actions**
+- In src/features/profiles folder, create a file called profileConstants.js
+- In profileConstants.js file:
+  - Add a constant listen to current user profile action
+  - This is something we want to listen to, especially when we initialize our application. We want to get the currentUser profile from Firestore and populate that in our Redux store and continuously listen to the current user profile as well
+    - `export const LISTEN_TO_CURRENT_USER_PROFILE = 'LISTEN_TO_CURRENT_USER_PROFILE';`
+- In src/features/profiles folder, create a file called profileActions.js
+- In profileActions.js file:
+  - Import the constant: `import { LISTEN_TO_CURRENT_USER_PROFILE } from "./profileConstants";`
+  - Write a listenToCurrentUserProfile action creator function that gets the current user profile from Firestore
+    - This function takes a profile as an argument
+    - This function returns as an object,
+      - the action type of LISTEN_TO_CURRENT_USER_PROFILE
+      - the payload of profile
+    ```javascript
+    export function listenToCurrentUserProfile(profile) {
+      return {
+        type: LISTEN_TO_CURRENT_USER_PROFILE,
+        payload: profile
+      };
+    }
+    ```
+- In src/features/profiles folder, create a file called profileReducer.js
+- In profileReducer.js file:
+  - Import the constant: `import { LISTEN_TO_CURRENT_USER_PROFILE } from './profileConstants';`
+  - Create an initialState object
+    ```javascript
+    const initialState = {
+      currentUserProfile: null
+    };
+    ```
+  - Write a profileReducer function
+    - This function takes 2 arguments
+      - 1st arg is the state and it is set to initialState as default value
+      - 2nd arg is the action, destructuring the type and payload properties
+    - Use a switch statement to handle different action types
+    - Write a case for the LISTEN_TO_CURRENT_USER_PROFILE action
+      - This action returns as an object, the existing state and the currentUserProfile state property of payload
+      - When this action is dispatched, currentUserProfile property in the store will contain current user profile from Firestore
+    - Write a default case that returns the state
+      ```javascript
+      export default function profileReducer(
+        state = initialState,
+        { type, payload }
+      ) {
+        switch (type) {
+          case LISTEN_TO_CURRENT_USER_PROFILE:
+            return {
+              ...state,
+              currentUserProfile: payload
+            };
+          default: {
+            return state;
+          }
+        }
+      }
+      ```
+- In rootReducer.js file:
+  - Import the profileReducer: `import profileReducer from '../../features/profiles/profileReducer';`
+  - Add the profileReducer as profile property to the rootReducer
+    - `profile: profileReducer`
+- We can go to the Redux devTools console and check out our Redux state and we should be able to find a new profile state with a currentUserProfile property in it. The currentUserProfile is currently null, but we can hook up our ProfilePage to Firestore and get the user profile data down so we can display it in the page
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
