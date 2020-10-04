@@ -4474,7 +4474,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     ```
 
 **14. Fixing our issue with app initialization**
-- When a user is signed in and then visits the My Account page and then refreshes the page, we will run into an error that says Cannot read property 'providerId' of null. That is because we've initialized our app and the auth state is currently null and there's no user object. Certain page or component requires the user visiting the page be authenticated and we wrote a conditional somewhere in the component that is looking for the user object. ProviderId is one of the properties of the user object. When the Account page refreshes it causes the component to re-render. And in the application initialization stage, it's looking for the providerId property but the currentUser object is currently null (no user object), so the application crashes
+- When a user is signed in and then visits the My Account page and then refreshes the page, we will run into an error that says Cannot read property 'providerId' of null. That is because we've initialized our app and the auth state is currently null and there's no user object. Certain page or component requires the user visiting the page be authenticated and we wrote a conditional somewhere in the component that is looking for the user object. ProviderId is one of the properties of the user object. When the Account page refreshes, it causes the component to re-render. And in the application initialization stage, it's looking for the providerId property but the currentUser object is currently null (no user object), so the application crashed
 - So what we need to take a look at is our application initialization. Our components are going to attempt to dispay as soon as possible and we need to add some control into that and wait until certain things have loaded in our application before we attempt to dispay the components. At the moment, whether we're authenticated or not, there may be other information that we want to load in when we initialize our application before anything else loads up
 - In our case, we're going to do this in the asyncReducer. We want to add an initialized flag into our asyncReducer and anything else that we need to do before our component renders
 - In asyncReducer.js file:
@@ -4530,7 +4530,6 @@ In src/app/firestore folder, create a file called firebaseService.js
     - `if (!initialized) return <LoadingComponent content='Loading app...' />;`
 - In SignedInMenu.jsx file:
   - When the user clicks the 'Sign out' Dropdown.Item, the handleSignOut() method is executed. We want to push the user to the homepage first, then call the signOutFirebase() method to sign them out in Firebase
-  - In the 
     ```javascript
     async function handleSignOut() {
       try {
@@ -4542,10 +4541,91 @@ In src/app/firestore folder, create a file called firebaseService.js
     }
     ```
 
-
-
-
-
+## S12: USER PROFILES
+**1. Adding a profile page: ProfilePage and ProfileHeader components**
+- In src/features/profiles/profilePage folder, create a component/file called ProfilePage.jsx
+- In ProfilePage.jsx file:
+  - Import React: `import React from 'react';`
+  - Import Semantic Grid component: `import { Grid } from 'semantic-ui-react';`
+  - Import the ProfileHeader component: `import ProfileHeader from './ProfileHeader';`
+  - Import the ProfileContent component: ``
+  - Write a ProfilePage functional component that renders the ProfileHeader and ProfileContent components using Semantic UI
+    - Render the ProfileHeader component and Profile content inside a 16-width grid column
+    ```javascript
+    export default function ProfilePage() {
+      return (
+        <Grid>
+          <Grid.Column width={16}>
+            <ProfileHeader />
+            <h1>Profile content</h1>
+          </Grid.Column>
+        </Grid>
+      );
+    }
+    ```
+- In features/profiles/profilePage folder, create a component/file called ProfileHeader.jsx
+- In ProfileHeader.jsx file:
+  - Import React: `import React from 'react';`
+  - Import Semantic components: `import { Button, Divider, Grid, Header, Item, Reveal, Segment, Statistic } from 'semantic-ui-react';`
+  - Write a ProfileHeader functional component that renders 
+    - a 12-width column grid of the user profile picture and display name
+    - a 4-width column grid of the user's statistics of number of following and followers
+    ```javascript
+    export default function ProfileHeader() {
+      return (
+        <Segment>
+          <Grid>
+            <Grid.Column width={12}>
+              <Item.Group>
+                <Item>
+                  <Item.Image avatar size='small' src='/assets/user.png' />
+                  <Item.Content verticalAlign='middle'>
+                    <Header
+                      as='h1'
+                      style={{ display: 'block', marginBottom: 10 }}
+                      content='Display name'
+                    />
+                  </Item.Content>
+                </Item>
+              </Item.Group>
+            </Grid.Column>
+            <Grid.Column width={4}>
+              <Statistic.Group>
+                <Statistic label='Followers' value={10} />
+                <Statistic label='Following' value={5} />
+              </Statistic.Group>
+              <Divider />
+              <Reveal animated='move'>
+                <Reveal.Content visible style={{ width: '100%' }}>
+                  <Button fluid color='teal' content='Following' />
+                </Reveal.Content>
+                <Reveal.Content hidden style={{ width: '100%' }}>
+                  <Button basic fluid color='red' content='Unfollow' />
+                </Reveal.Content>
+              </Reveal>
+            </Grid.Column>
+          </Grid>
+        </Segment>
+      );
+    }
+    ```
+- Setup a link so that we can visit the ProfilePage
+- In App.jsx file:
+  - Import the ProfilePage component: `import ProfilePage from '../../features/profiles/profilePage/ProfilePage';`
+  - Create a route for the ProfilePage component right after the route for AccountPage
+    - The path contains the user id
+    - `<Route path='/profile/:id' component={ProfilePage} />`
+- In SignedInMenu.jsx file:
+  - In the jsx section:
+    - Make the 'My profile' Dropdown.Item component as a Link and specify the pathname
+    ```javascript
+    <Dropdown.Item
+      as={Link}
+      to={`/profile/${currentUser.uid}`}
+      text='My profile'
+      icon='user'
+    />
+    ```
 
 
 
