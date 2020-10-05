@@ -4660,7 +4660,7 @@ In src/app/firestore folder, create a file called firebaseService.js
 **3. Creating the redux actions**
 - In src/features/profiles folder, create a file called profileConstants.js
 - In profileConstants.js file:
-  - Add a constant listen to current user profile action
+  - Add a constant LISTEN_TO_CURRENT_USER_PROFILE action
   - This is something we want to listen to, especially when we initialize our application. We want to get the currentUser profile from Firestore and populate that in our Redux store and continuously listen to the current user profile as well
     - `export const LISTEN_TO_CURRENT_USER_PROFILE = 'LISTEN_TO_CURRENT_USER_PROFILE';`
 - In src/features/profiles folder, create a file called profileActions.js
@@ -4697,38 +4697,92 @@ In src/app/firestore folder, create a file called firebaseService.js
       - This action returns as an object, the existing state and the currentUserProfile state property of payload
       - When this action is dispatched, currentUserProfile property in the store will contain current user profile from Firestore
     - Write a default case that returns the state
-      ```javascript
-      export default function profileReducer(
-        state = initialState,
-        { type, payload }
-      ) {
-        switch (type) {
-          case LISTEN_TO_CURRENT_USER_PROFILE:
-            return {
-              ...state,
-              currentUserProfile: payload
-            };
-          default: {
-            return state;
-          }
+    ```javascript
+    export default function profileReducer(
+      state = initialState,
+      { type, payload }
+    ) {
+      switch (type) {
+        case LISTEN_TO_CURRENT_USER_PROFILE:
+          return {
+            ...state,
+            currentUserProfile: payload
+          };
+        default: {
+          return state;
         }
       }
-      ```
+    }
+    ```
 - In rootReducer.js file:
   - Import the profileReducer: `import profileReducer from '../../features/profiles/profileReducer';`
   - Add the profileReducer as profile property to the rootReducer
     - `profile: profileReducer`
 - We can go to the Redux devTools console and check out our Redux state and we should be able to find a new profile state with a currentUserProfile property in it. The currentUserProfile is currently null, but we can hook up our ProfilePage to Firestore and get the user profile data down so we can display it in the page
 
-
-
-
-
-
-
-
-
-
+**4. Connect the ProfilePage to the store**
+- In ProfilePage.jsx file:
+  - Import useDispatch() and useSelector() hooks: `import { useDispatch, useSelector } from 'react-redux';`
+  - Create a dispatch() method using useDispatch() hook
+    - `const dispatch = useDispatch();`
+  - Extract the currentUserProfile property from profileReducer using useSelector() hook
+    - `const { currentUserProfile } = useSelector((state) => state.profile);`
+  - Extract the loading and error properties from asyncReducer using useSelector() hook
+    - `const { loading, error } = useSelector((state) => state.async);`
+- Next, we want to get the user profile document from Firestore
+- In firestoreService.js file:
+  - Write a getUserProfile query function that gets user profile from Firestore
+    - This function takes userId as an argument
+    ```javascript
+    export function getUserProfile(userId) {
+      return db.collection('users').doc(userId);
+    }
+    ```
+- In ProfilePage.jsx file:
+  - We will use the custom useFirestoreDoc() hook to get the user document from fire
+  - Import the following:
+    ```javascript
+    import { useDispatch, useSelector } from 'react-redux';
+    import { getUserProfile } from '../../../app/firestore/firestoreService';
+    import useFirestoreDoc from '../../../app/hooks/useFirestoreDoc';
+    import { listenToCurrentUserProfile } from '../profileActions';
+    import LoadingComponent from '../../../app/layout/LoadingComponent';
+    ```
+  - In the ProfilePage component, destructure the match props. We want to use the match.params to get the userId from the route params
+    - `export default function ProfilePage({ match }) { ... }`
+  - Use the custom useFirestoreDoc() hook:
+    - This hook accepts query, data, deps, and shouldExecute object as an argument
+    - For query props, call the getUserProfile() method inside an arrow function and pass in the match.params.id, which is the userId
+      - This will return the user data from Firestore
+    - For data props: dispatch the listenToCurrentUserProfile() action inside an arrow function and pass in the profile as an argument. The arrow function receives profile as props
+      - Once we have the data, we dispatch the listenToCurrentUserProfile() action to store the data/profile in Redux store
+      - The data/profile is stored in the currentUserProfile property in the profileReducer
+    - For deps props, which is an array: list dispatch and match.params.id as dependencies
+      - This component will only re-renders when there's a change in dispatch or the userId
+    ```javascript
+    useFirestoreDoc({
+      query: () => getUserProfile(match.params.id),
+      data: (profile) => dispatch(listenToCurrentUserProfile(profile)),
+      deps: [dispatch, match.params.id]
+    });
+    ```
+  - Write an if statement to check if loading is true AND no currentUserProfile or no currentUserProfile AND no error. If the condition is true, then return the LoadingComponent component
+    ```javascript
+    if ((loading && !currentUserProfile) || (!currentUserProfile && !error))
+      return <LoadingComponent content='Loading profile...' />;
+    ```
+  - Pass down the currentUserProfile object as profile props to both ProfileHeader and ProfileContent child components
+    ```javascript
+    <ProfileHeader profile={currentUserProfile} />
+    <ProfileContent profile={currentUserProfile} />
+    ```
+- In ProfileHeader.jsx file:
+  - Accept profile as props from ProfilePage parent component and destructure it
+    - `export default function ProfileHeader({ profile }) { ... }`
+  - Then set the source image to display the profile photoURL or a static profile image if they don't have one
+    - `src={profile.photoURL || '/assets/user.png'}`
+  - Set the Header content to display the profile displayName
+    - `content={profile.displayName}`
 
 
 
