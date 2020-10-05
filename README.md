@@ -4847,6 +4847,77 @@ In src/app/firestore folder, create a file called firebaseService.js
     - Then pass down the profile props to the AboutTab child component
     - `{ menuItem: 'About', render: () => <AboutTab profile={profile} /> }`
 
+**6. Adding the profile form: ProfileForm component**
+- In features/profiles/profilePage folder, create a component/file called ProfileForm.jsx
+- In ProfileForm.jsx file:
+  - Import the following:
+    ```javascript
+    import React from 'react';
+    import { Form, Formik } from 'formik';
+    import MyTextInput from '../../../app/common/form/MyTextInput';
+    import MyTextArea from '../../../app/common/form/MyTextArea';
+    import { Button } from 'semantic-ui-react';
+    import * as Yup from 'yup';
+    ```
+  - Write a ProfileForm functional component that renders a profile form using Formik
+    - This component receives profile props from AboutTab parent component
+    - Use Formik to create the form
+      - Provide the initialValues object
+      - Add validationSchema property to validate the input field
+      - Console log the values for onSubmit event handler for now
+    - Render the Form component inside the render props
+      - Extracts the isSubmitting, isValid, and dirty props as an argument
+    ```javascript
+    export default function ProfileForm({ profile }) {
+      return (
+        <Formik
+          initialValues={{
+            displayName: profile.displayName,
+            description: profile.description || ''
+          }}
+          validationSchema={Yup.object({
+            displayName: Yup.string().required()
+          })}
+          onSubmit={(values) => console.log(values)}
+        >
+          {({ isSubmitting, isValid, dirty }) => (
+            <Form className='ui form'>
+              <MyTextInput name='displayName' placeholder='Display Name' />
+              <MyTextArea name='description' placeholder='Description' />
+              <Button
+                loading={isSubmitting}
+                disabled={isSubmitting || !isValid || !dirty}
+                floated='right'
+                type='submit'
+                size='large'
+                positive
+                content='Update profile'
+              />
+            </Form>
+          )}
+        </Formik>
+      );
+    }
+    ```
+- In AboutTab.jsx file:
+  - Import the ProfileForm component: `import ProfileForm from './ProfileForm';`
+  - In the editMode conditional logic, render the ProfileForm component if editMode state is true
+    - Pass down the profile props to the ProfileForm child component
+    - `{editMode ? ( <ProfileForm profile={profile} /> ) : ( ... )}`
+					
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
