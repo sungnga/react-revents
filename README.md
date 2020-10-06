@@ -5135,6 +5135,72 @@ In src/app/firestore folder, create a file called firebaseService.js
     ```
 
 
+## S13: IMAGE UPLOAD
+- Storage with FirebaseStorage
+- Adding images with dropzone
+- Image resizing with Cropper.js
+- Allowing users to update their main photo
+- Users should be able to:
+  - Upload new photos
+  - Set a photo as their main photo
+  - Delete a photo
+
+**1. Adding a profile photos page: PhotosTab component**
+- In src/features/profiles/profilePage folder, create a component/file called PhotosTab.jsx
+- In PhotosTab.jsx file:
+  - Import React: `import React, { useState } from 'react';`
+  - Import Semantic UI components: `import { Button, Card, Grid, Header, Image, Tab } from 'semantic-ui-react';`
+  - This component very similar page layout and functionality as the AboutTab component. Copy and paste the code as a starter
+  - Write a PhotosTab functional component that renders a profile photos tab using Semantic UI
+    ```javascript
+    export default function PhotosTab({ profile, isCurrentUser }) {
+      const [editMode, setEditMode] = useState(false);
+
+      return (
+        <Tab.Pane>
+          <Grid>
+            <Grid.Column width={16}>
+              <Header floated='left' icon='user' content={`Photos`} />
+              {isCurrentUser && (
+                <Button
+                  onClick={() => setEditMode(!editMode)}
+                  floated='right'
+                  basic
+                  content={editMode ? 'Cancel' : 'Add Photo'}
+                />
+              )}
+            </Grid.Column>
+            <Grid.Column width={16}>
+              {editMode ? (
+                <p>Photo widget will go here</p>
+              ) : (
+                <Card.Group itemsPerRow={5}>
+                  <Card>
+                    <Image src='/assets/user.png' />
+                    <Button.Group fluid width={2}>
+                      <Button basic color='green' content='Main' />
+                      <Button basic color='red' icon='trash' />
+                    </Button.Group>
+                  </Card>
+                </Card.Group>
+              )}
+            </Grid.Column>
+          </Grid>
+        </Tab.Pane>
+      );
+    }
+    ```
+- In ProfileContent.jsx file:
+  - Import the PhotosTab component: `import PhotosTab from './PhotosTab';`
+  - Inside the 'Photos' menuItem panes:
+    - Instantiate the PhotosTab component inside the arrow function of the render property
+    - Then pass down the profile and isCurrentUser props to the PhotosTab child component
+    ```javascript
+		{
+			menuItem: 'Photos',
+			render: () => <PhotosTab profile={profile} isCurrentUser={isCurrentUser} />
+		},
+    ```
 
 
 
