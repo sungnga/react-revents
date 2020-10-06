@@ -4693,7 +4693,7 @@ In src/app/firestore folder, create a file called firebaseService.js
       - 1st arg is the state and it is set to initialState as default value
       - 2nd arg is the action, destructuring the type and payload properties
     - Use a switch statement to handle different action types
-    - Write a case for the LISTEN_TO_CURRENT_USER_PROFILE action
+    - Write a case for the LISTEN_TO_CURRENT_USER_PROFILE action type
       - This action returns as an object, the existing state and the currentUserProfile state property of payload
       - When this action is dispatched, currentUserProfile property in the store will contain current user profile from Firestore
     - Write a default case that returns the state
@@ -4961,12 +4961,104 @@ In src/app/firestore folder, create a file called firebaseService.js
     }}
     ```
  
+**8. Initializing the app with the current user profile**
+- Once a user is successfully logged in, the user profile displayed in the NavBar on the right hand side is currently populated from the authReducer. It's listening to state change in Firebase.auth. If the user updates their displayName, they would have to refresh the ProfilePage to see the updated change. Instead, we want this to listen to the currentUserProfile profileReducer in Firestore and update the change from there
+- We will need to create another action and another state for the profileReducer
+- In profileConstants.js file:
+  - Create another constant for LISTEN_TO_SELECTED_USER_PROFILE
+  - `export const LISTEN_TO_SELECTED_USER_PROFILE = 'LISTEN_TO_SELECTED_USER_PROFILE';`
+- In profileActions.js file:
+  - Import the constant: `import { LISTEN_TO_SELECTED_USER_PROFILE } from "./profileConstants";`
+  - Write a listenToSelectedUserProfile action creator function that gets the selected user profile from Firestore
+    - This function takes a profile as an argument
+    - This function returns as an object,
+      - the action type of LISTEN_TO_SELECTED_USER_PROFILE
+      - the payload of profile
+    ```javascript
+    export function listenToSelectedUserProfile(profile) {
+      return {
+        type: LISTEN_TO_SELECTED_USER_PROFILE,
+        payload: profile
+      };
+    }
+    ```
+- In profileReducer.js file:
+  - Import the constant: `import { LISTEN_TO_SELECTED_USER_PROFILE } from './profileConstants';`
+  - In the initialState object, add a selectedUserProfile property and set it to null
+    ```javascript
+    const initialState = {
+      currentUserProfile: null,
+      selectedUserProfile: null
+    };
+    ```
+  - In the profileReducer function:
+    - Add another case in the switch statement for LISTEN_TO_SELECTED_USER_PROFILE action type
+      - This action returns as an object, the existing state and the selectedUserProfile state property of payload
+      - When this action is dispatched, selectedUserProfile property in the store will contain the selected user profile from Firestore
+    ```javascript
+    case LISTEN_TO_SELECTED_USER_PROFILE:
+      return {
+        ...state,
+        selectedUserProfile: payload
+      };
+    ```
+- In the SignedInMenu.jsx file:
+  - What we currently doing to display the current user in the NavBar is we're getting this from the authReducer `(state => state.auth)`. Instead, we want to get the currentUserProfile property from the profileReducer
+    - `const { currentUserProfile } = useSelector((state) => state.profile);`
+  - Then in JSX, we want to get the user profile image from currentUserProfile property state
+    ```javascript
+    <Image
+      avatar
+      spaced='right'
+      src={currentUserProfile.photoURL || '/assets/user.png'}
+    />
+    ```
+  - Also the user profile displayName from currentUserProfile property state
+    - `<Dropdown pointing='top left' text={currentUserProfile.displayName}>`
+  - And the Link path to 'My Profile' page
+    ```javascript
+    <Dropdown.Item
+      as={Link}
+      to={`/profile/${currentUserProfile.id}`}
+      text='My profile'
+      icon='user'
+    />
+    ```
+- Now our code is broken. Before we display anything to the user, we need to verify whether they're logged in or not and respond accordingly
+- In authActions.js file:
+  - Import the following:
+    ```javascript
+    import { dataFromSnapshot, getUserProfile } from '../../app/firestore/firestoreService';
+    import { listenToCurrentUserProfile } from '../../features/profiles/profileActions';
+    ```
+  - Inside the verifyAuth() function:
+    - After we dispatched the signInUser() action, we want to call the getUserProfile() function from firestoreService and pass in the user.uid to get the user document in Firestore users collection. Assign the returned user document to profileRef variable
+    - Then call the .onSnapshot() method on profileRef to get the snapshot, which contains the user profile data
+    - Once we have the snapshot, use a callback function to 
+      - dispatch the listenToCurrentUserProfile() action and pass in the dataFromSnapshot() method with the snapshot as an argument. The dataFromSnapshot() method shapes the snapshot into a usable format before handing the profile data to the listenToCurrentUserProfile() action. The listenToCurrentUserProfile() action will take this profile data and store it currentUserProfile property in profileReducer store
+      - After we received the snapshot, we know that our app is safe to be loaded. So inside the callback function, dispatch the APP_LOADED action
+    ```javascript
+    export function verifyAuth() {
+      return function (dispatch) {
+        return firebase.auth().onAuthStateChanged((user) => {
+          if (user) {
+            // Update the state with currentUser object
+            dispatch(signInUser(user));
+            const profileRef = getUserProfile(user.uid);
+            profileRef.onSnapshot((snapshot) => {
+              dispatch(listenToCurrentUserProfile(dataFromSnapshot(snapshot)));
+              dispatch({ type: APP_LOADED });
+            });
+          } else {
+            dispatch(signOutUser());
+            dispatch({ type: APP_LOADED });
+          }
+        });
+      };
+    }
+    ```
+- Now when the user updates their displayName in the 'Update profile' form, it'll update the current user displayName in the NavBar as well
 
-
-
-
-
- 
 
 
 

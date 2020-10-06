@@ -1,6 +1,11 @@
 import { SIGN_IN_USER, SIGN_OUT_USER } from './authConstants';
 import firebase from '../../app/config/firebase';
 import { APP_LOADED } from '../../app/async/asyncReducer';
+import {
+	dataFromSnapshot,
+	getUserProfile
+} from '../../app/firestore/firestoreService';
+import { listenToCurrentUserProfile } from '../../features/profiles/profileActions';
 
 // Action creator
 export function signInUser(user) {
@@ -16,7 +21,11 @@ export function verifyAuth() {
 			if (user) {
 				// Update the state with currentUser object
 				dispatch(signInUser(user));
-				dispatch({ type: APP_LOADED });
+				const profileRef = getUserProfile(user.uid);
+				profileRef.onSnapshot((snapshot) => {
+					dispatch(listenToCurrentUserProfile(dataFromSnapshot(snapshot)));
+					dispatch({ type: APP_LOADED });
+				});
 			} else {
 				dispatch(signOutUser());
 				dispatch({ type: APP_LOADED });
