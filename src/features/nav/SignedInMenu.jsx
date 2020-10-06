@@ -35,7 +35,7 @@ export default function SignedInMenu({ signOut }) {
 					/>
 					<Dropdown.Item
 						as={Link}
-						to={`/profile/${currentUserProfile.uid}`}
+						to={`/profile/${currentUserProfile.id}`}
 						text='My profile'
 						icon='user'
 					/>

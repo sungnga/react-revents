@@ -5059,6 +5059,100 @@ In src/app/firestore folder, create a file called firebaseService.js
     ```
 - Now when the user updates their displayName in the 'Update profile' form, it'll update the current user displayName in the NavBar as well
 
+**9. Selecting other user profiles**
+- When a user visits another user's profile page we want to show or hide certain data depending on whether they're the currently logged in user. For example, we don't want a user have access to the 'Edit/Cancel' button to edit a profile if they're are not the current user of this profile page. Or make the 'Follow' button available if the current logged in user visits their own profile page. We can find out the current logged in user with their uid in the currentUser property in the authReducer
+- In ProfilePage.jsx file:
+  - Import the listenToSelectedUserProfile() action: `import { listenToSelectedUserProfile } from '../profileActions';`
+  - Extract the selectedUserProfile property from profileReducer using useSelector() hook
+    - `const { selectedUserProfile } = useSelector((state) => state.profile);`
+  - Extract the currentUser property from authReducer using useSelector() hook
+    - `const { currentUser } = useSelector((state) => state.auth);`
+  - In the useFirestoreDoc() custom hook:
+    - Instead of listening to the listenToCurrentUserProfile() action, we want to listen to the listenToSelectionUserProfile() action. This will store the profile data in the selectedUserProfile property of the profileReducer state
+    ```javascript
+    useFirestoreDoc({
+      query: () => getUserProfile(match.params.id),
+      data: (profile) => dispatch(listenToSelectedUserProfile(profile)),
+      deps: [dispatch, match.params.id]
+    });
+    ```
+  - Then swap all of the currentUserProfile properties to use selectedUserProfile properties instead
+  - Pass down the selectedUserProfile as profile props to both ProfileHeader and ProfileContent child components
+    ```javascript
+    <ProfileHeader profile={selectedUserProfile} />
+    <ProfileContent profile={selectedUserProfile} />
+    ```
+  - Next thing is we want to check if the profile we're looking at is the currentUser. Write a condition that checks that the currentUser.uid is equal to the selectedUserProfile.id. If it is, assign it to isCurrentUser props that's being passed down to the ProfileHeader and ProfileContent child components
+    ```javascript
+    <ProfileHeader
+      profile={selectedUserProfile}
+      isCurrentUser={currentUser.uid === selectedUserProfile.id}
+    />
+    <ProfileContent
+      profile={selectedUserProfile}
+      isCurrentUser={currentUser.uid === selectedUserProfile.id}
+    />
+    ```
+- In ProfileHeader.jsx file:
+  - Receive the isCurrentUser props from the ProfilePage parent component and destructure it
+  - In JSX, we only want to display/reveal the 'Following' button in the ProfileHeader section if the user is NOT the currentUser. This prevents them from following themselves. If they're visiting someone else's ProfilePage, then they're not the isCurrentUser of this page and they would see the 'Following' button and they can follow this particular user
+    ```javascript
+    {!isCurrentUser && (
+      <>
+        <Divider />
+        <Reveal animated='move'>
+          <Reveal.Content visible style={{ width: '100%' }}>
+            <Button fluid color='teal' content='Following' />
+          </Reveal.Content>
+          <Reveal.Content hidden style={{ width: '100%' }}>
+            <Button basic fluid color='red' content='Unfollow' />
+          </Reveal.Content>
+        </Reveal>
+      </>
+    )}
+    ```
+- In ProfileContent.jsx file:
+  - Receive the isCurrentUser props from the ProfilePage parent component and destructure it
+  - Pass down the isCurrentUser props to the AboutTab child component
+    ```javascript
+		{
+			menuItem: 'About',
+			render: () => <AboutTab profile={profile} isCurrentUser={isCurrentUser} />
+		},
+    ```
+- In AboutTab.jsx file:
+  - Receive the isCurrentUser props from the ProfileContent parent component and destructure it
+  - In JSX, we only want the isCurrentUser to be able to edit their own profile. Write a condition to check if the user is a current user. If they are, then display the 'Cancel/Edit' button
+    ```javascript
+    {isCurrentUser && (
+      <Button
+        onClick={() => setEditMode(!editMode)}
+        floated='right'
+        basic
+        content={editMode ? 'Cancel' : 'Edit'}
+      />
+    )}
+    ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
