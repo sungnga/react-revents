@@ -121,3 +121,8 @@ export async function updateUserProfilePhoto(downloadURL, filename) {
 		throw error;
 	}
 }
+
+// Get user photos from Firestore photos collection
+export function getUserPhotos(userUid) {
+	return db.collection('users').doc(userUid).collection('photos');
+}
