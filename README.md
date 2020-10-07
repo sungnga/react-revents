@@ -5299,7 +5299,7 @@ In src/app/firestore folder, create a file called firebaseService.js
       - Call the setFiles() method and pass in the acceptFiles
       - Map over the acceptedFiles to access the individual file using .map() method
       - For each file, call the Object.assign() method and pass in the file as the 1st argument. The 2nd argument is an object to set a preview property of `URL.createObjectURL(file)`. This will give us the ability to preview the image
-    - Specify the dependencies array with setFiles. Whenever there's a change in setFiles, it causes the component to re-render
+    - As for the 2nd arg, list setFiles as a dependency in the dependencies array. Whenever there's a change in setFiles, it causes the component to re-render
     ```javascript
     const onDrop = useCallback(
       (acceptedFiles) => {
@@ -5459,7 +5459,7 @@ In src/app/firestore folder, create a file called firebaseService.js
           />
           <Button.Group>
 					  <Button style={{ width: 100 }} positive icon='check' />
-						<Button style={{ width: 100 }} icon='close' />
+					  <Button style={{ width: 100 }} icon='close' />
 					</Button.Group>
         </>
       )}
@@ -5492,11 +5492,11 @@ In src/app/firestore folder, create a file called firebaseService.js
     - Use the try/catch block
     - If there's an error, throw the error. We'll deal with the error in the component
     - In the try block:
-      - 1. Call the userDocRef.get() method to get the user document and assign the returned data to userDoc variable. This is equivalent to making an api call and it's an async operation. Add 'await' keyword in front of it
-      - 2. Write an if statement to check the user document to see if they do not have a photo in there
+      - First, call the userDocRef.get() method to get the user document and assign the returned data to userDoc variable. This is equivalent to making an api call and it's an async operation. Add 'await' keyword in front of it
+      - Second, write an if statement to check the user document to see if they do not have a photo in there
         - If they don't, then we want to update the user document photoURL property with the downloadURL using the .update() method. This is an async operation, so add 'await' keyword in front of it
         - Then also update the user photoURL property in firebase.auth by calling the .updateProfile() method on user. Rememeber that `const user = firebase.auth().currentUser;`. This is also an async operation, so add the 'await' keyword in front of it
-      - 3. Lastly, we want to add the photo to the photos collection inside the user document in Firestore users collection. This is an async operation, so add the 'await' keyword. We also want to add a return so that we can use this data later
+      - Third, we want to add the photo to the photos collection inside the user document in Firestore users collection. This is an async operation, so add the 'await' keyword. We also want to add a return so that we can use this data later
         - So first, we want to access the user document with `db.collection('users').doc(user.uid)`
         - To add a new collection inside the user document, add the `.collection('photos')` method after it and pass in the name of the collection
         - Then to add a document inside this new 'photos' collection, add the `.add()` method after it and specify the properties inside this document
@@ -5523,6 +5523,118 @@ In src/app/firestore folder, create a file called firebaseService.js
       }
     }
     ```
+
+**6. Using the upload method in the photo widget**
+- In PhotoUploadWidget.jsx file:
+  - Import the following:
+    ```javascript
+    import cuid from 'cuid';
+    import { toast } from 'react-toastify';
+    import { getFileExtension } from '../util/util';
+    import { uploadToFirebaseStorage } from '../../firestore/firebaseService'
+    import { updateUserProfilePhoto } from '../../firestore/firestoreService';
+    ```
+  - Create a loading state to handle the loading indicator. Use useState() hook and inititalize its value to false
+    - `const [loading, setLoading] = useState(false);`
+  - Write a handleUploadImage function
+    - First thing is call the setLoading() methdod to set the loading indicator to true
+    - Second, we want to give each of the image we upload a unique name. To do that we'll make use of the cuid library to give us a unique id and a utility function to give us the file extension
+    - Third, create an uploadTask by calling the uploadToFirebaseStorage() method with the image and filename to upload to FirebaseStorage
+      - The uploadTask will return a snapshot or we can get a snapshot from the uploadTask
+    - Fourth, use uploadTask.on() method to listen to state-changes. This allows us to track the progress of how much of the file is being uploaded in the snapshot
+      - 1st arg is set to 'state_changed'
+      - 2nd arg is a function that takes snapshot as an argument. This function tracks the file upload progress
+      - 3rd arg is a function that takes error as an argument and handles the error with toast.error() method to display the error.message
+      - 4th arg is a callback function, what to do when this file upload is complete. In this callback:
+        - First, we want to get the downloadURL from the snapshot by calling the `uploadTask.snapshot.ref.getDownloadURL()` method. This method will return a promise, so we can use the .then() operator and pass in a callback function to handle the downloadURL that we get back
+        - Second, once we have the downloadURL, inside this promise callback function, we call the updateUserProfileProfile() and pass in the downloadURL and filename as arguments. This will update the user photo in Firebase and Firestore. This method is also an async operation and it returns a promise. Use the .then() operator and pass in a callback function to handle success. And use the .catch() operator and pass in a callback function to handle the error
+        - If this is completed successfully, inside this promise callback function,
+          - Call setLoading() method and set it to false
+          - Call the handleCancelCrop() method. This will remove the image from the photo widget and returns to how they were originally
+          - Call setEditMode() method and set it to false
+        - If there's an error being returned, in the callback function,
+          - take the error as an argument
+          - call the toast.error() method to display the error.message
+          - call setLoading() method and set it to false to turn off the loading indicator
+    ```javascript
+    function handleUploadImage() {
+      setLoading(true);
+      const filename = cuid() + '.' + getFileExtension(files[0].name);
+      const uploadTask = uploadToFirebaseStorage(image, filename);
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+        },
+        (error) => {
+          toast.error(error.message);
+        },
+        () => {
+          uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+            updateUserProfilePhoto(downloadURL, filename)
+              .then(() => {
+                setLoading(false);
+                handleCancelCrop();
+                setEditMode(false);
+              })
+              .catch((error) => {
+                toast.error(error.message);
+                setLoading(false);
+              });
+          });
+        }
+      );
+    }
+    ```
+  - Write a handleCancelCrop function that resets the files and image states to empty
+    ```javascript
+    function handleCancelCrop() {
+      setFiles([]);
+      setImage(null);
+    }
+    ```
+- In src/app/common/util/util.js file:
+  - Write a getFileExtension util function to get a file extension
+    ```javascript
+    export function getFileExtension(filename) {
+      return filename.slice((filename.lastIndexOf('.') -1 >>> 0) + 2);
+    }
+    ```
+- In PhotosTab.jsx file:
+  - Pass down the setEditMode method as props to the PhotoUploadWidget child component
+    - `<PhotoUploadWidget setEditMode={setEditMode} />`
+- In PhotoUploadWidget.jsx file:
+  - Receive the setEditMode props from the PhotosTab parent component
+  - In JSX:
+    - In the 'check' Button element:
+      - Call the handleUploadImage method to handle the onClick event
+      - Set the loading property to loading state
+      ```javascript
+      <Button
+        onClick={handleUploadImage}
+        loading={loading}
+        style={{ width: 100 }}
+        positive
+        icon='check'
+      />
+      ```
+    - In the 'close' Button element:
+      - Call the handleCancelCrop method to handle the onClick event
+      - Set the disabled property to loading state
+      ```javascript
+      <Button
+        onClick={handleCancelCrop}
+        disabled={loading}
+        style={{ width: 100 }}
+        icon='close'
+      />
+      ```
+- Go to Firesbase console website: https://console.firebase.google.com/
+  - Select Storage from the main menu
+  - Click on the 'Get Started' button and accept the default bucket rules
+  - This will create a storage for our application
 
 
 

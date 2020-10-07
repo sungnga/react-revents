@@ -106,7 +106,7 @@ export async function updateUserProfilePhoto(downloadURL, filename) {
 	try {
 		const userDoc = await userDocRef.get();
 		if (!userDoc.data().photoURL) {
-			await db.collection('user').doc(user.uid).update({
+			await db.collection('users').doc(user.uid).update({
 				photoURL: downloadURL
 			});
 			await user.updateProfile({
