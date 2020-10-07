@@ -55,3 +55,10 @@ export function updateUserPassword(creds) {
 	const user = firebase.auth().currentUser;
 	return user.updatePassword(creds.newPassword1);
 }
+
+// Upload a file to FirebaseStorage
+export function uploadToFirebaseStorage(file, filename) {
+	const user = firebase.auth().currentUser;
+	const storageRef = firebase.storage().ref();
+	return storageRef.child(`${user.uid}/user_images/${filename}`).put(file);
+}

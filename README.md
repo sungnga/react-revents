@@ -5404,59 +5404,46 @@ In src/app/firestore folder, create a file called firebaseService.js
   - In the cropImage() function:
     - Inside the .toBlob() callback function, call the setImage() method to set the blob
     - Then as a 2nd arg of the .toBlob() method, we need specify the type of blob it's going to be. In this case, it's an image/jpeg type
+  - After that we need to specify the properties for the Cropper wrapper component in JSX
+    - Note that the preview property is set a className. We will use this className in a div tag in the PhotoUploadWidget component to display the image preview
+    - The initialAspectRatio property is set to 1. This will crop a square image
+    - The src property is set to imagePreview, which is a props from the parent component. imagePreview is the file in the files state
+  - Final code for the component:
     ```javascript
-    function cropImage() {
-      const imageElement = cropperRef?.current;
-      const cropper = imageElement?.cropper;
+    export default function PhotoWidgetCropper({ setImage, imagePreview }) {
+      const cropperRef = useRef(null);
 
-      if (typeof cropper.getCroppedCanvas() === 'undefined') {
-        return;
+      function cropImage() {
+        const imageElement = cropperRef?.current;
+        const cropper = imageElement?.cropper;
+
+        if (typeof cropper.getCroppedCanvas() === 'undefined') {
+          return;
+        }
+        cropper.getCroppedCanvas().toBlob((blob) => {
+          setImage(blob);
+        }, 'image/jpeg');
       }
-      cropper.getCroppedCanvas().toBlob((blob) => {
-        setImage(blob);
-      }, 'image/jpeg');
+
+      return (
+        <Cropper
+          ref={cropperRef}
+          src={imagePreview}
+          style={{ height: 200, width: '100%' }}
+          // Cropper.js options
+          initialAspectRatio={1}
+          preview='.img-preview'
+          guides={false}
+          viewMode={1}
+          dragMode='move'
+          scalable={true}
+          cropBoxMovable={true}
+          cropBoxResizable={true}
+          crop={cropImage}
+        />
+      );
     }
     ```
-    - After that we need to specify the properties for the Cropper wrapper component in JSX
-      - Note that the preview property is set a className. We will use this className in a div tag in the PhotoUploadWidget component to display the image preview
-      - The initialAspectRatio property is set to 1. This will crop a square image
-      - The src property is set to imagePreview, which is a props from the parent component. imagePreview is the file in the files state
-    - Final code for the component:
-      ```javascript
-      export default function PhotoWidgetCropper({ setImage, imagePreview }) {
-        const cropperRef = useRef(null);
-
-        function cropImage() {
-          const imageElement = cropperRef?.current;
-          const cropper = imageElement?.cropper;
-
-          if (typeof cropper.getCroppedCanvas() === 'undefined') {
-            return;
-          }
-          cropper.getCroppedCanvas().toBlob((blob) => {
-            setImage(blob);
-          }, 'image/jpeg');
-        }
-
-        return (
-          <Cropper
-            ref={cropperRef}
-            src={imagePreview}
-            style={{ height: 200, width: '100%' }}
-            // Cropper.js options
-            initialAspectRatio={1}
-            preview='.img-preview'
-            guides={false}
-            viewMode={1}
-            dragMode='move'
-            scalable={true}
-            cropBoxMovable={true}
-            cropBoxResizable={true}
-            crop={cropImage}
-          />
-        );
-      }
-      ```
 - In PhotoUploadWidget.jsx file:
   - In JSX, inside the 3rd Grid.Column: 
     - We first want to check if there exists at least one file in the files state. If there is, we want to display the image preview and two buttons underneath it
@@ -5479,16 +5466,63 @@ In src/app/firestore folder, create a file called firebaseService.js
     </Grid.Column>
     ```
 
-
-
-
-
-
-
-
-
-
-
+**5. Adding an upload image method: upload to FirebaseStorage, Firebase.auth, and Firestore**
+- Now that we have the image upload widget working, we want to upload to FirebaseStorage. We also want to update the photoURL in the Firebase.auth, so that if we do need to use the currentUser anywhere in our app, we have the updated user profile. We also want to update the user's main profile photo if this is the first image they uploaded. We need to create two methods. One is for FirebaseStorage to upload the file and the second is for firestoreService
+- In firebaseService.js file:
+  - Write an uploadToFirebaseStorage method that uploads a file to FiresbaseStorage
+    - This function takes file and filename as arguments
+    - First, get the user reference, the currently logged in user, from firebase.auth().currentUser and assign it to a user variable
+    - Then get the storage ref from firebase.storage().ref() and assign to a storageRef variable
+    - Then return storageRef.child(`${user.uid}/user_images/${filename}`) containing the reference pathname, then .put(filename) method to upload data/file to the reference location. The .child() method returns a reference to a relative path from this reference
+    - The directory created in firebaseStorage is: user.uid -> user_images -> filename
+    - What we get back from this function is an UploadTask, firebase.storage.UploadTask. This UploadTask will allow us to get the download URL
+    ```javascript
+    export function uploadToFirebaseStorage(file, filename) {
+      const user = firebase.auth().currentUser;
+      const storageRef = firebase.storage().ref();
+      return storageRef.child(`${user.uid}/user_images/${filename}`).put(file);
+    }
+    ```
+- In firestoreService.js file:
+  - Write an async updateUserProfilePhoto method to update the user profile photo in Firebase.auth and Firestore
+    - This method takes a downloadURL and filename as arguments
+    - First, get a reference to the current user from `firebase.auth().currentUser` and assign it to a user variable
+    - Then get a reference to this user document from Firestore `db.collection('users').doc(user.uid)`. The reason why we want a ref of this user doc is we want to check to see if there's a photo is already inside there. If there is, we don't want to update the profile. If there isn't, we want to update the main profile photo
+    - In this function, we also want to take the opportunity to update the photoURL inside the firebase.auth
+    - Use the try/catch block
+    - If there's an error, throw the error. We'll deal with the error in the component
+    - In the try block:
+      - 1. Call the userDocRef.get() method to get the user document and assign the returned data to userDoc variable. This is equivalent to making an api call and it's an async operation. Add 'await' keyword in front of it
+      - 2. Write an if statement to check the user document to see if they do not have a photo in there
+        - If they don't, then we want to update the user document photoURL property with the downloadURL using the .update() method. This is an async operation, so add 'await' keyword in front of it
+        - Then also update the user photoURL property in firebase.auth by calling the .updateProfile() method on user. Rememeber that `const user = firebase.auth().currentUser;`. This is also an async operation, so add the 'await' keyword in front of it
+      - 3. Lastly, we want to add the photo to the photos collection inside the user document in Firestore users collection. This is an async operation, so add the 'await' keyword. We also want to add a return so that we can use this data later
+        - So first, we want to access the user document with `db.collection('users').doc(user.uid)`
+        - To add a new collection inside the user document, add the `.collection('photos')` method after it and pass in the name of the collection
+        - Then to add a document inside this new 'photos' collection, add the `.add()` method after it and specify the properties inside this document
+    ```javascript
+    export async function updateUserProfilePhoto(downloadURL, filename) {
+      const user = firebase.auth().currentUser;
+      const userDocRef = db.collection('users').doc(user.uid);
+      try {
+        const userDoc = await userDocRef.get();
+        if (!userDoc.data().photoURL) {
+          await db.collection('user').doc(user.uid).update({
+            photoURL: downloadURL
+          });
+          await user.updateProfile({
+            photoURL: downloadURL
+          });
+        }
+        return await db.collection('users').doc(user.uid).collection('photos').add({
+          name: filename,
+          url: downloadURL
+        });
+      } catch (error) {
+        throw error;
+      }
+    }
+    ```
 
 
 
