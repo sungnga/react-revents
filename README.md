@@ -5234,8 +5234,8 @@ In src/app/firestore folder, create a file called firebaseService.js
   - In JSX, right where the editMode is true, render the PhotoUploadWidget component
     - `{editMode ? ( <PhotoUploadWidget /> ) : ( ... )}`
 					
-**3. React dropzone: PhotoWidgetDropzone component**
-- react-dropzone source: https://www.npmjs.com/package/react-dropzone
+**3. React-dropzone: PhotoWidgetDropzone component**
+- React-dropzone source: https://www.npmjs.com/package/react-dropzone
 - Install react-dropzone library: `npm i react-dropzone`
 - In src/app/common/photos folder, create a component/file called PhotoWidgetDropzone.jsx
 - In PhotoWidgetDropzone.jsx file:
@@ -5285,7 +5285,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     ```
 - In PhotoUploadWidget.jsx file:
   - Import useState() hook: `import React, { useState } from 'react';`
-  - Create files state using useState() hook and initialize its value to an empty array
+  - Create a files state using useState() hook and initialize its value to an empty array
     - `const [files, setFiles] = useState([]);`
   - Pass down the setFiles method as props to the PhotoWidgetDropzone child component
     - `<PhotoWidgetDropzone setFiles={setFiles} />`
@@ -5328,6 +5328,164 @@ In src/app/firestore folder, create a file called firebaseService.js
     );
     ```
 - Now when we drag an image file to the dropzone widget, the border should turn green. When it's not active, it should have a grey dashed border. Also, the files state of the PhotoUploadWidget component should contain the image file we just uploaded
+
+**4. React-cropper: PhotoWidgetCropper component**
+- After the user uploaded an image, we want them to be able to crop the image using the react-cropper library
+- React-cropper source: https://github.com/react-cropper/react-cropper
+- Install react-cropper library: `npm i react-cropper`
+- In src/app/common/photos folder, create a component/file called PhotoWidgetCropper.jsx
+- In PhotoWidgetCropper.jsx file:
+  - Import the following:
+    ```javascript
+    import React, { useRef } from "react";
+    import Cropper from "react-cropper";
+    import "cropperjs/dist/cropper.css";
+    ```
+  - Create a PhotoWidgetCropper functional component
+    - Copy and paste the example demo code from the github website as a starter
+    - Create a cropperRef using the useRef() hook and initialize its value to null. cropperRef is now a ref to an element on our page
+      - `const cropperRef = useRef(null);`
+      - `useRef` returns a mutable ref object whose `.current` property is initialized to the passed argument (`initialValue`). The returned object will persist for the full lifetime of the component
+    - Write a cropImage function
+      - First, check to see if there is a cropper element that we can call the .getCroppedCanvas() method on. If there isn't (undefined), return early
+      - If there is a cropper element, we want to call a setImage() function, but we need to create this function in the parent component, which is the PhotoUploadWidget component
+    ```javascript
+    export default function PhotoWidgetCropper() {
+      const cropperRef = useRef(null);
+
+      function cropImage() {
+        const imageElement = cropperRef?.current;
+        const cropper = imageElement?.cropper;
+
+        if (typeof cropper.getCroppedCanvas() === 'undefined') {
+          return;
+        }
+        cropper.getCroppedCanvas().toBlob((blob) => {
+          // setImage() function goes here
+        });
+      }
+
+      return (
+        <Cropper
+          src="https://raw.githubusercontent.com/roadmanfong/react-cropper/master/example/img/child.jpg"
+          style={{ height: 400, width: "100%" }}
+          // Cropper.js options
+          initialAspectRatio={16 / 9}
+          guides={false}
+          crop={onCrop}
+          ref={cropper}
+        />
+      );
+    };
+    ```
+- In PhotoUploadWidget.jsx file:
+  - Import the PhotoWidgetCropper component: `import PhotoWidgetCropper from './PhotoWidgetCropper';`
+  - Create an image state using useState() hook and initialize its value to null
+    - `const [image, setImage] = useState(null);`
+  - In JSX:
+    - Inside the 2nd Grid.Column and after the Header element, instantiate the PhotoWidgetCropper component
+      - Then pass down the setImage method as props to the PhotoWidgetCropper child component
+      - Also pass down the imagePreview props to the PhotoWidgetCropper child component. This props is the files state of the first element of the files array and the preview property that we created in the PhotoWidgetDropzone component
+      - `<PhotoWidgetCropper setImage={setImage} imagePreview={files[0].preview} />`
+    - We also want to write a condition to make sure that there is at least one file in the files state array before we display the PhotoWidgetCropper component
+      ```javascript
+			<Grid.Column width={4}>
+				<Header color='teal' sub content='Step 2 - Resize' />
+				{files.length > 0 && (
+					<PhotoWidgetCropper
+						setImage={setImage}
+						imagePreview={files[0].preview}
+					/>
+				)}
+			</Grid.Column>
+      ```
+- In PhotoWidgetCropper.jsx file:
+  - Receive the setImage and imagePreview props from the PhotoUploadWidget component and destructure it
+  - In the cropImage() function:
+    - Inside the .toBlob() callback function, call the setImage() method to set the blob
+    - Then as a 2nd arg of the .toBlob() method, we need specify the type of blob it's going to be. In this case, it's an image/jpeg type
+    ```javascript
+    function cropImage() {
+      const imageElement = cropperRef?.current;
+      const cropper = imageElement?.cropper;
+
+      if (typeof cropper.getCroppedCanvas() === 'undefined') {
+        return;
+      }
+      cropper.getCroppedCanvas().toBlob((blob) => {
+        setImage(blob);
+      }, 'image/jpeg');
+    }
+    ```
+    - After that we need to specify the properties for the Cropper wrapper component in JSX
+      - Note that the preview property is set a className. We will use this className in a div tag in the PhotoUploadWidget component to display the image preview
+      - The initialAspectRatio property is set to 1. This will crop a square image
+      - The src property is set to imagePreview, which is a props from the parent component. imagePreview is the file in the files state
+    - Final code for the component:
+      ```javascript
+      export default function PhotoWidgetCropper({ setImage, imagePreview }) {
+        const cropperRef = useRef(null);
+
+        function cropImage() {
+          const imageElement = cropperRef?.current;
+          const cropper = imageElement?.cropper;
+
+          if (typeof cropper.getCroppedCanvas() === 'undefined') {
+            return;
+          }
+          cropper.getCroppedCanvas().toBlob((blob) => {
+            setImage(blob);
+          }, 'image/jpeg');
+        }
+
+        return (
+          <Cropper
+            ref={cropperRef}
+            src={imagePreview}
+            style={{ height: 200, width: '100%' }}
+            // Cropper.js options
+            initialAspectRatio={1}
+            preview='.img-preview'
+            guides={false}
+            viewMode={1}
+            dragMode='move'
+            scalable={true}
+            cropBoxMovable={true}
+            cropBoxResizable={true}
+            crop={cropImage}
+          />
+        );
+      }
+      ```
+- In PhotoUploadWidget.jsx file:
+  - In JSX, inside the 3rd Grid.Column: 
+    - We first want to check if there exists at least one file in the files state. If there is, we want to display the image preview and two buttons underneath it
+    - Wrap the two Buttons in a Button.Group wrapper. This way, the buttons will be next to each other
+    ```javascript
+    <Grid.Column width={4}>
+      <Header color='teal' sub content='Step 3 - Preview & Upload' />
+      {files.length > 0 && (
+        <>
+          <div
+            className='img-preview'
+            style={{ minHeight: 200, minWidth: 200, overflow: 'hidden' }}
+          />
+          <Button.Group>
+					  <Button style={{ width: 100 }} positive icon='check' />
+						<Button style={{ width: 100 }} icon='close' />
+					</Button.Group>
+        </>
+      )}
+    </Grid.Column>
+    ```
+
+
+
+
+
+
+
+
 
 
 
@@ -5414,3 +5572,17 @@ In src/app/firestore folder, create a file called firebaseService.js
 - React dropzone
   - Source: https://www.npmjs.com/package/react-dropzone
   - Install: `npm i react-dropzone`
+  - Import in PhotoWidgetDropzone.jsx file:
+    ```javascript
+    import React, { useCallback } from 'react';
+    import { useDropzone } from 'react-dropzone';
+    ```
+- React cropper
+  - Source: https://github.com/react-cropper/react-cropper
+  - Install: `npm i react-cropper`
+  - Import in PhotoWidgetCropper.jsx file:
+    ```javascript
+    import React, { useRef } from "react";
+    import Cropper from "react-cropper";
+    import "cropperjs/dist/cropper.css";
+    ```

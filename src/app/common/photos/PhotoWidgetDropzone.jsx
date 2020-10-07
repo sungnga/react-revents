@@ -30,11 +30,15 @@ export default function PhotoWidgetDropzone({ setFiles }) {
 	const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
 	return (
-		<div {...getRootProps()} style={isDragActive ? {...dropzoneStyles, ...dropzoneActive} : dropzoneStyles}>
+		<div
+			{...getRootProps()}
+			style={
+				isDragActive ? { ...dropzoneStyles, ...dropzoneActive } : dropzoneStyles
+			}
+		>
 			<input {...getInputProps()} />
-      <Icon name='upload' size='huge' />
-      <Header content='Drop image here' />
+			<Icon name='upload' size='huge' />
+			<Header content='Drop image here' />
 		</div>
 	);
 }
-
