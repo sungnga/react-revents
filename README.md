@@ -5980,7 +5980,7 @@ In src/app/firestore folder, create a file called firebaseService.js
         </Button>
       }
       ```
-    - If the user is not the host of the event, then they see the 'Join this event' button to join the event. If the user is not the host and is going to the event, then they see the 'Cancel' button to be able to cancel 
+    - If the user is not the host of the event, then they see the 'Join this event' button to join the event. If the user is not the host and is going to the event, then they see the 'Cancel My Place' button to be able to cancel 
       ```javascript
       {!isHost && (
         <>
@@ -5993,10 +5993,64 @@ In src/app/firestore folder, create a file called firebaseService.js
       )}
       ```
 
-
-
-
-
+**3. Adding the join event handler**
+- In firestoreService.js file:
+  - Write a addUserAttendance function that adds the currentUser to a given event
+    - This function takes an event as an argument
+    - First, get a reference to the current user from firebase.auth and assign it to a user variable
+    - Then use the .update() method on `db.collection('events').doc(event.id)` to add the currentUser to the attendees array property and the attendeeIds array property of a specified event document
+    ```javascript
+    export function addUserAttendance(event) {
+      const user = firebase.auth().currentUser;
+      return db.collection('events').doc(event.id).update({
+        attendees: firebase.firestore.FieldValue.arrayUnion({
+          id: user.uid,
+          displayName: user.displayName,
+          photoURL: user.photoURL || null
+        }),
+        attendeeIds: firebase.firestore.FieldValue.arrayUnion(user.uid)
+      });
+    }
+    ```
+- In EventDetailedHeader.jsx file:
+  - Import the following:
+    ```javascript
+    import React, { useState } from 'react';
+    import { toast } from 'react-toastify';
+    import { addUserAttendance } from '../../../app/firestore/firestoreService';
+    ```
+  - Create a loading state using useState() hook and initialize its value to false
+    - `const [loading, setLoading] = useState(false);`
+  - Write an async handleUserJoinEvent function that adds a user to an event as an attendee. This function executes the addUserAttendance method which adds the user in Firestore events collection
+    - First, call the setLoading() method to set loading to true
+    - Use a try/catch block to run the code since this is an async function
+    - If there's an error, call the toast.error() method to display the error.message
+    - In the try block, call the addUserAttendance() function and pass in the event as an argument. Since this is an async operation, add the 'await' keyword in front of it
+    - Finally, call the setLoading() method again to set the loading state back to false
+    ```javascript
+    async function handleUserJoinEvent() {
+      setLoading(true);
+      try {
+        await addUserAttendance(event);
+      } catch (error) {
+        toast.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    ```
+  - In the 'Join the event' Button element:
+    - For onClicke event handler, call the handleUserJoinEvent method and it doesn't take any arguments
+    - Add the loading property and set it to loading state
+    ```javascript
+    <Button
+      onClick={handleUserJoinEvent}
+      loading={loading}
+      color='teal'
+    >
+      JOIN THIS EVENT
+    </Button>
+    ```
 
 
 
