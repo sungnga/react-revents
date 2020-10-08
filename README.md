@@ -5501,7 +5501,7 @@ In src/app/firestore folder, create a file called firebaseService.js
         - Then also update the user photoURL property in firebase.auth by calling the .updateProfile() method on user. Rememeber that `const user = firebase.auth().currentUser;`. This is also an async operation, so add the 'await' keyword in front of it
       - Third, we want to add the photo to the photos collection inside the user document in Firestore users collection. This is an async operation, so add the 'await' keyword. We also want to add a return so that we can use this data later
         - So first, we want to access the user document with `db.collection('users').doc(user.uid)`
-        - To add a new collection inside the user document, add the `.collection('photos')` method after it and pass in the name of the collection
+        - To add a new collection inside the user document, add the `.collection('photos')` method after it and pass in the name of the collection. If there's a photos collection for this user already, it simply adds the photo to this existing collection
         - Then to add a document inside this new 'photos' collection, add the `.add()` method after it and specify the properties inside this document
     ```javascript
     export async function updateUserProfilePhoto(downloadURL, filename) {
@@ -5539,7 +5539,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     ```
   - Create a loading state to handle the loading indicator. Use useState() hook and inititalize its value to false
     - `const [loading, setLoading] = useState(false);`
-  - Write a handleUploadImage function
+  - Write a handleUploadImage function that uploads the photo to FirebaseStorage, updates the photoURL property in Firestore user doc and in user profile firebase.auth, and adds the photo to the Firestore photos collection. It's done by executing the uploadToFirebaseStorage() and updateUserProfilePhoto() methods
     - First thing is call the setLoading() methdod to set the loading indicator to true
     - Second, we want to give each of the image we upload a unique name. To do that we'll make use of the cuid library to give us a unique id and a utility function to give us the file extension
     - Third, create an uploadTask by calling the uploadToFirebaseStorage() method with the image and filename to upload to FirebaseStorage
@@ -5730,6 +5730,111 @@ In src/app/firestore folder, create a file called firebaseService.js
       </Card.Group>
       ```
 - Now we should be able to see the user photos collection in the PhotosTab
+
+**8. Setting the main profile photo**
+- In firestoreService.js file:
+  - Write an async setMainPhoto function that updates the photoURL property in Firestore user document and updates the user profile photoURL property in firebase.auth
+    - This function takes photo as an argument
+    - First, get the currently logged in user from firebase.auth and assign it to user variable
+    - Use a try/catch block
+    - If there's an error, throw the error back to the component
+    - In the try block:
+      - First, we want to update the photoURL property in Firestore users collection user doc. Call the .update() method on user doc and set the photoURL property to photo.url. This is an async operation, so add the 'await' keyword in front of it
+      - Second, we want to update the user profile photoURL property in firebase.auth. Call the .updateProfile() method on user variable and set the photoURL property to photo.url. This is also an async operation, so add the 'await' keyword in front of it. We also want to return from this because we want to turn off the loading indicator after this operation is done
+    ```javascript
+    export async function setMainPhoto(photo) {
+      const user = firebase.auth().currentUser;
+      try {
+        await db.collection('users').doc(user.uid).update({
+          photoURL: photo.url
+        });
+        return await user.updateProfile({
+          photoURL: photo.url
+        });
+      } catch (error) {
+        throw error;
+      }
+    }
+    ```
+- In PhotosTab.jsx file:
+  - Import the setMainPhoto function: `import { setMainPhoto } from '../../../app/firestore/firestoreService';`
+  - Create an updating state using useState() hook and initialize its value to false
+    - `const [updating, setUpdating] = useState(false);`
+  - Write an async handleSetMainPhoto function that executes the setMainPhoto function. This will update the photoURL property with the new photo.url in Firestore user doc and user profile firebase.auth
+    - This function takes photo as an argument
+    - First, call the setUpdating() method and set it to true
+    - Then use the try/catch block
+    - If there's an error, call the toast.error() method and display the error.message
+    - In the try block:
+      - Call the setMainPhoto() method and pass in photo as an argument. This is an async operation, so add the 'await' keyword in front of it
+    - Finally, call the setUpdating() method again and set it back to false to turn off the loading indicator
+    ```javascript
+    async function handleSetMainPhoto(photo) {
+      setUpdating(true);
+      try {
+        await setMainPhoto(photo);
+      } catch (error) {
+        toast.error(error.message);
+      } finally {
+        setUpdating(false);
+      }
+    }
+    ```
+  - In the 'Main' Button element:
+    - To handle the onClick event, call the handleSetMainPhoto() method inside a callback function because we need to pass the photo as an argument to handleSetMainPhoto
+    - Also add the loading property and set it to updating state
+    ```javascript
+    <Button
+      loading={updating}
+      onClick={() => handleSetMainPhoto(photo)}
+      basic
+      color='green'
+      content='Main'
+    />
+    ```
+- Now when the user clicks on the 'Main' button of a particular photo to set it as their main profile photo, it should update in both the ProfilePage and the currently logged in user profile picture in NavBar
+- However, the problem we're running into now is the loading indicator for the 'Main' button is running for all photos, not just the photo we want to set. To fix this problem, we need to make some adjustments to the updating state
+- In PhotosTab.jsx file:
+  - For the updating state, we want to initialize the state as an object instead of a simple boolean value
+    - Initialize the isUpdating property to false
+    - Initialize the target property to null
+    - `const [updating, setUpdating] = useState({ isUpdating: false, target: null });`
+  - Then in handleSetMainPhoto() function:
+    - This function takes target as a 2nd arg
+    - Call the setUpdating() method to set the isUpdating property to true and set target to target
+    - And in finally, call the setUpdating() method to set the isUpdating property back to false and target back to null
+    ```javascript
+    async function handleSetMainPhoto(photo, target) {
+      setUpdating({ isUpdating: true, target });
+      try {
+        await setMainPhoto(photo);
+      } catch (error) {
+        toast.error(error.message);
+      } finally {
+        setUpdating({ isUpdating: false, target: null });
+      }
+    }
+    ```
+  - In the 'Main' Button element:
+    - Add a name property and set it to photo.id
+    - For the loading property, set it to `updating.isUpdatng && updating.target === photo.id`. The loading indicator only runs if isUpdating is true AND the updating target is equal to photo.id, which is the name of the Button element
+    - For onClick event, pass in the e/event as the additional parameter to the callback function. Then pass in e.target.name as a 2nd parameter to the handleSetMainPhoto() method
+    ```javascript
+    <Button
+      name={photo.id}
+      loading={
+        updating.isUpdating && updating.target === photo.id
+      }
+      onClick={(e) => handleSetMainPhoto(photo, e.target.name)}
+      basic
+      color='green'
+      content='Main'
+    />    
+    ```
+
+
+
+
 
 
 
