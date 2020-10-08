@@ -141,3 +141,14 @@ export async function setMainPhoto(photo) {
 		throw error;
 	}
 }
+
+// Delete photo from Firestore photos collection based on the given photoId
+export function deletePhotoFromCollection(photoId) {
+	const userUid = firebase.auth().currentUser.uid;
+	return db
+		.collection('users')
+		.doc(userUid)
+		.collection('photos')
+		.doc(photoId)
+		.delete();
+}
