@@ -5923,6 +5923,52 @@ In src/app/firestore folder, create a file called firebaseService.js
     ```
 
 
+## FIREBASE RELATIONSHIPS
+**1. Adding attendances to an event**
+- In firestoreService.js file:
+  - In addEventToFirestore() function:
+    - What we have going on at the moment when we're creating an event is we're manually adding static data to the fields. Now that we have the information we need to dynamically populate these fields when we create an event, we're going to update this function
+    - First, we're going to get a reference to the currently logged in user from firebase.auth and assign it to a user variable
+    - Then we're going to modify the properties that we pass to the .add() method
+      - hostedBy, set it to user.displayName
+      - hostPhotoURL, set it to user.photoURL or null, if the user doesn't have a photo
+      - id of attendees, set to user.uid
+      - displayName of attendees, set to user.displayName
+      - photoURL of attendees, set to user.photoURL or null
+      - Add hostUid property and set it to user.uid
+      - Add an attendeeIds property and set it to `firebase.firestore.FieldValue.arrayUnion(user.uid)`. This will create an array of user.uids for the attendeeIds property. This list Field we're going to query, so we can find out which events a user with that specific uid is attending. With Firestore arrays, we can query simple string-based arrays. Our user.uids are going to be strings
+    ```javascript
+    export function addEventToFirestore(event) {
+      const user = firebase.auth().currentUser;
+
+      return db.collection('events').add({
+        ...event,
+        hostUid: user.uid,
+        hostedBy: user.displayName,
+        hostPhotoURL: user.photoURL || null,
+        attendees: firebase.firestore.FieldValue.arrayUnion({
+          id: user.uid,
+          displayName: user.displayName,
+          photoURL: user.photoURL || null
+        }),
+        attendeeIds: firebase.firestore.FieldValue.arrayUnion(user.uid)
+      });
+    }
+    ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
