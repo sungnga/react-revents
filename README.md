@@ -1493,7 +1493,7 @@
 **4. Getting events from the Redux store**
 - Instead of getting events from the local state of a component, we can get the events from the Redux store using the useSelector() hook. useSelector() hook comes with React-Redux library
 - In EventDashboard.jsx file:
-  - Import the useSelector() hook: ``
+  - Import the useSelector() hook: `import { useSelector } from 'react-redux';`
   - Get the events property from store using the useSelector() hook
     - The useSelector() hook takes a selector function as an argument
     - The selector function is called with the store state and returns the result value based on the name of the reducer used. We get the events property from the store using state.event and event is the name of the reducer
@@ -4625,7 +4625,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     ```javascript
     <Dropdown.Item
       as={Link}
-      to={`/profile/${currentUser.uid}`}
+      to={`/profile/${currentUser?.uid}`}
       text='My profile'
       icon='user'
     />
@@ -5013,7 +5013,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     <Image
       avatar
       spaced='right'
-      src={currentUserProfile.photoURL || '/assets/user.png'}
+      src={currentUserProfile?.photoURL || '/assets/user.png'}
     />
     ```
   - Also the user profile displayName from currentUserProfile property state
@@ -5022,7 +5022,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     ```javascript
     <Dropdown.Item
       as={Link}
-      to={`/profile/${currentUserProfile.id}`}
+      to={`/profile/${currentUserProfile?.id}`}
       text='My profile'
       icon='user'
     />
@@ -5956,14 +5956,42 @@ In src/app/firestore folder, create a file called firebaseService.js
     }
     ```
 
-
-
-
-
-
-
-
-
+**2. Setting up the event detailed header**
+- We want to configure the EventDetailedHeader so that only certain buttons show depending on the user's status to that event. Are they the host, are they the attendee, or are they not an attendee?
+- In EventDetailedPage.jsx file:
+  - First, we want to get the currentUser property from authReducer using useSelector() hook
+    - `const { currentUser } = useSelector((state) => state.auth);`
+  - Create an isHost variable that returns a boolean if the event host is the current user. 
+    - `const isHost = event.hostUid === currentUser.uid;`
+    - Now, we need to be careful when accessing properties where we don't know they exist when isHost is called. We can use the optional chaining operator aka `?` to check and see if the event exists first before accessing the .hostUid property. This way, if event doesn't exist, then it'll be undefined and undefined is going to set to false
+    - `const isHost = event?.hostUid === currentUser.uid;`
+  - Next is we want establish if the user is going to the event. We want to know if the currentUser is in the attendees list
+    - `const isGoing = event?.attendees?.some((a) => a.id === currentUser.uid);`
+  - Then we want to pass down these two items as props to the EventDetailedHeader child component
+    - `<EventDetailedHeader event={event} isGoing={isGoing} isHost={isHost} />`
+- In EventDetailedHeader.jsx file:
+  - Receive the isHost and isGoing props from the EventDetailedPage parent component and destructure them
+  - In JSX, now we can add conditional logic to show or hide buttons
+    - If a user is hosting the event, then they see the 'Manage Event' button
+      ```javascript
+      {isHost && 
+        <Button as={Link} to={`/manage/${event.id}`} color='orange' floated='right'>
+          Manage Event
+        </Button>
+      }
+      ```
+    - If the user is not the host of the event, then they see the 'Join this event' button to join the event. If the user is not the host and is going to the event, then they see the 'Cancel' button to be able to cancel 
+      ```javascript
+      {!isHost && (
+        <>
+          {isGoing ? (
+            <Button>Cancel My Place</Button>
+          ) : (
+            <Button color='teal'>JOIN THIS EVENT</Button>
+          )}
+        </>
+      )}
+      ```
 
 
 
