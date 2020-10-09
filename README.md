@@ -6372,7 +6372,41 @@ In src/app/firestore folder, create a file called firebaseService.js
   - In the 'Events' menuItem, render the EventsTab component
     - `{ menuItem: 'Events', render: () => <EventsTab /> },`
 
+**9. Adding the user event query**
+- In firestoreService.js file:
+  - Write an getUserEventsQuery function that gets the user events in Firestore events collection based on the specified query clauses
+    - This function takes activeTab and userUid as parameters
+    - First, get a referenece to the events collection and assign it to an eventsRef variable
+    - Also get a reference to today's date using `new Date()`. Assign it to a today variable
+    - Then use a switch statement to handle the filters for different activeTab
+      - The switch we're looking for is activeTab that we receive
+      - Then we specify our cases
+      - The 1st case is for past events:
+        - Return the eventsRef with the specified queries and order the events by date in descending order. That means, the latest past event goes on top
+      - 2nd case is for events the user hosting:
+        - Return the eventsRef with one specified query and order the events by date
+      - The default case is for future events:
+        - Return the eventsRef with one query where the attendeeIds contains the userUid and order the events by date
+    ```javascript
+    export function getUserEventsQuery(activeTab, userUid) {
+      let eventsRef = db.collection('events');
+      const today = new Date();
 
+      switch (activeTab) {
+        case 1: // past events
+          return eventsRef
+            .where('attendeeIds', 'array-contains', userUid)
+            .where('date', '<=', today)
+            .orderBy('date', 'desc');
+        case 2: // hosting
+          return eventsRef.where('hostUid', '==', userUid).orderBy('date');
+        default: // future events
+          return eventsRef
+            .where('attendeeIds', 'array-contains', userUid)
+            .orderBy('date');
+      }
+    }
+    ```
 
 
 
