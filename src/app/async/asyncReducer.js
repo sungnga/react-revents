@@ -20,6 +20,7 @@ export function asyncActionFinish() {
 
 // Action creator
 export function asyncActionError(error) {
+	console.log(error)
 	return {
 		type: ASYNC_ACTION_ERROR,
 		payload: error

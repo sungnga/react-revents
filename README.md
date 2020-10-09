@@ -3372,7 +3372,7 @@
             data(docs)
             dispatch(asyncActionFinish())
           },
-          error => dispatch(asyncActionError())
+          error => dispatch(asyncActionError(error))
         )
         return () => {
           unsubscribe()
@@ -3429,7 +3429,7 @@
             data(dataFromSnapshot(snapshot))
             dispatch(asyncActionFinish())
           },
-          error => dispatch(asyncActionError())
+          error => dispatch(asyncActionError(error))
         )
         return () => {
           unsubscribe()
@@ -3496,7 +3496,7 @@
           data(dataFromSnapshot(snapshot));
           dispatch(asyncActionFinish());
         },
-        (error) => dispatch(asyncActionError())
+        (error) => dispatch(asyncActionError(error))
       );
       return () => {
         unsubscribe();
@@ -6176,7 +6176,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     ```
   - Write a handleSetPredicate function to set the predicate
     - This function takes a key and value as arguments
-    - Call the setPredicate() method to set the predicate. In order for our component to re-render when we update this state, we need to specify a new map inside this method. Inside the new Map(), use the .set() method on the predicate state and pass in the key and value as arguments. This will set the predicate state with the specified key and value element
+    - Call the setPredicate() method to set the predicate. In order for our component to re-render when we update this state, we need to specify a new map inside this method. Inside the new Map(), call the .set() method on the predicate state and pass in the key and value as arguments. The .set() method comes with the map object. This will set the predicate state with the specified key and value element
     ```javascript
     function handleSetPredicate(key, value) {
       setPredicate(new Map(predicate.set(key, value)));
@@ -6221,8 +6221,8 @@ In src/app/firestore folder, create a file called firebaseService.js
             />
             <Menu.Item
               content="I'm hosting"
-              active={predicate.get('filter') === 'isHosting'}
-              onClick={() => setPredicate('filter', 'isHosting')}
+              active={predicate.get('filter') === 'isHost'}
+              onClick={() => setPredicate('filter', 'isHost')}
               disabled={loading}
             />
           </Menu>
@@ -6237,18 +6237,65 @@ In src/app/firestore folder, create a file called firebaseService.js
     }
     ```
 
+**7. Getting the filtered data**
+- Now we're going to hook up the filter functionality to listen to events from Firestore method in our firestoreService. So we can go out and listen to the new data we're going to get returned from Firestore
+- In firestoreService.js file:
+  - Let's modify the listenToEventsFromFirestore() function that we wrote earlier:
+    - This function accepts the predicate as a parameter
+    - First, get a reference to the currently logged in user from firebase.auth and assign it to a user variable
+    - Add an eventsRef variable and set it equal to `db.collection('events').orderBy('date')`. This will get the events collection in the order by date
+    - Then use a switch statement to handle different filters
+      - The switch we're looking for is the 'filter' keyword. Call the predicate.get() method and pass in the word 'filter' to get it
+      - Then we specify our cases
+      - The 1st case is isGoing:
+        - Return the eventsRef and in here, we can specify our queries using the `.where()`
+        - The way Firestore queries work is: specify the `.where()` clause and then in it, we can specify the Fields that we want to query on. `.where('Field_name', 'query_type', 'what_we_are_looking_for_in_the_Field')` We can specify as many queries as we want by using the `.where()` clauses
+      - 2nd case is isHost:
+        - Return the eventsRef with the specified queries
+      - The default case:
+        - Return the eventsRef with the date greater or equal to the startDate
+    ```javascript
+    export function listenToEventsFromFirestore(predicate) {
+      const user = firebase.auth().currentUser;
+      const eventsRef = db.collection('events').orderBy('date');
 
-
-
-
-
-
-
-
-
-
-
-
+      switch (predicate.get('filter')) {
+        case 'isGoing':
+          return eventsRef
+            .where('attendeeIds', 'array-contains', user.uid)
+            .where('date', '>=', predicate.get('startDate'));
+        case 'isHost':
+          return eventsRef
+            .where('hostUid', '==', user.uid)
+            .where('date', '>=', predicate.get('startDate'));
+        default:
+          return eventsRef.where('date', '>=', predicate.get('startDate'));
+      }
+    }
+    ```
+- In EventDashboard.jsx file:
+  - Inside the useFirestoreCollection() hook:
+    - Pass in the predicate to the listenToEventsFromFirestore() method as an argument
+    - Also list the predicate state as dependency to the custom hook
+    ```javascript
+    useFirestoreCollection({
+      query: () => listenToEventsFromFirestore(predicate),
+      data: (events) => dispatch(listenToEvents(events)),
+      deps: [dispatch, predicate]
+    });
+    ```
+- At this point, the events filter functionality is not filtering as we expect it. And we would not be able to see the error that's causing this problem from the Redux devTools. We need to console log the error manually from the asyncActionError() action function in the asyncReducer.js file to see what's causing the problem
+  ```javascript
+  export function asyncActionError(error) {
+    console.log(error)
+    return {
+      type: ASYNC_ACTION_ERROR,
+      payload: error
+    };
+  }
+  ```
+  - The problem showing in the console is: `FirebaseError: The query requires an index` and a link to the Firebase console is listed to fix this particular problem
+  - The problem we're running into is when we're filtering more than one Fields in Firestore, we need to create a composite index in Firestore. Everytime we'er querying multiple Fields we will run into this issue. Firestore will generate the index for us, but we need to go to the website to create the index
 
 
 

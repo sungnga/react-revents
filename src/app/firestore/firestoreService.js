@@ -27,9 +27,23 @@ export function dataFromSnapshot(snapshot) {
 	};
 }
 
-// Listen to events data from Firestore
-export function listenToEventsFromFirestore() {
-	return db.collection('events').orderBy('date');
+// Listen to events data from Firestore events collection
+export function listenToEventsFromFirestore(predicate) {
+	const user = firebase.auth().currentUser;
+	const eventsRef = db.collection('events').orderBy('date');
+
+	switch (predicate.get('filter')) {
+		case 'isGoing':
+			return eventsRef
+				.where('attendeeIds', 'array-contains', user.uid)
+				.where('date', '>=', predicate.get('startDate'));
+		case 'isHost':
+			return eventsRef
+				.where('hostUid', '==', user.uid)
+				.where('date', '>=', predicate.get('startDate'));
+		default:
+			return eventsRef.where('date', '>=', predicate.get('startDate'));
+	}
 }
 
 export function listenToEventFromFirestore(eventId) {
