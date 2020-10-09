@@ -6112,13 +6112,54 @@ In src/app/firestore folder, create a file called firebaseService.js
     </Button>
     ```
 
-
-
-
-
-
-
-
+**5. Adding the user nav links**
+- In the EventDetailedPage, we want to add a ribbon label to the user what hosts the event. We also want to add nav links for the attendees and hosts throughout the event page. This way, when other users visiting the event page, they can easily go to others profile pages
+- In EventDetailedPage.jsx file:
+  - Pass down the event.hostUid as hostUid props to the EventDetailedSidebar child component
+    - `<EventDetailedSidebar attendees={event?.attendees} hostUid={event.hostUid} />`
+- In EventDetailedSidebar.jsx file:
+  - Import the Link component: `import { Link } from 'react-router-dom';`
+  - Import Semantic Label component: `import { Label } from 'semantic-ui-react';`
+  - Receive the hostUid props from the EventDetailedPage parent component and destructure it
+  - In JSX:
+    - Just above the Item.Image element, write a condition to check if the hostUid is equal to the attendee.id. If it is, render the Semantic UI Label component and set the content to Host
+      ```javascript
+      {hostUid === attendee.id && (
+        <Label
+          style={{ position: 'absolute' }}
+          color='orange'
+          ribbon='right'
+          content='Host'
+        />
+      )}
+      ```
+    - Now, add a profile link for the attendee. Turn the Item element into a link and specify the pathname
+      ```javascript
+      <Item
+        as={Link}
+        to={`/profile/${attendee.id}`}
+        key={attendee.id}
+        style={{ position: 'relative' }}
+      >
+      ```
+- In EventDetailedHeader.jsx file:
+  - Make the name of the host a link
+    ```javascript
+    <p>
+      Hosted by <strong><Link to={`/profile/${event.hostUid}`}>{event.hostedBy}</Link></strong>
+    </p>
+    ```
+- In the EventListAttendee.jsx file:
+  - Import the Link component: `import { Link } from 'react-router-dom';`
+  - Turn the List.Item element into a link and specify the pathname
+    - `<List.Item as={Link} to={`/profile/${attendee.id}`}>`
+- In EventListItem.jsx file:
+  - In the Item.Description element, make the name of the host a link and specify the pathname
+    ```javascript
+    <Item.Description>
+      Hosted by <Link to={`/profile/${event.hostUid}`}>{event.hostedBy}</Link>
+    </Item.Description>
+    ```
 
 
 
