@@ -6060,7 +6060,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     - Then use a try/catch block
     - If there's an error, throw the error back to the component
     - In the try block:
-      - Use the .get() method to get the event doc from events collection document of a given event.id. Assign it to an eventDoc variable. Add the 'await' keyword in front of it for we need to wait for this operation to complete
+      - Use the .get() method to get the event doc from events collection document of a given event.id. Add the 'await' keyword in front of it for we need to wait for this operation to complete. Assign it to an eventDoc variable
       - Then use the .update() method to update the attendeeIds and attendees properties in events collection document of a given event.id
         - For the attendeeIds property, use the .arrayRemove() method to remove the user.uid from the array
         - For the attendees property, first, access the data of the eventDoc that we got back `eventDoc.data()`. Then call the .filter() method on the attendees array to upate the array and remove the attendee.id that matches with the user.uid
@@ -6160,6 +6160,97 @@ In src/app/firestore folder, create a file called firebaseService.js
       Hosted by <Link to={`/profile/${event.hostUid}`}>{event.hostedBy}</Link>
     </Item.Description>
     ```
+
+**6. Adding the filter functionality**
+- In EventDashboard.jsx file:
+  - Create a predicate state using useState() hook
+    - What we're going to use to initialize the state is a Javascript map. This is a Javascript object that allows us to use certain methods and we can get and set different elements in this map easily. This is a sufficient way for users to set a particular filter
+    - To create a map, call `new Map()`. And inside this map is going to be an array and inside this array are going to be keys and values. So each element inside the map is going to have a key and a value and we can set these different keys and values
+    ```javascript
+    const [predicate, setPredicate] = useState(
+      new Map([
+        ['startDate', new Date()],
+        ['filter', 'all']
+      ])
+    );
+    ```
+  - Write a handleSetPredicate function to set the predicate
+    - This function takes a key and value as arguments
+    - Call the setPredicate() method to set the predicate. In order for our component to re-render when we update this state, we need to specify a new map inside this method. Inside the new Map(), use the .set() method on the predicate state and pass in the key and value as arguments. This will set the predicate state with the specified key and value element
+    ```javascript
+    function handleSetPredicate(key, value) {
+      setPredicate(new Map(predicate.set(key, value)));
+    }
+    ```
+  - Then pass down the predicate state and the handleSetPredicate function as props to the EventFilters child component
+    ```javascript
+    <EventFilters
+      predicate={predicate}
+      setPredicate={handleSetPredicate}
+      loading={loading}
+    />
+    ```
+- In EventFilters.jsx file:
+  - Destructure the predicate, setPredicate, and loading props received from the EventDashboard parent component
+  - In JSX:
+    - Inside each of the Menu.Item element:
+      - Add a loading property and set it to loading state. We want to disable the filter button while the app is fetching and loading the data
+      - Add an active property and set it to predicate state. Since the predicate is a map object, we can call the .get() method on predicate and pass in a key to it
+      - For the onClick event handler, call the setPredicate() method inside a callback function and pass in the key and value as arguments
+    - Inside the Caledar component:
+      - For the onChange event handler, the callback function takes the date value as an argument. Then call the setPredicate() method in the callback and pass in startDate as the key and the date value as the value
+      - Add a value property and set it to the predicate state. We can use the .get() method on predicate and pass in 'startDate' or `new Date()` as the key. The `new Date()` is today's date
+      - Add a tileDisabled property and this takes a callback. Set loading in the callback
+    ```javascript
+    export default function EventFilters({ predicate, setPredicate, loading }) {
+      return (
+        <>
+          <Menu vertical size='large' style={{ width: '100%' }}>
+            <Header icon='filter' attached color='teal' content='Filters' />
+            <Menu.Item
+              content='All Events'
+              active={predicate.get('filter') === 'all'}
+              onClick={() => setPredicate('filter', 'all')}
+              disabled={loading}
+            />
+            <Menu.Item
+              content="I'm going"
+              active={predicate.get('filter') === 'isGoing'}
+              onClick={() => setPredicate('filter', 'isGoing')}
+              disabled={loading}
+            />
+            <Menu.Item
+              content="I'm hosting"
+              active={predicate.get('filter') === 'isHosting'}
+              onClick={() => setPredicate('filter', 'isHosting')}
+              disabled={loading}
+            />
+          </Menu>
+          <Header icon='calendar' attached color='teal' content='Select date' />
+          <Calendar
+            onChange={(date) => setPredicate('startDate', date)}
+            value={predicate.get('startDate' || new Date())}
+            tileDisabled={() => loading}
+          />
+        </>
+      );
+    }
+    ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
