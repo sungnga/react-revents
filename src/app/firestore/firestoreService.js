@@ -1,4 +1,3 @@
-import cuid from 'cuid';
 import firebase from '../config/firebase';
 
 // This gives us access to Firestore db
@@ -219,9 +218,11 @@ export function getUserEventsQuery(activeTab, userUid) {
 				.orderBy('date', 'desc');
 		case 2: // hosting
 			return eventsRef.where('hostUid', '==', userUid).orderBy('date');
-		default: // future events
+		default:
+			// future events
 			return eventsRef
 				.where('attendeeIds', 'array-contains', userUid)
+				.where('date', '>=', today)
 				.orderBy('date');
 	}
 }
