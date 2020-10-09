@@ -6558,9 +6558,36 @@ In src/app/firestore folder, create a file called firebaseService.js
     }
     ```
 
-
-
-
+**2. Setting up the chat form: EventDetailedChatForm component**
+- In EventDetailedPage.jsx file:
+  - Pass down the eventId as props to the EventDetailedChat child component
+    - `<EventDetailedChat eventId={event.id} />`
+- In EventDetailedChat.jsx file:
+  - Destructure the eventId props received from the EventDetailedPage parent component
+  - Import the EventDetailedChatForm component: `import EventDetailedChatForm from './EventDetailedChatForm';`
+  - In JSX and at the very bottom of Comment.Group element, instantiate the EventDetailedChatForm component
+    - Pass down the eventId props to the EventDetailedChatForm child component
+    - `<EventDetailedChatForm eventId={eventId} />`
+- In src/features/events/eventDetailed folder, create a component/file called EventDetailedChatForm.jsx
+- In EventDetailedChatForm.jsx file:
+  - Import the following
+    ```javascript
+    import React from 'react';
+    import { Form, Formik } from 'formik';
+    import { toast } from 'react-toastify';
+    import { addEventChatComment } from '../../../app/firestore/firebaseService';
+    import MyTextArea from '../../../app/common/form/MyTextArea';
+    import { Button } from 'semantic-ui-react';
+    ```
+  - Write an EventDetailedChatForm functional component that displays the chat form
+    - This component receives the eventId props from the EventDetailedChat parent component
+    - Use the Formik component to create the chat form
+      - Specify the initialValues and onSubmit properties for Formik component
+    - Then inside the Formik component:
+      - Use render props to destructure the isSubmitting props from Formik
+      - Then inside the render props function, render the Formik Form component
+      - Inside the Form component, instantiate the MyTextArea component and add a 'Add reply' Button after that
+- Now when a currentUser adds a comment in the chat form, the comment is added in firebase database under: chat -> eventId -> comment ID along with the comment detailed info
 
 
 
