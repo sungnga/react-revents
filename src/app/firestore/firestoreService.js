@@ -160,12 +160,34 @@ export function deletePhotoFromCollection(photoId) {
 // Add currentUser to Firestore events collection
 export function addUserAttendance(event) {
 	const user = firebase.auth().currentUser;
-	return db.collection('events').doc(event.id).update({
-		attendees: firebase.firestore.FieldValue.arrayUnion({
-			id: user.uid,
-			displayName: user.displayName,
-			photoURL: user.photoURL || null
-		}),
-		attendeeIds: firebase.firestore.FieldValue.arrayUnion(user.uid)
-	});
+	return db
+		.collection('events')
+		.doc(event.id)
+		.update({
+			attendees: firebase.firestore.FieldValue.arrayUnion({
+				id: user.uid,
+				displayName: user.displayName,
+				photoURL: user.photoURL || null
+			}),
+			attendeeIds: firebase.firestore.FieldValue.arrayUnion(user.uid)
+		});
+}
+
+// Remove currentUser from events collection doc
+export async function cancelUserAttendance(event) {
+	const user = firebase.auth().currentUser;
+	try {
+		const eventDoc = await db.collection('events').doc(event.id).get();
+		return db
+			.collection('events')
+			.doc(event.id)
+			.update({
+				attendeeIds: firebase.firestore.FieldValue.arrayRemove(user.uid),
+				attendees: eventDoc
+					.data()
+					.attendees.filter((attendee) => attendee.id !== user.uid)
+			});
+	} catch (error) {
+		throw error;
+	}
 }
