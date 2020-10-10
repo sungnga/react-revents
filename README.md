@@ -6902,10 +6902,90 @@ In src/app/firestore folder, create a file called firebaseService.js
     }
     ```
 
-
-
-
-
+**7. Adding the reply functionality**
+- Enable a user to reply to a chat comment and we'll only make it one level deep. When the user hits the 'Reply' to a comment, we want to display the EventDetailedChatForm compononent. And after they submitted the reply, we want to close the reply form automatically. Another thing we want to do is add a parentId property to the comment data object. If it's the original comment, then the parentId is set to 0. But if it's a reply comment, then the parentId is set to its parent comment id
+- In firebaseService.js file:
+  - Lets modify the addEventChatComment function:
+    - Instead of accepting comment as a parameter, we accept values that's coming from the form instead
+    - Set the value for text property to values.comment
+    - Add parentId property and set it to values.parentId
+    ```javascript
+    export function addEventChatComment(eventId, values) {
+      const user = firebase.auth().currentUser;
+      const newComment = {
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+        uid: user.uid,
+        text: values.comment,
+        date: Date.now(),
+        parentId: values.parentId
+      };
+      return firebase.database().ref(`chat/${eventId}`).push(newComment);
+    }
+    ```
+- In EventDetailedChat.jsx file:
+  - We want to track whether the reply form is open or not. So we'll create a state for this
+  - Create a showReplyForm state using useState() hook. This state is an object with open and commentId properties
+    ```javascript
+    const [showReplyForm, setShowReplyForm] = useState({
+      open: false,
+      commentId: null
+    });
+    ```
+  - Write a handleCloseReplyForm function to close the reply form
+    - This function calls the setShowReplyForm() method to set the open property to false and commentId property back to null
+    ```javascript
+    function handleCloseReplyForm() {
+      setShowReplyForm({ open: false, commentId: null });
+    }
+    ```
+  - In JSX:
+    - In the 'Reply' Comment.Action element, add the onClick event handler and call the setShowReplyForm() to change the showReplyForm state when this button is clicked
+    - Underneath the Comment.Action element, write a condition to check if showReplyForm.open state is true AND if showReplyForm.commendId in the state is equal to comment.id. If both condition are true, then display the EventDetailedChatForm component as a reply chat form
+    - Inside the EventDetailedChatForm component that we use to render for the original/parent comment, we want to pass down the parentId props with the value set to 0
+      - `<EventDetailedChatForm eventId={eventId} parentId={0} />`
+    - Then inside the EventDetailedChatForm component that we use for the reply chat form, we want to pass down 3 props:
+      - The eventId props is set to eventId
+      - The parentId props is set to comment.id
+      - The closeForm props is set to handleCloseReplyForm function
+    ```javascript
+    <Comment.Actions>
+      <Comment.Action
+        onClick={() =>
+          setShowReplyForm({ open: true, commendId: comment.id })
+        }
+      >
+        Reply
+      </Comment.Action>
+      {showReplyForm.open &&
+        showReplyForm.commendId === comment.id && (
+          <EventDetailedChatForm
+            eventId={eventId}
+            parentId={comment.id}
+            closeForm={handleCloseReplyForm}
+          />
+        )}
+    </Comment.Actions>
+    ```
+- In EventDetailedChatForm.jsx file:
+  - Destructure the 3 props received from the EventDetailedChat parent component
+    - `export default function EventDetailedChatForm({ eventId, parentId, closeForm }) { //code }`
+  - In the addEventChatComment() function, instead of sending eventId and values.comment as arguments, we're going to send the eventId and an object. This object contains all the existing values and we also want to append the parentId property
+    - `await addEventChatComment(eventId, {...values, parentId});`
+  - Once the reply chat form is submitted we want to close the form. Still inside the onSubmit event handler, call the closeForm() function in the finally block
+    ```javascript
+    onSubmit={async (values, { setSubmitting, resetForm }) => {
+      try {
+        await addEventChatComment(eventId, {...values, parentId});
+        resetForm();
+      } catch (error) {
+        toast.error(error.message);
+      } finally {
+        setSubmitting(false);
+        closeForm()
+      }
+    }}
+    ```
 
 
 
