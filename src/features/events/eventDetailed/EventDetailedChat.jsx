@@ -18,7 +18,9 @@ export default function EventDetailedChat({ eventId }) {
 		getEventChatRef(eventId).on('value', (snapshot) => {
 			if (!snapshot.exists()) return;
 			// console.log(firebaseObjectToArray(snapshot.val()));
-			dispatch(listenToEventChat(firebaseObjectToArray(snapshot.val())));
+			dispatch(
+				listenToEventChat(firebaseObjectToArray(snapshot.val()).reverse())
+			);
 		});
 	}, [eventId, dispatch]);
 
@@ -35,6 +37,7 @@ export default function EventDetailedChat({ eventId }) {
 			</Segment>
 
 			<Segment attached>
+				<EventDetailedChatForm eventId={eventId} />
 				<Comment.Group>
 					{comments.map((comment) => (
 						<Comment key={comment.id}>
@@ -46,7 +49,14 @@ export default function EventDetailedChat({ eventId }) {
 								<Comment.Metadata>
 									<div>{formatDistance(comment.date, new Date())}</div>
 								</Comment.Metadata>
-								<Comment.Text>{comment.text}</Comment.Text>
+								<Comment.Text>
+									{comment.text.split('\n').map((text, i) => (
+										<span key={i}>
+											{text}
+											<br />
+										</span>
+									))}
+								</Comment.Text>
 								<Comment.Actions>
 									<Comment.Action>Reply</Comment.Action>
 								</Comment.Actions>
@@ -54,7 +64,6 @@ export default function EventDetailedChat({ eventId }) {
 						</Comment>
 					))}
 				</Comment.Group>
-				<EventDetailedChatForm eventId={eventId} />
 			</Segment>
 		</>
 	);

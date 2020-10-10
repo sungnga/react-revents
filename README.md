@@ -6779,6 +6779,77 @@ In src/app/firestore folder, create a file called firebaseService.js
     </Comment.Group>
     ```
 
+**5. Improving the chat UI**
+- In EventDetailedChat.jsx file:
+  - Right now the chat displays the last comment at the bottom. We have no way to change the order in firebase db, but we can reverse the order on the client side
+    - Inside useEffect() hook, use the .reverse() method on firebaseObjectToArray() to reverse the snapshot array
+    - `dispatch(listenToEventChat(firebaseObjectToArray(snapshot.val()).reverse()));`
+  - Move the EventDetailedChatForm componment to outside and above the Comment.Group element. This way, the chat form is above the chat comments
+- We want users to be able to type in their comment and just hit the Enter key to submit the comment. We will remove the 'Add reply' button altogether. With that, we need to change we way we submit the textArea input field
+- In EventDetailedChatForm.jsx file:
+  - Remove the current MyTextArea component and the Button element
+  - Import the Field component: `import { Field, Form, Formik } from 'formik';`
+  - Import Loader component: `import { Loader } from 'semantic-ui-react';`
+  - Inside the Form wrapper component, we'er going to use the Formik Field component to render the textArea input field
+  - Inside the Field component:
+    - Use render props to extract the field props. Destructure it in the render props function
+    - Then inside the render props function,
+      - render a Loader component and set active property to isSubmitting
+      - render the textarea element
+        - set the rows property to 2
+        - write an instruction for the user in placeholder property
+        - for onKeyPress event handler, we first want to check how the user presses the keys. If they press the Enter key AND the Shift key, then we're just going to return because we want a normal behavior of someone presses a key, like Enter key. If they press the Enter key AND NOT the Shift key at the same time, then we want to call the handleSubmit() method
+  - We also want to pass down the handleSubmit props from Formik as well
+    ```javascript
+    {({ isSubmitting, handleSubmit }) => (
+      <Form className='ui form'>
+        <Field name='comment'>
+          {({ field }) => (
+            <div style={{ position: 'relative' }}>
+              <Loader active={isSubmitting} />
+              <textarea
+                rows='2'
+                {...field}
+                placeholder='Enter your comment (Enter to submit, SHIFT + Enter for new line)'
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter' && e.shiftKey) {
+                    return;
+                  }
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    handleSubmit();
+                  }
+                }}
+              ></textarea>
+            </div>
+          )}
+        </Field>
+      </Form>
+    )}
+    ```
+- At the moment, even though we're able to add a new line in the textArea input field, however, it does not display the new line in the chat comment after we submitted the comment. To fix this problem, we need to split the comment text in the Comment.Text element in EventDetailedChat.jsx file
+- In EventDetailedChat.jsx file:
+  - In the Comment.Text element:
+    - Use the .split() method on comment.text and pass in \n to split the comment text at \n. `\n` means new line. The .split() method returns an array, containing the splitted values
+    - Then use .map() method on the text array and display each text element followed by a break in a span element. This will add a new line after each text element. The span element will need a key and set to the array index
+    ```javascript
+    <Comment.Text>
+      {comment.text.split('\n').map((text, i) => (
+        <span key={i}>
+          {text}
+          <br />
+        </span>
+      ))}
+    </Comment.Text>
+    ```
+  - Note that in firebase database, the text property of a coment will still have the '\n' included in the text string. What we did in the Comment.Text element is how we want to display the text on the page. The .split() method did not change the original text string
+
+
+
+
+
+
+
+
 
 
 
