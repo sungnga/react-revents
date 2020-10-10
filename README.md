@@ -6484,7 +6484,7 @@ In src/app/firestore folder, create a file called firebaseService.js
   - In JSX:
     - In the Tab.Pane element, add a loading property and set it to loading state
       - `<Tab.Pane loading={loading}>`
-    - Now we can map over the profileEvents array and display each event in a Card component. Map the profileEvents array inside the Card.Group element
+    - Now we can map over the profileEvents array and display each event in a Semantic UI Card component. Map the profileEvents array inside the Card.Group element
       - The Card component will need a key property and set it to event.id. Also set the Link pathname to go to the EventDetailedPage
       - Set the category Image src to event.category
       - In the Card.Header element, set the content to event.title
@@ -6746,9 +6746,38 @@ In src/app/firestore folder, create a file called firebaseService.js
     }, [eventId, dispatch]);
     ```
 
-
-
-
+**4. Displaying the chat comments**
+- In EventDetailedChat.jsx file:
+  - Import the Link component: `import { Link } from 'react-router-dom';`
+  - Import formatDistance: `import { formatDistance } from 'date-fns';`
+  - In JSX:
+    - We can map over the comments array and display each comment in a Semantic UI Comment component. Map the comments array inside the Comment.Group element
+      - The Comment component will need a key property and set it to comment.id
+      - For the Comment.Avatar element, set the src to comment.photoURL or the static user image
+      - Make the Comment.Author element into a Link and set the link path to comment.uid, which is this user's profile page and set the author's display name to comment.displayName
+      - To format the time, use formatDistance() method from date-fns. The 1st arg we specify is comment.date and 2nd arg is today's date `new Date()`. This will display the time since this comment was created from today's time
+      - Set Comment.Text element to comment.text
+    ```javascript
+    <Comment.Group>
+      {comments.map((comment) => (
+        <Comment key={comment.id}>
+          <Comment.Avatar src={comment.photoURL || '/assets/user.png'} />
+          <Comment.Content>
+            <Comment.Author as={Link} to={`/profile/${comment.uid}`}>
+              {comment.displayName}
+            </Comment.Author>
+            <Comment.Metadata>
+              <div>{formatDistance(comment.date, new Date())}</div>
+            </Comment.Metadata>
+            <Comment.Text>{comment.text}</Comment.Text>
+            <Comment.Actions>
+              <Comment.Action>Reply</Comment.Action>
+            </Comment.Actions>
+          </Comment.Content>
+        </Comment>
+      ))}
+    </Comment.Group>
+    ```
 
 
 
