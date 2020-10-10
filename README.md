@@ -6843,6 +6843,76 @@ In src/app/firestore folder, create a file called firebaseService.js
     ```
   - Note that in firebase database, the text property of a coment will still have the '\n' included in the text string. What we did in the Comment.Text element is how we want to display the text on the page. The .split() method did not change the original text string
 
+**6. Clearing the chat comments and chat form validation**
+- Right now when we go visit another event page, the current chat comments array that's in the redux store is displaying in every event page. We should not be able to see some other event chat comments when we visit an event page. What we need to do is clear the comments property in eventReducer redux state when the EventDetailedPage dismounts. We need to create an action to clear the store state
+- In eventConstants.js file:
+  - Create another constant for CLEAR_COMMENTS action
+    - `export const CLEAR_COMMENTS = 'CLEAR_COMMENTS';`
+- In eventReducer.js file:
+  - Import the constant: `import { CLEAR_COMMENTS } from './eventConstants';`
+  - In the profileReducer function:
+    - Add another case in the switch statement for CLEAR_COMMENTS action type
+      - This action returns as an object, the existing state and set the comments property back to an empty array
+      - When this action is dispatched, comments property in the eventReducer redux store will reset back to an empty array
+    ```javascript
+		case CLEAR_COMMENTS:
+			return {
+				...state,
+				comments: []
+			};
+    ```
+- In the EventDetailedChat.jsx file:
+  - Import the constant: `import { CLEAR_COMMENTS } from '../eventConstants';`
+  - When we're using an useEffect() hook, after a component is unmounted (as in we moved away from this event to somewhere else), then we can use a return function inside the useEffect() to do something else, like cleanup
+  - Inside the useEffect() hook:
+    - Use a return callback function to dispatch the action type of CLEAR_COMMENTS. This will callout the eventReducer function to clear out the comments array
+    - What we can also do is turn off the listener for the event chat in firebase db when a component is unmounted. In the return callback, call the getEventChatRef() method and then call the .off() method on it
+    ```javascript
+    useEffect(() => {
+      getEventChatRef(eventId).on('value', (snapshot) => {
+        if (!snapshot.exists()) return;
+        // console.log(firebaseObjectToArray(snapshot.val()));
+        dispatch(listenToEventChat(firebaseObjectToArray(snapshot.val()).reverse()));
+      });
+      return () => {
+        dispatch({ type: CLEAR_COMMENTS });
+        getEventChatRef().off();
+      };
+    }, [eventId, dispatch]);
+    ```
+- Right now we're not validating the textarea input field for chat form. If the user doesn't have anything in the field they can still submit it
+- In EventDetailedChatForm.jsx file:
+  - Import Yup: `import * as Yup from 'yup';`
+  - Add validationSchema in Formik component and validate the comment property that the text input field is required
+    ```javascript
+    validationSchema={Yup.object({
+      comment: Yup.string().required()
+    })}
+    ```
+  - Then we need to pass down the isValid props in render props to the Form component
+    - `{({ isSubmitting, handleSubmit, isValid }) => ( ... )`
+  - In the `if (e.key === 'Enter' && !e.shiftKey)` condition:
+    - We want to prevent users from submitting when they just press the 'Enter' key alone
+    - Add the .preventDefault() method. This will prevent the default behavior
+    - Then add `isValid && handleSubmit()`. If the form is not valid, then this prevents the submission from taking place. If the form is valid, then handleSubmit() is called
+    ```javascript
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      isValid && handleSubmit();
+    }
+    ```
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
