@@ -6587,12 +6587,164 @@ In src/app/firestore folder, create a file called firebaseService.js
       - Use render props to destructure the isSubmitting props from Formik
       - Then inside the render props function, render the Formik Form component
       - Inside the Form component, instantiate the MyTextArea component and add a 'Add reply' Button after that
+    ```javascript
+    export default function EventDetailedChatForm({ eventId }) {
+      return (
+        <Formik
+          initialValues={{ comment: '' }}
+          onSubmit={async (values, { setSubmitting, resetForm }) => {
+            try {
+              await addEventChatComment(eventId, values.comment);
+              resetForm();
+            } catch (error) {
+              toast.error(error.message);
+            } finally {
+              setSubmitting(false);
+            }
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form className='ui form'>
+              <MyTextArea
+                name='comment'
+                placeholder='Please enter your comment here'
+                rows={2}
+              />
+              <Button
+                loading={isSubmitting}
+                content='Add reply'
+                icon='edit'
+                primary
+                type='submit'
+              />
+            </Form>
+          )}
+        </Formik>
+      );
+    }
+    ```
 - Now when a currentUser adds a comment in the chat form, the comment is added in firebase database under: chat -> eventId -> comment ID along with the comment detailed info
 
-
-
-
-
+**3. Listening to the chat data**
+- Now that we have some comments in firebase database to listen to, we're going to add them to Redux store and use that to display on the page
+- In eventConstants.js file:
+  - Create another constant for LISTEN_TO_EVENT_CHAT
+  - `export const LISTEN_TO_EVENT_CHAT = 'LISTEN_TO_EVENT_CHAT';`
+- In eventActions.js file:
+  - Import the constant: `import { LISTEN_TO_EVENT_CHAT } from './eventConstants';`
+  - Write a listenToEventChat action creator function that listens to an event chat in firebase database
+    - This function takes a comments as a parameter
+    - This function returns as an object,
+      - the action type of LISTEN_TO_EVENT_CHAT
+      - the payload of comments
+    ```javascript
+    export function listenToEventChat(comments) {
+      return {
+        type: LISTEN_TO_EVENT_CHAT,
+        payload: comments
+      };
+    }
+    ```
+- In eventReducer.js file:
+  - Import the constant: `import { LISTEN_TO_EVENT_CHAT } from './eventConstants';`
+  - In the initialState object, add a comments property and initialized to an empty array
+    ```javascript
+    const initialState = {
+      events: [],
+      comments: []
+    };
+    ```
+  - In the profileReducer function:
+    - Add another case in the switch statement for LISTEN_TO_EVENT_CHAT action type
+      - This action returns as an object, the existing state and the comments state property of payload
+      - When this action is dispatched, comments property in the eventReducer redux store will contain an array of comments from firebase database of an event chat
+    ```javascript
+		case LISTEN_TO_EVENT_CHAT:
+			return {
+				...state,
+				comments: payload
+			};
+    ```
+- In firebaseService.js file:
+  - Write a getEventChatRef function that gets an event chat reference from firebase database
+    - This function takes an eventId as a parameter
+    - Then return the event chat reference in .orderByKey()
+      - First get access to the firebase database using `firebase.database()`
+      - Then get a reference on firebase database using `.ref()` and specify the pathname. In our case, we want to get to chat directory and then a specific event by its id
+      - Then use .orderByKey() method to be explicit that the comments being returned will be in timestamp order
+    ```javascript
+    export function getEventChatRef(eventId) {
+      return firebase.database().ref(`chat/${eventId}`).orderByKey();
+    }
+    ```
+- In EventDetailedChat.jsx file:
+  - Import the following:
+    ```javascript
+    import React, { useEffect } from 'react';
+    import { useDispatch, useSelector } from 'react-redux';
+    import { getEventChatRef } from '../../../app/firestore/firebaseService';
+    import EventDetailedChatForm from './EventDetailedChatForm';
+    ```
+  - Create a dispatch method using useDispatch() hook
+    - `const dispatch = useDispatch();`
+  - Extract the comments property from eventReducer using useSelector() hook
+    - `const { comments } = useSelector((state) => state.event);`
+  - Use useEffect() hook
+    - This hook takes a function as 1st arg and a dependency array as 2nd arg
+    - List the eventId and dispatch as two dependencies in the dependency array
+    - Inside the function, call the getEventChatRef() method and pass in the eventId as an argument
+    - Next thing is, in order to listen to the data from firebase database, we use the .on() method. The .on() function listens for data change at a particular location
+      - Call the .on() method on getEventChatRef()
+    - Inside the .on() method:
+      - The 1st arg is what we want to listen to. In our case, we want to listen to value
+      - The 2nd arg is a callback function. The .on() method returns a snapshot. And the callback is what do we want to do once we have the snapshot. Inside the callback:
+        - First, check to see if the snapshot exists. If it doesn't, return early
+        - If it does exist, console log the snapshot to see what we're getting back
+    ```javascript
+    useEffect(() => {
+      getEventChatRef(eventId).on('value', (snapshot) => {
+        if (!snapshot.exists()) return;
+        console.log(snapshot.val());
+      });
+    }, [eventId, dispatch]);
+    ```
+- In the console, what we currently get back in snapshot is a list of comments in an object. We want the list of comments in an array. Another thing is the key inside this object is the comment id. We want to have this comment id populated inside the data so we can use it in our application. So we need to write a helper method to shape the data that we got back first before we can use it
+- In firebaseService.js file:
+  - Write a firebaseObjectToArray helper function that shapes the snapshot data into an array that we can use
+    - This function takes snapshot as a parameter
+    - First, check to see if there's a snapshot. If there is, run the following code
+    - To convert the snapshot object into an array, use Object.entries() method and pass in the snapshort as an argument. This will return an array
+      - For example, if we have 2 comment objects inside the snapshot object, the Object.entries() methods will return an array that has 2 array items in it. The 1st array item is the first comment and the 2nd array item is the second comment. In each array item, the 1st index is the comment id key in string and the 2nd index is the comment data in object. The 2nd array item is the same structure but for the second comment
+      - `[[comment1], [comment2]] -> [["comment1_key", {comment1_value_dataObject}], ["comment2_key", {comment2_value_dataObject}]]`
+    - Then to convert each array item into an object, we first use .map() method on the array to get each array item and then use the Object.assign() method to create a new object
+      - What we specify first is the target object and we can let it as an empty object
+      - The second thing we specify is the properties of the object itself. And we know that data object is the array element at index of 1
+      - And then we want to populate the comment id (at index of 0) in the new object as well. So the third thing we specify is a new id property and set it to the array element at index of 0
+    ```javascript
+    export function firebaseObjectToArray(snapshot) {
+      if (snapshot) {
+        return Object.entries(snapshot).map((e) =>
+          Object.assign({}, e[1], { id: e[0] })
+        );
+      }
+    }
+    ```
+- In EventDetailedChat.jsx file:
+  - Import the firebaseObjectToArray function: `import { firebaseObjectToArray } from '../../../app/firestore/firebaseService';`
+  - Import the listenToEventChat() action: `import { listenToEventChat } from '../eventActions';`
+  - Call the firebaseObjectToArray() function and pass in snapshot.val(). Console log it to see what we get. What we get back is an array of comment objects. The comment object contains all of the properties about the comment, including the id property
+    - `console.log(firebaseObjectToArray(snapshot.val()));`
+  - Now that we have the chat comments in the form that we can use, the next thing is dispatch the listenToEventChat() action and pass in the new version of snapshot
+  - We can check in Redux store and see the comments data is populated in the commments array property in the eventReducer
+    ```javascript
+    useEffect(() => {
+      getEventChatRef(eventId).on('value', (snapshot) => {
+        if (!snapshot.exists()) return;
+        // console.log(firebaseObjectToArray(snapshot.val()));
+        dispatch(listenToEventChat(firebaseObjectToArray(snapshot.val())));
+      });
+    }, [eventId, dispatch]);
+    ```
 
 
 

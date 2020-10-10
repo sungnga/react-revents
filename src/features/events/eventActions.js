@@ -2,7 +2,8 @@ import {
 	CREATE_EVENT,
 	DELETE_EVENT,
 	UPDATE_EVENT,
-	FETCH_EVENTS
+	FETCH_EVENTS,
+	LISTEN_TO_EVENT_CHAT
 } from './eventConstants';
 import {
 	asyncActionError,
@@ -49,5 +50,12 @@ export function deleteEvent(eventId) {
 	return {
 		type: DELETE_EVENT,
 		payload: eventId
+	};
+}
+
+export function listenToEventChat(comments) {
+	return {
+		type: LISTEN_TO_EVENT_CHAT,
+		payload: comments
 	};
 }

@@ -1,8 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Segment, Header, Comment } from 'semantic-ui-react';
+import {
+	firebaseObjectToArray,
+	getEventChatRef
+} from '../../../app/firestore/firebaseService';
 import EventDetailedChatForm from './EventDetailedChatForm';
+import { listenToEventChat } from '../eventActions';
 
 export default function EventDetailedChat({ eventId }) {
+	const dispatch = useDispatch();
+	const { comments } = useSelector((state) => state.event);
+
+	useEffect(() => {
+		getEventChatRef(eventId).on('value', (snapshot) => {
+			if (!snapshot.exists()) return;
+			// console.log(firebaseObjectToArray(snapshot.val()));
+			dispatch(listenToEventChat(firebaseObjectToArray(snapshot.val())));
+		});
+	}, [eventId, dispatch]);
+
 	return (
 		<>
 			<Segment
