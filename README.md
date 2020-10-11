@@ -6942,9 +6942,12 @@ In src/app/firestore folder, create a file called firebaseService.js
   - In JSX:
     - In the 'Reply' Comment.Action element, add the onClick event handler and call the setShowReplyForm() to change the showReplyForm state when this button is clicked
     - Underneath the Comment.Action element, write a condition to check if showReplyForm.open state is true AND if showReplyForm.commendId in the state is equal to comment.id. If both condition are true, then display the EventDetailedChatForm component as a reply chat form
-    - Inside the EventDetailedChatForm component that we use to render for the original/parent comment, we want to pass down the parentId props with the value set to 0
-      - `<EventDetailedChatForm eventId={eventId} parentId={0} />`
-    - Then inside the EventDetailedChatForm component that we use for the reply chat form, we want to pass down 3 props:
+    - Inside the EventDetailedChatForm component that we use to render the original chat form, we want to pass down 3 props:
+      - The eventId props is set to eventId
+      - The parentId props is set to value of 0
+      - The closeForm props is set to setShowReplyForm function
+      - `<EventDetailedChatForm eventId={eventId} parentId={0} closeForm={setShowReplyForm} />`
+    - Then inside the EventDetailedChatForm component that we use to render the reply chat form, we want to pass down 3 props:
       - The eventId props is set to eventId
       - The parentId props is set to comment.id
       - The closeForm props is set to handleCloseReplyForm function
@@ -6972,7 +6975,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     - `export default function EventDetailedChatForm({ eventId, parentId, closeForm }) { //code }`
   - In the addEventChatComment() function, instead of sending eventId and values.comment as arguments, we're going to send the eventId and an object. This object contains all the existing values and we also want to append the parentId property
     - `await addEventChatComment(eventId, {...values, parentId});`
-  - Once the reply chat form is submitted we want to close the form. Still inside the onSubmit event handler, call the closeForm() function in the finally block
+  - Once the reply chat form is submitted we want to close the form. Still inside the onSubmit event handler and inside the finally block, call the closeForm() function and set open property to false and commentId property to null
     ```javascript
     onSubmit={async (values, { setSubmitting, resetForm }) => {
       try {
@@ -6982,16 +6985,110 @@ In src/app/firestore folder, create a file called firebaseService.js
         toast.error(error.message);
       } finally {
         setSubmitting(false);
-        closeForm()
+        closeForm({ open: false, commentId: null });
       }
     }}
     ```
 
-
-
-
-
-
+**8. Displaying the replies**
+- Right now all of our original comments and reply comments are in one array in firebase database and we have no way to organize the comments in a tree structure. However, we can organize the display of it on the client side. We need to create a utility function to organize our dataset
+- In src/app/common/util/util.js file:
+  - Write a createDataTree utility function to create a data tree based on a given array/dataset
+    - This function takes dataset as a parameter
+    - First, create an empty object using Object.create() method and assign it to a hashtable variable
+      - `let hashtable = Object.create(null);`
+    - Then loop over each element in dataset array using the .forEach() method. For each element, set the hashtable object key to the element id and set the hashtable object value to an object that has all the properties of the array element and also a childNodes property of an empty array
+      - `dataset.forEach((a) => (hashtable[a.id] = { ...a, childNodes: [] }));`
+    - Create a dataTree variable and set it to an empty array
+      - `let dataTree = [];`
+    - Then loop over each element in dataset array using the .forEach() method again. For each element, 
+      - if parentId property is true (original comment parentId is set to 0. 0 means false), add the hashtable object (which contains this element data) using the .push() method to the childNodes array property of a hashtable object of that parentId. Remember that childNodes is a property of hashtable object. To acess childNodes of a specific hashtable object, use `hashtable[specify_the_hash].childNodes`. And then call a method on childNodes
+      - if parentId property is false or doesn't exist (meaning, this is the original comment), add the hashtable object, which contains this element data, to the dataTree array using the .push() method
+    - Return the dataTree array
+    - The dataTree array contains an array of hastable objects, which are the original comment objects. If there are reply comments to the original comment, they live in the childNodes array property of the original comment object. Each reply comment is also an object and it contains a childNodes array property as well and it has a parentId of its parent comment id
+    ```javascript
+    export function createDataTree(dataset) {
+      let hashtable = Object.create(null);
+      dataset.forEach((a) => (hashtable[a.id] = { ...a, childNodes: [] }));
+      let dataTree = [];
+      dataset.forEach((a) => {
+        if (a.parentId) hashtable[a.parentId].childNodes.push(hashtable[a.id]);
+        else dataTree.push(hashtable[a.id]);
+      });
+      return dataTree;
+    }
+     ```
+- In EventDetailedChat.jsx file:
+  - Import the utility function: `import { createDataTree } from '../../../app/common/util/util';`
+  - In JSX:
+    - Before we map over the comments array, we want to pass this comments array to the createDataTree utility function to create a comments data tree. And then map over the comments data tree
+      - `{createDataTree(comments).map((comment) => ( //rest of the code )`
+    - While mapping over the comments, for each comment element:
+      - Inside the Comment wrapper component and at the end of it, write a condition to check if comment.childNodes.length is greater than 0. If it is, that means this comment has a reply comment and we'll render the Comment.Group element inside this condition. If there's no childNode, we won't render this element
+      - Inside the Comment.Group element, map over each element of the comment.childNodes array. For each child element, render the Comment component and give it a key of child.id
+        ```javascript
+        {comment.childNodes.length > 0 && (
+          <Comment.Group>
+            {comment.childNodes.map((child) => (
+              <Comment key={child.id}>
+                Paste the code of everything inside the prev Comment component here..
+              </Comment>
+            ))}
+          </Comment.Group>
+        )}
+        ```
+      - Then inside this Comment component, copy and paste the code of everything that is inside the previous Comment component we wrote earlier. Go through this new code and swap the comment element to child element
+      - For the childNodes array, we want to display the reverse order of reply comments. Use the .reverse() method on the comment.childNodes array
+        - `{comment.childNodes.reverse().map((child) => (...)`
+      ```javascript
+      {comment.childNodes.length > 0 && (
+        <Comment.Group>
+          {comment.childNodes.reverse().map((child) => (
+            <Comment key={child.id}>
+              <Comment.Avatar
+                src={child.photoURL || '/assets/user.png'}
+              />
+              <Comment.Content>
+                <Comment.Author as={Link} to={`/profile/${child.uid}`}>
+                  {child.displayName}
+                </Comment.Author>
+                <Comment.Metadata>
+                  <div>{formatDistance(child.date, new Date())}</div>
+                </Comment.Metadata>
+                <Comment.Text>
+                  {child.text.split('\n').map((text, i) => (
+                    <span key={i}>
+                      {text}
+                      <br />
+                    </span>
+                  ))}
+                </Comment.Text>
+                <Comment.Actions>
+                  <Comment.Action
+                    onClick={() =>
+                      setShowReplyForm({
+                        open: true,
+                        commendId: child.id
+                      })
+                    }
+                  >
+                    Reply
+                  </Comment.Action>
+                  {showReplyForm.open &&
+                    showReplyForm.commendId === child.id && (
+                      <EventDetailedChatForm
+                        eventId={eventId}
+                        parentId={child.parentId}
+                        closeForm={handleCloseReplyForm}
+                      />
+                    )}
+                </Comment.Actions>
+              </Comment.Content>
+            </Comment>
+          ))}
+        </Comment.Group>
+      )}
+      ```
 
 
 

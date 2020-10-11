@@ -5,7 +5,11 @@ import { addEventChatComment } from '../../../app/firestore/firebaseService';
 import { Loader } from 'semantic-ui-react';
 import * as Yup from 'yup';
 
-export default function EventDetailedChatForm({ eventId, parentId, closeForm }) {
+export default function EventDetailedChatForm({
+	eventId,
+	parentId,
+	closeForm
+}) {
 	return (
 		<Formik
 			initialValues={{ comment: '' }}
@@ -14,13 +18,13 @@ export default function EventDetailedChatForm({ eventId, parentId, closeForm }) 
 			})}
 			onSubmit={async (values, { setSubmitting, resetForm }) => {
 				try {
-					await addEventChatComment(eventId, {...values, parentId});
+					await addEventChatComment(eventId, { ...values, parentId });
 					resetForm();
 				} catch (error) {
 					toast.error(error.message);
 				} finally {
 					setSubmitting(false);
-					closeForm()
+					closeForm({ open: false, commentId: null });
 				}
 			}}
 		>
@@ -39,7 +43,7 @@ export default function EventDetailedChatForm({ eventId, parentId, closeForm }) 
 											return;
 										}
 										if (e.key === 'Enter' && !e.shiftKey) {
-											e.preventDefault()
+											e.preventDefault();
 											isValid && handleSubmit();
 										}
 									}}
