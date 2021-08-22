@@ -4,13 +4,13 @@ The codebase for each step can be found in the commit link
 
 ## PROJECT SETUP
 
-### [1. Create project using create-react-app](https://github.com/sungnga/react-revents/commit/e9baf38b60a5844a15ce5cf2e56945fa608ca0b4)
+### [1. Create project using create-react-app](https://github.com/sungnga/react-revents/commit/e9baf38b60a5844a15ce5cf2e56945fa608ca0b4?ts=2)
 - Run in command line. The --use-npm flag is to ensure that we're using the npm package manager: `npx create-react-app react-revents --use-npm`
 - Once the React app has been successfully created, cd into the directory: `cd react-revents`
 - Then run: `npm start`
 - Can view the react-revents app in the browser: `http://localhost:3000`
 
-### [2. Hot Module Replacement](https://github.com/sungnga/react-revents/commit/b013c8cb6fa42f1efca0e7e5b7e64267da947968)
+### [2. Hot Module Replacement](https://github.com/sungnga/react-revents/commit/b013c8cb6fa42f1efca0e7e5b7e64267da947968?ts=2)
 - The hot module replacement prevents a full page reload when we make changes to our code
 - In index.js file:
   ```javascript
@@ -29,7 +29,7 @@ The codebase for each step can be found in the commit link
   render();
   ```
 
-### [3. Semantic UI React](https://github.com/sungnga/react-revents/commit/055a9875971668db010e0eb91f0a4b22bb49f3bc)
+### [3. Semantic UI React](https://github.com/sungnga/react-revents/commit/055a9875971668db010e0eb91f0a4b22bb49f3bc?ts=2)
 - Website: www.react.semantic-ui.com
 - Semantic UI React and Semantic UI CSS
   - Run to install both: `npm i semantic-ui-react semantic-ui-css`
@@ -39,7 +39,7 @@ The codebase for each step can be found in the commit link
 
 ## EVENT DASHBOARD PAGE LAYOUTS
 
-### [1. Create EventDashboard component](https://github.com/sungnga/react-revents/commit/c69298f4ed967e9fd7de90f1326208235cc44b05)
+### [1. Create EventDashboard component](https://github.com/sungnga/react-revents/commit/c69298f4ed967e9fd7de90f1326208235cc44b05?ts=2)
 - This component renders two columns, a 10-column grid and a 6-column grid, using Semantic Grid component
 - In src/features/events/eventDashboard folder, create a component/file called EventDashboard.jsx
 - In EventDashboard.jsx file:
@@ -79,7 +79,7 @@ The codebase for each step can be found in the commit link
   }
   ```
 
-### [2. Add NavBar component](https://github.com/sungnga/react-revents/commit/36c81d794452febedec81e88441b457b25f4ef77)
+### [2. Add NavBar component](https://github.com/sungnga/react-revents/commit/36c81d794452febedec81e88441b457b25f4ef77?ts=2)
 - Create Navigation menu
 - In features/nav folder, create a component/file called NavBar.jsx
 - In NavBar.jsx file:
@@ -152,7 +152,7 @@ The codebase for each step can be found in the commit link
   }
   ```
 
-### [3. Create Event List Items: EventList, EventListItem, and EventListAttendee components](https://github.com/sungnga/react-revents/commit/b3a0b071ecc2d52f68dd7d20abc129d1b0fb60c6)
+### [3. Create Event List Items: EventList, EventListItem, and EventListAttendee components](https://github.com/sungnga/react-revents/commit/b3a0b071ecc2d52f68dd7d20abc129d1b0fb60c6?ts=2)
 - In the EventDashboard 10-column grid section, create and display the details of event list item that includes the title of the event, who is hosting the event, date, venue, description of the event, a button to view the event detail, and list of attendees
 - In features/events/eventDashboard folder, create a component/file called EventList.jsx
 - In EventList.jsx file:
@@ -241,7 +241,7 @@ The codebase for each step can be found in the commit link
   </Grid.Column>
   ```
 
-### [4. Create an Event Form: EventForm component](https://github.com/sungnga/react-revents/commit/272b9350f7e519237003ce1cf993d2588de949b9)
+### [4. Create an Event Form: EventForm component](https://github.com/sungnga/react-revents/commit/272b9350f7e519237003ce1cf993d2588de949b9?ts=2)
 - In features/events/eventForm folder, create a component/file called EventForm.jsx
 - In EventForm.jsx file:
   - Import React: `import React from 'react';`
@@ -287,8 +287,8 @@ The codebase for each step can be found in the commit link
   </Grid.Column>
   ```
 
-### [5. Passing props down to child components](https://github.com/sungnga/react-revents/commit/24ca77efdcca7981a8a83760119daee83e6e00ae)
-- In src/app/api foler, there's a sampleData.js file which contains sample data of events that we can use display events information
+### [5. Passing props down to child components](https://github.com/sungnga/react-revents/commit/24ca77efdcca7981a8a83760119daee83e6e00ae?ts=2)
+- In src/app/api folder, there's a sampleData.js file which contains sample data of events that we can use display events information
 - In EventDashboard.jsx file:
   - Import the sample data file: `import { sampleData } from '../../../app/api/sampleData';`
   - The EventDashboard component is a parent of the EventList component. Parent can pass properties/props down to child components
@@ -371,7 +371,7 @@ The codebase for each step can be found in the commit link
   }
   ```
 
-### [6. React component state: React useState hook](https://github.com/sungnga/react-revents/commit/c6373f8c591eae387fc1fd21a683451386b94e48)
+### [6. React component state: React useState hook](https://github.com/sungnga/react-revents/commit/c6373f8c591eae387fc1fd21a683451386b94e48?ts=2)
 - In EventDashboard.jsx file:
   - Import react useState hook: `import React, { useState } from 'react';`
   - Create an events state and initialize its value to sampleData. Now the events state holds the data sample coming from the dataSample.js file
@@ -383,7 +383,7 @@ The codebase for each step can be found in the commit link
   - Import react useState hook: `import React, { useState } from 'react';`
   - Create a formOpen state and initialize it to false
     - `const [formOpen, setFormOpen] = useState(false);`
-  - Pass the setFormOpen method down as props to the NavBar child component. The NavBar component will comsume this method, setting the state to true, when the 'Create Event' button is clicked. This will trigger the EventForm component to display in the EventDashboard component
+  - Pass the setFormOpen method down as props to the NavBar child component. The NavBar component will consume this method, setting the state to true, when the 'Create Event' button is clicked. This will trigger the EventForm component to display in the EventDashboard component
     - `<NavBar setFormOpen={setFormOpen} />`
   - Pass the formOpen state and setFormOpen method down as props to the EventDashboard component
     - `<EventDashboard formOpen={formOpen} setFormOpen={setFormOpen} />` 
@@ -412,7 +412,7 @@ The codebase for each step can be found in the commit link
 - In EventDashboard.jsx file:
   - Receive the formOpen and setFormOpen props as an argument from App parent component and destructure them
     - `export default function EventDashboard({ formOpen, setFormOpen }) { ... }`
-  - Pass the setFormOpen method down as props to the EventForm child component. The EventForm component will comsume this method, setting the state to false, when the 'Cancel' button is clicked
+  - Pass the setFormOpen method down as props to the EventForm child component. The EventForm component will consume this method, setting the state to false, when the 'Cancel' button is clicked
   - We can show or hide the event form based on the state
     - `{formOpen && <EventForm setFormOpen={setFormOpen} />}`
     - Whatever is on the left of && is true, do whatever is on the right of &&
@@ -455,9 +455,9 @@ The codebase for each step can be found in the commit link
   - No direct access to the DOM
   - So no access to Input
   - Only concerned with altering State
-  - Rely on React to manipuate the DOM via the Virtual DOM
+  - Rely on React to manipulate the DOM via the Virtual DOM
 
-### [1. Basic forms in React: EventForm](https://github.com/sungnga/react-revents/commit/d59ad986c0fb657e35b14acf5aa43da536e99f25)
+### [1. Basic forms in React: EventForm](https://github.com/sungnga/react-revents/commit/d59ad986c0fb657e35b14acf5aa43da536e99f25?ts=2)
 - Enable the EventForm component to receive input values from the user and update the values state with the input values
 - In EventDashboard.jsx file:
   - Since we're going to be updating events, we're going to be updating them in events state. So we want to pass down the setEvents method as props to the EventForm child component 
@@ -472,7 +472,7 @@ The codebase for each step can be found in the commit link
       category: '',
       description: '',
       city: '',
-      venu: '',
+      venue: '',
       date: ''
     };
     ```
@@ -511,7 +511,7 @@ The codebase for each step can be found in the commit link
     }
     ```
 
-### [2. Creating an event, cuid](https://github.com/sungnga/react-revents/commit/2bb226ab6206c86192a3cfe93e72d9a0bea5bc0d)
+### [2. Creating an event, cuid](https://github.com/sungnga/react-revents/commit/2bb226ab6206c86192a3cfe93e72d9a0bea5bc0d?ts=2)
 - We create a new event by updating the events state with the new event. Do this by creating a method and pass in the values state which comes from the form input values
 - In EventDashboard.jsx file:
   - Write a handleCreateEvent method that adds a new event received to the events state using the setEvents() method
@@ -535,7 +535,7 @@ The codebase for each step can be found in the commit link
     }
     ```
 - Now, when we hit form submit to create a new event, we will run into 2 errors
-  - First is, we don't have a unique event id. In the EventList component, when we're mapping over the events array, it's expecting to find an event.id for eachh event
+  - First is, we don't have a unique event id. In the EventList component, when we're mapping over the events array, it's expecting to find an event.id for each event
   - Second is, our values object state does not have an attendees property. Since the attendees array is not defined and the .map() method is called on it, we get an error
   - Solution: need to provide the event an id and an array of attendees
 - Install a cuid package, a unique identifier: `npm install cuid`
@@ -560,7 +560,7 @@ The codebase for each step can be found in the commit link
     }
     ```
 
-### [3. Selecting an event to read](https://github.com/sungnga/react-revents/commit/d28c750f8fcd34592db9f9d04b3e5e56c24e823a)
+### [3. Selecting an event to read](https://github.com/sungnga/react-revents/commit/d28c750f8fcd34592db9f9d04b3e5e56c24e823a?ts=2)
 - When we click on the 'View' button on an event, it opens up the event form and populates the values from the event inside the form as well. We need to create a selectedEvent state to store the selected event values. And depending on the condition of this state, we can either show an empty form or a form with the values from the event
 - In App.jsx file:
   - Create a selectedEvent state and give its initial value of null
@@ -640,14 +640,14 @@ The codebase for each step can be found in the commit link
 		category: '',
 		description: '',
 		city: '',
-		venu: '',
+		venue: '',
 		date: ''
 	};
   ```
 
-### [4. Controlled components with a key: EventForm](https://github.com/sungnga/react-revents/commit/caedc6622fc8a3b9a06844a343b349e1d3a28afe)
+### [4. Controlled components with a key: EventForm](https://github.com/sungnga/react-revents/commit/caedc6622fc8a3b9a06844a343b349e1d3a28afe?ts=2)
 - The current problem we have is that when we click on the 'View' button to view a different event or click on the 'Create Event' button to create a new event, nothing causes the page to re-render so nothing happens. Behind the scene, however, the EventForm component does have the correct information in props when one of those buttons are clicked
-- When we send new props to a component, it does not cause the component to be re-rendered. The work-around solution is to use the special React attibute called key. We can add a key property to a component. So when the key changes, the component will be recreated with a freshly initialized state
+- When we send new props to a component, it does not cause the component to be re-rendered. The work-around solution is to use the special React attribute called key. We can add a key property to a component. So when the key changes, the component will be recreated with a freshly initialized state
 - So we're going to give our EventForm component a key
 - In EventDashboard.jsx file:
   - For the EventForm child component, add a key property
@@ -660,7 +660,7 @@ The codebase for each step can be found in the commit link
   - In the Header element, add a conditional to display one or the other
   - `<Header content={selectedEvent ? 'Edit the event' : 'Create new event'} />`
 
-### [5. Updating an event](https://github.com/sungnga/react-revents/commit/745b8c9c52963a568cd057a9edac0429bc1a8876)
+### [5. Updating an event](https://github.com/sungnga/react-revents/commit/745b8c9c52963a568cd057a9edac0429bc1a8876?ts=2)
 - We can update an event in the events state by check the updatedEvent id with the event id in the events state. If it matches, we can update the event with the new values. Write a method to handle the update event
 - In EventDashboard.jsx file:
   - Write a handleUpdateEvent method that updates an event in the events state based on the event id. Also sets the selectedEvent back to null and closes the form
@@ -699,7 +699,7 @@ The codebase for each step can be found in the commit link
     }
     ```
 
-### [6. Deleting an event](https://github.com/sungnga/react-revents/commit/90f0177ee2920870a61950e9ac17fac2eaa4b54d)
+### [6. Deleting an event](https://github.com/sungnga/react-revents/commit/90f0177ee2920870a61950e9ac17fac2eaa4b54d?ts=2)
 - In EventDashboard.jsx file:
   - Write a handleDeleteEvent method removes an event from the events state based on its id
     - This method takes an eventId as argument
@@ -759,17 +759,17 @@ The codebase for each step can be found in the commit link
 **Install react-router-dom**
   - Install: `npm i react-router-dom`
 
-### [1. Adding HomePage and EventDetailedPage components](https://github.com/sungnga/react-revents/commit/061fb0b89a7c9d8203a5d74481a24e8432b0fb34)
+### [1. Adding HomePage and EventDetailedPage components](https://github.com/sungnga/react-revents/commit/061fb0b89a7c9d8203a5d74481a24e8432b0fb34?ts=2)
 - In features folder, create a new folder called home. In home folder, create a component/file called HomePage.jsx
 - In HomePage.jsx file:
   - Import React: `import React from 'react';`
-  - Write a HomePage functional component that renders a 'Homeage' text for now
+  - Write a HomePage functional component that renders a 'Homepage' text for now
 - In features/events folder, create a new folder called eventDetailed. In eventDetailed folder, create a component/file called EventDetailedPage.jsx
 - In EventDetailedPage.jsx file:
   - Import React: `import React from 'react';`
   - Write a EventDetailedPage functional component that render a 'Event Detailed Page' text for now
   
-### [2. Routing configuration](https://github.com/sungnga/react-revents/commit/cae6e12df81c38d04631a02efb82f84b34d78c13)
+### [2. Routing configuration](https://github.com/sungnga/react-revents/commit/cae6e12df81c38d04631a02efb82f84b34d78c13?ts=2)
 - Website: https://reactrouter.com/web/guides/quick-start
 - In index.js file:
   - Import BrowserRouter component: `import { BrowserRouter } from 'react-router-dom';`
@@ -797,7 +797,7 @@ The codebase for each step can be found in the commit link
   </Container>
   ```
 
-### [3. Using NavLinks and Links](https://github.com/sungnga/react-revents/commit/340a5eb413db17ecea97ca3e41277a8c9d162f2a)
+### [3. Using NavLinks and Links](https://github.com/sungnga/react-revents/commit/340a5eb413db17ecea97ca3e41277a8c9d162f2a?ts=2)
 - `<NavLink>` is a special version of the `<Link>` that will add styling attribute to the rendered element when it matches the current URL. It adds an activeClass and applies styles to a link
 - In NavBar.jsx file:
   - Import the NavLink component: `import { NavLink } from 'react-router-dom';`
@@ -815,7 +815,7 @@ The codebase for each step can be found in the commit link
   </Menu.Item>
   ```
 
-### [4. Home page styling](https://github.com/sungnga/react-revents/commit/355436ff155aec6180cb144af79f7541d221e25c)
+### [4. Home page styling](https://github.com/sungnga/react-revents/commit/355436ff155aec6180cb144af79f7541d221e25c?ts=2)
 - We don't want the NavBar to show when we're on home page. We want something that takes up the entire screen and provide a button that takes us to the events page
 - In HomePage.jsx file:
   - Add content and styles to the page using Semantic UI
@@ -899,7 +899,7 @@ The codebase for each step can be found in the commit link
     </Button>
     ```
 
-### [5. Adding menus for authenticated and unauthenticated users](https://github.com/sungnga/react-revents/commit/0575d4b7e86a8aa1f19973639988fa7dbce51572)
+### [5. Adding menus for authenticated and unauthenticated users](https://github.com/sungnga/react-revents/commit/0575d4b7e86a8aa1f19973639988fa7dbce51572?ts=2)
 - We're not going to implement any user authentication at this point. We're just going to give the user the ability to fake a login or not login for now
 - In features/nav folder, create components/files called SignedInMenu.jsx and SignedOutMenu.jsx
 - In SignedOutMenu.jsx file:
@@ -925,7 +925,7 @@ The codebase for each step can be found in the commit link
 - In SignedInMenu.jsx file:
   - Import React: `import React from 'react';`
   - Import Link component: `import { Link } from 'react-router-dom';`
-  - Import Semantic compontnets: `import { Dropdown, Image, Menu } from 'semantic-ui-react';`
+  - Import Semantic components: `import { Dropdown, Image, Menu } from 'semantic-ui-react';`
   - Write a SignedInMenu functional component that renders a user already signed in dropdown menu. Usee Semantic UI
     ```javascript
     export default function SignedInMenu() {
@@ -949,7 +949,7 @@ The codebase for each step can be found in the commit link
   - Call the SignedOutMenu component in the render section: `<SignedOutMenu />`
   - Call the SignedInMenu component in the render section: `<SignedInMenu />`
 
-### [6. Adding fake authentication](https://github.com/sungnga/react-revents/commit/f78df90a17805f3fdef3131ce72557b028230e72)
+### [6. Adding fake authentication](https://github.com/sungnga/react-revents/commit/f78df90a17805f3fdef3131ce72557b028230e72?ts=2)
 - For now, we'll use local states in our NavBar component to check if a user is authenticated or not. If the user is authenticated, they get to see the 'Create Event' button and the SignedInMenu appears. If not authenticated, they won't see the 'Create Event' button and the SignedOutMenu appears
 - In NavBar.jsx file:
   - Create an authenticated state and set it to false as its initial value state
@@ -983,7 +983,7 @@ The codebase for each step can be found in the commit link
     - So when the 'Sign out' dropdown is clicked, the 'Create Event' button will not show on the NavBar and switch to the SignedOutMenu
     - `<Dropdown.Item onClick={() => setAuthenticated(false)} text='Sign out' icon='power' />`
 
-### [7. Using the useHistory hook](https://github.com/sungnga/react-revents/commit/935a2b00f8f4c3348b938a73e015dab31a84eddb)
+### [7. Using the useHistory hook](https://github.com/sungnga/react-revents/commit/935a2b00f8f4c3348b938a73e015dab31a84eddb?ts=2)
 - Since the NavBar component is not in a Route component, it doesn't have access to the browser history object. So we can't use the history.push() method to push the user to a new route. React-router comes with a useHistory hook that we can utilize
 - When the authenticated user clicks the 'Sign out' button, it'll direct them to the homepage
 - In NavBar.jsx file:
@@ -1007,7 +1007,7 @@ The codebase for each step can be found in the commit link
   - In the 'Sign out' DropDown.Item, call the signOut method on the onClick event property. We don't need to use the setAuthenticated() method anymore
   - `<Dropdown.Item onClick={signOut} text='Sign out' icon='power' />`
 
-### [8. EventDetailedPage structure: create smaller comps](https://github.com/sungnga/react-revents/commit/6aebc9fbdc62fb8ff0ce5c03ec8860b5ba4baa70)
+### [8. EventDetailedPage structure: create smaller comps](https://github.com/sungnga/react-revents/commit/6aebc9fbdc62fb8ff0ce5c03ec8860b5ba4baa70?ts=2)
 - The Event Detailed Page is significant and will have many features and functionalities. We'll break these into smaller components and render them onto the EventDetailedPage component
 - In the features/events/eventDetailed folder, create the following components/files:
   - EventDetailedHeader.jsx
@@ -1050,7 +1050,7 @@ The codebase for each step can be found in the commit link
   />
   ```
 
-### [9. EventDetailedPage content](https://github.com/sungnga/react-revents/commit/2f6acb36ea87deeb87078ef3ec76a9cfbdccdfe7)
+### [9. EventDetailedPage content](https://github.com/sungnga/react-revents/commit/2f6acb36ea87deeb87078ef3ec76a9cfbdccdfe7?ts=2)
 - Add content and styles to the following components:
   - EventDetailedHeader.jsx
   - EventDetailedInfo.jsx
@@ -1070,7 +1070,7 @@ The codebase for each step can be found in the commit link
 **Redux Trade Offs - it asks use to:**
 - Describe application state as plain objects and arrays. We can add complex objects to our store. It's not relational database on the client-side. It's a simple state management system
 - Describe changes in the system as plain objects. So when we want to make a change to our store, then we send Redux, a plain object with the information inside it, that we want it to change
-- Describle the logic for handling changes as *pure functions*. This will keep our code clean!
+- Describe the logic for handling changes as *pure functions*. This will keep our code clean!
 
 **Pure Functions**
 - Given the same input, will always return the same output
@@ -1136,7 +1136,7 @@ The codebase for each step can be found in the commit link
 **Install Redux Dev Tools**
 - Install: `npm i redux-devtools-extension --save-dev`
 - In configureStore.jsx file:
-  - Import the devToolsEnhencer method: `import { devToolsEnhancer } from 'redux-devtools-extension';`
+  - Import the devToolsEnhancer method: `import { devToolsEnhancer } from 'redux-devtools-extension';`
   - Pass in the devToolsEnhancer to the createStore() method as 2nd argument
   ```javascript
   export function configureStore() {
@@ -1149,7 +1149,7 @@ The codebase for each step can be found in the commit link
 
 ## A TASTE OF REDUX
 
-### [Setting up Redux, Redux sandbox](https://github.com/sungnga/react-revents/commit/8b49fa7a966930ddfb44a3642ac088eddc12f6dd)
+### [Setting up Redux, Redux sandbox](https://github.com/sungnga/react-revents/commit/8b49fa7a966930ddfb44a3642ac088eddc12f6dd?ts=2)
 **The Reducer Function**
 - The reducer function takes two arguments:
   - 1st arg is the initial state in the store
@@ -1292,7 +1292,7 @@ The codebase for each step can be found in the commit link
 ------------------------------------------------------------------------------
 
 
-### [1. Setting up Redux](https://github.com/sungnga/react-revents/commit/df4369657b112b5029964fe6038265ddf5358170)
+### [1. Setting up Redux](https://github.com/sungnga/react-revents/commit/df4369657b112b5029964fe6038265ddf5358170?ts=2)
 - **Install Redux and React-Redux:**
   - Install: `npm i redux react-redux`
 - **Configure the store:**
@@ -1330,7 +1330,7 @@ The codebase for each step can be found in the commit link
     }
     ```
 
-### [2. Creating the event reducer](https://github.com/sungnga/react-revents/commit/e4095fd69916f70f2de5ee9557744c169b425c4d)
+### [2. Creating the event reducer](https://github.com/sungnga/react-revents/commit/e4095fd69916f70f2de5ee9557744c169b425c4d?ts=2)
 - In features/events folder, create eventActions.js, eventConstants.js, and eventReducer.js files
 - In eventConstants.js file:
   - Create constants for create event, update event, and delete event
@@ -1378,12 +1378,12 @@ The codebase for each step can be found in the commit link
     };
     ```
   - Write an eventReducer function that updates the store state based on the given actions
-    - 1st arg is the state. Assign its default value to the intialState
+    - 1st arg is the state. Assign its default value to the initialState
     - 2nd arg is the action. Destructure the type and payload properties from the action object
     - Note that the state is an object. events is a state property and it's an array of objects. Each item in the array is an event
-    - Use switch statment to find the type of action, update the store state based on the action type, and return the updated state
+    - Use switch statement to find the type of action, update the store state based on the action type, and return the updated state
     - Now, when updating the store state, we never want to mutate the state itself. Rather, we can use the spread operator(`...`) to create a new object or new array of the state and update that state instead
-    - In this case, we return a state object and spread in the initial state using the spread operator(`return { ...state, }`). Then specify the state property we want to update, which in this case, the events state property. Note that the events state is an array of objects. So to update the events state, we use an array to spread in the intial events state followed by the thing we want to update(`events: [...state.events, payload]`)
+    - In this case, we return a state object and spread in the initial state using the spread operator(`return { ...state, }`). Then specify the state property we want to update, which in this case, the events state property. Note that the events state is an array of objects. So to update the events state, we use an array to spread in the initial events state followed by the thing we want to update(`events: [...state.events, payload]`)
     - The last case in the switch statement is the default case, which returns the current state
     ```javascript
     export default function eventReducer(state = initialState, { type, payload }) {
@@ -1412,7 +1412,7 @@ The codebase for each step can be found in the commit link
     }
     ```
 
-### [3. Creating a root reducer](https://github.com/sungnga/react-revents/commit/f0e0810d11998185498a1585aa56bd48b26323a8)
+### [3. Creating a root reducer](https://github.com/sungnga/react-revents/commit/f0e0810d11998185498a1585aa56bd48b26323a8?ts=2)
 - Even though we can only have a single store in our application, we can have as many reducers as we like. Think of each reducer as a way to access a piece of the store state. We can combine all the reducers into a single rootReducer and pass that to the createStore() method in the configureStore() function
 - In app/store folder, create a file called rootReducer.js
 - In rootReducer.js file:
@@ -1440,7 +1440,7 @@ The codebase for each step can be found in the commit link
   }
   ```
 
-### [4. Getting events from the Redux store](https://github.com/sungnga/react-revents/commit/3534c8b5f58c01a89a6d5c68696d4d286c41b963)
+### [4. Getting events from the Redux store](https://github.com/sungnga/react-revents/commit/3534c8b5f58c01a89a6d5c68696d4d286c41b963?ts=2)
 - Instead of getting events from the local state of a component, we can get the events from the Redux store using the useSelector() hook. useSelector() hook comes with React-Redux library
 - In EventDashboard.jsx file:
   - Import the useSelector() hook: `import { useSelector } from 'react-redux';`
@@ -1449,7 +1449,7 @@ The codebase for each step can be found in the commit link
     - The selector function is called with the store state and returns the result value based on the name of the reducer used. We get the events property from the store using state.event and event is the name of the reducer
     - Destructure the events property from the store
     - `const { events } = useSelector((state) => state.event);`
-- Next, we want to populate the event information onto the event detailed page. We can get an event info from the store using the useSelector() hook. Since the EventDetailedPage component is a routed component, we can get the event id from the route params. Weuse this event id to retreive the event from the store. The event id lives inside the params property and it's inside the match props. match.params.id
+- Next, we want to populate the event information onto the event detailed page. We can get an event info from the store using the useSelector() hook. Since the EventDetailedPage component is a routed component, we can get the event id from the route params. We use this event id to retrieve the event from the store. The event id lives inside the params property and it's inside the match props. match.params.id
 - In EventDetailedPage.jsx file:
   - Destructure the match props to get access to the route params
     - `export default function EventDetailedPage({ match }) {...}`
@@ -1474,7 +1474,7 @@ The codebase for each step can be found in the commit link
   - `{attendees.length} {attendees.length > 1 ? 'People' : 'Person'} Going`
   - Call .map() method on attendees array to display each attendee onto the page
 
-### [5. Dispatching event actions](https://github.com/sungnga/react-revents/commit/b8c774dcce3786050a0ff25702755f233930f879)
+### [5. Dispatching event actions](https://github.com/sungnga/react-revents/commit/b8c774dcce3786050a0ff25702755f233930f879?ts=2)
 - In EventListItem.jsx file:
   - Import the useDispatch hook: `import { useDispatch } from 'react-redux';`
   - Import the deleteEvent action: `import { deleteEvent } from '../eventActions';`
@@ -1500,7 +1500,7 @@ The codebase for each step can be found in the commit link
     - To update an event, call the dispatch() function and pass in the updateEvent() action creator function as an argument
     - To create an event, call the dispatch() function and pass in the createEvent() action creator function as an argument
     
-### [6. Clean up code, add key to EventForm](https://github.com/sungnga/react-revents/commit/bd44dbc2c724074768404256723107ad634d6f53)
+### [6. Clean up code, add key to EventForm](https://github.com/sungnga/react-revents/commit/bd44dbc2c724074768404256723107ad634d6f53?ts=2)
 - After the user submitted the form to update an event, we want to direct them to the events list page
 - In EventForm.jsx file:
   - Add the history props to the EventForm component
@@ -1517,7 +1517,7 @@ The codebase for each step can be found in the commit link
   - Specify the key property on the route that contains the EventForm component
     - `<Route path={['/createEvent', '/manage/:id']} component={EventForm} key={key} />`
 
-### [7. Scroll to top: ScrollToTop component](https://github.com/sungnga/react-revents/commit/6b94b94ef8e21a2201483a6bd941bc938e90fbef)
+### [7. Scroll to top: ScrollToTop component](https://github.com/sungnga/react-revents/commit/6b94b94ef8e21a2201483a6bd941bc938e90fbef?ts=2)
 - Currently, when we go to a different page, it doesn't automatically take us to the top of the page
 - In app/layout folder, create a component/file called ScrollToTop.jsx
 - In ScrollToTop.jsx file:
@@ -1553,7 +1553,7 @@ The codebase for each step can be found in the commit link
   - handling submission
 - Our goal is to create reusable fields, with validation that can be used in any project
 
-### [1. Setting up Formik](https://github.com/sungnga/react-revents/commit/1712ad76651cff854a6ffc30bfcb619ea2528ad5)
+### [1. Setting up Formik](https://github.com/sungnga/react-revents/commit/1712ad76651cff854a6ffc30bfcb619ea2528ad5?ts=2)
 - Website: https://formik.org/docs/api/formik
 - Install package: `npm i formik`
 - In EventForm.jsx file:
@@ -1583,7 +1583,7 @@ The codebase for each step can be found in the commit link
       - We can swap the old handleFormSubmit method for handleSubmit coming from Formik
       - Swap the handleInputChange method for all of the input elements for handleChange
 
-### [2. Formik with less code](https://github.com/sungnga/react-revents/commit/390419cd5cc6adfb6473bc4f43918ef6cac51d87)
+### [2. Formik with less code](https://github.com/sungnga/react-revents/commit/390419cd5cc6adfb6473bc4f43918ef6cac51d87?ts=2)
 - We can use some Formik's helper components:
   - `<Form />`: Form is a small wrapper around an HTML `<form>` element that automatically hooks into Formik's `handleSubmit` and `handleReset`. All other props are passed directly through to the DOM node
   - `<Field />`: Field will automatically hook up inputs to Formik. It uses the `name` attribute to match up with Formik state. `<Field />` will default to an HTML `<input />` element 
@@ -1636,7 +1636,7 @@ The codebase for each step can be found in the commit link
     </Formik>
     ```
 
-### [3. Form validation with Formik validationSchema](https://github.com/sungnga/react-revents/commit/3385736ea3a2fc55badc8c6c4027c117c8783e1f)
+### [3. Form validation with Formik validationSchema](https://github.com/sungnga/react-revents/commit/3385736ea3a2fc55badc8c6c4027c117c8783e1f?ts=2)
 - Source: https://formik.org/docs/guides/validation
 - Formik Validation: Formik is designed to manage forms with complex validation with ease. Formik supports synchronous and asynchronous form-level and field-level validation. Furthermore, it comes with baked-in support for schema-based form-level validation through Yup
 - Install Yup: `npm i yup`
@@ -1660,7 +1660,7 @@ The codebase for each step can be found in the commit link
     >
     ```
 
-### [4. Creating a reusable text input field: MyTextInput component](https://github.com/sungnga/react-revents/commit/a888bfbbcf37d4e8f314fdcc04bebfacd0521966)
+### [4. Creating a reusable text input field: MyTextInput component](https://github.com/sungnga/react-revents/commit/a888bfbbcf37d4e8f314fdcc04bebfacd0521966?ts=2)
 - DOC for useField() hook: https://formik.org/docs/api/useField 
 - Let's create a reusable text input field component that has input error handling and styling. Use Semantic UI for styling and Formik Field props for error handling
 - In src/app/common/form folder, create a component/file called MyTextInput.jsx
@@ -1696,7 +1696,7 @@ The codebase for each step can be found in the commit link
   - Inside the `<Form />` component, instantiate the MyTextInput component and give it a name and placeholder properties
     - `<MyTextInput name='title' placeholder='Event title' />`
 
-### [5. Cleaning up the form](https://github.com/sungnga/react-revents/commit/5a9036371750db234aabf4e15b9fe34a61d2b3a9)
+### [5. Cleaning up the form](https://github.com/sungnga/react-revents/commit/5a9036371750db234aabf4e15b9fe34a61d2b3a9?ts=2)
 - In EventForm.jsx file:
   - Replace the rest of the FormField input fields `<FormField><Form ... />></FormField>` with the MyTextInput component to create the input fields instead.
     - Fill in the values for name and placeholder properties for each component
@@ -1730,7 +1730,7 @@ The codebase for each step can be found in the commit link
       category: Yup.string().required('You must provide a category'),
       description: Yup.string().required(),
       city: Yup.string().required(),
-      venu: Yup.string().required(),
+      venue: Yup.string().required(),
       date: Yup.string().required()
     });
     ```
@@ -1756,7 +1756,7 @@ The codebase for each step can be found in the commit link
     >
     ```
 
-### [6. Creating a reusable text area: MyTextArea component](https://github.com/sungnga/react-revents/commit/5eccfd307672ffdccf0c998a31e2073ab95da0f4)
+### [6. Creating a reusable text area: MyTextArea component](https://github.com/sungnga/react-revents/commit/5eccfd307672ffdccf0c998a31e2073ab95da0f4?ts=2)
 - A textarea field gives you a larger text area than an input field does. This reusable component will have the exact same functionality as the MyTextInput component does. The only difference is instead of an `<input />` element, it uses a `<textarea />` element
 - In src/app/common/form folder, create a component/file called MyTextArea.jsx
 - In MyTextArea.jsx file:
@@ -1768,7 +1768,7 @@ The codebase for each step can be found in the commit link
     - We can specify the number of rows the textarea will display using the rows property 
     - `<MyTextArea name='description' placeholder='Description' rows={3} />`
   
-### [7. Creating a reusable select input: MySelectInput component](https://github.com/sungnga/react-revents/commit/97994e40d36130a9882ad63dbcafbcc81df1a048)
+### [7. Creating a reusable select input: MySelectInput component](https://github.com/sungnga/react-revents/commit/97994e40d36130a9882ad63dbcafbcc81df1a048?ts=2)
 - This component will have the same error handling functionality as the MyTextInput and MyTextArea components
 - DOC for useField() hook: https://formik.org/docs/api/useField 
 - In src/app/common/form folder, create a component/file called MySelectInput.jsx
@@ -1796,7 +1796,7 @@ The codebase for each step can be found in the commit link
     - Add the 'options' property to the component and set its value to categoryData. The categoryOptions.js file contains the select options data
     - `<MySelectInput name='category' placeholder='Category' options={categoryData} />`
 
-### [8. Creating a reusable date input: MyDateInput component](https://github.com/sungnga/react-revents/commit/a760f1a6af8fd5710c6adf93862505d95954b644)
+### [8. Creating a reusable date input: MyDateInput component](https://github.com/sungnga/react-revents/commit/a760f1a6af8fd5710c6adf93862505d95954b644?ts=2)
 - We'll be using the React Datepicker library. It gives us a consistent datepicker across every different browsers
 - Install React Datepicker library: `npm i react-datepicker`
 - In src/app/common/form folder, create a component/file called MyDateInput.jsx
@@ -1863,7 +1863,7 @@ The codebase for each step can be found in the commit link
   }
   ```
 
-### [9. Date-fns package: format Javascript date object into string](https://github.com/sungnga/react-revents/commit/8a0516e44195b8923145ca5e53c4689bfacc889e)
+### [9. Date-fns package: format Javascript date object into string](https://github.com/sungnga/react-revents/commit/8a0516e44195b8923145ca5e53c4689bfacc889e?ts=2)
 - We have a little issue with our current date value. Our date value is a date object, not a string. So we need to format a Javascript date object into a string that can be displayed on a page. We will use a date package to help us format dates into strings
 - The react-datepicker library is already using date-fns, but we want to install a date-fns package separately. When installing date-fns, we want to install the same version as the one in react-datepicker. Run `npm ls date-fns` to see the version that react-datepicker is using. Then install date-fns of the same version. This way, we won't run into any issues
 - Install date-fns: `npm i date-fns@2.16.1`
@@ -1872,7 +1872,7 @@ The codebase for each step can be found in the commit link
     - Replace the `{event.id}` Javascript date object with the format version
     - `{format(event.date, 'MMMM d, yyyy h:mm a')}`
 
-### [10. Formik props: control the submit and cancel buttons in event form](https://github.com/sungnga/react-revents/commit/8f1c95e18ec4a9ee293cd26b3b1b6a0202e5f281)
+### [10. Formik props: control the submit and cancel buttons in event form](https://github.com/sungnga/react-revents/commit/8f1c95e18ec4a9ee293cd26b3b1b6a0202e5f281?ts=2)
 - In our event form, we want to disable the 'Submit' button if the user hasn't completed the form correctly. To do that, we need to look into other properties/props from Formik to pass down to our form
 - We're going to pass properties down to our form from Formik via 'render' props. The way we do that is:
   - Inside the `<Formik />` component, use render props. Render props starts with curly braces and uses an arrow function
@@ -1924,7 +1924,7 @@ The codebase for each step can be found in the commit link
     />
     ```
 
-### [11. Modals: create a modalReducer and ModalWrapper component](https://github.com/sungnga/react-revents/commit/18e5d7364bac0bf28586868c27ee7ca0a9b7dc2a)
+### [11. Modals: create a modalReducer and ModalWrapper component](https://github.com/sungnga/react-revents/commit/18e5d7364bac0bf28586868c27ee7ca0a9b7dc2a?ts=2)
 - When a user clicks on the 'Login' or 'Register' button, we want to display a modal on the screen to allow them to enter login details or register to the application
 - Semantic UI has modals that we can use
 - We'll use Redux to store the state of the modal. So we'll need a modalReducer
@@ -2017,13 +2017,13 @@ The codebase for each step can be found in the commit link
     }
     ```
 
-### [12. Adding a Modal Manager: ModalManager component](https://github.com/sungnga/react-revents/commit/aee767ef46b84f82e8dee3bdf82e7ee2972c902d)
+### [12. Adding a Modal Manager: ModalManager component](https://github.com/sungnga/react-revents/commit/aee767ef46b84f82e8dee3bdf82e7ee2972c902d?ts=2)
 - Now that we have a a modalReducer and a modalWrapper that we can use around any modals that we create, what we need to do is have a way to select a specific modal and display it on the page
 - In src/app/common/modals folder, create a component/file called ModalManager.jsx
 - In ModalManager.jsx file:
   - Import React: `import React from 'react';`
   - Import useSelector() hook: `import { useSelector } from 'react-redux';`
-  - Create a ModalManager functional component that renders the modal content to be displayed inside a ModalWrapper. This component is the "`{children}`" being passed to the ModaWrapper component and rendered inside the `<ModalWrapper />` component
+  - Create a ModalManager functional component that renders the modal content to be displayed inside a ModalWrapper. This component is the "`{children}`" being passed to the ModalWrapper component and rendered inside the `<ModalWrapper />` component
   - In ModalManager component:
     - Create a modalLookup object that's going to allow us to check what type of modal we want to open. Set it to an empty object for now
       - `const modalLookup = {};`
@@ -2064,7 +2064,7 @@ The codebase for each step can be found in the commit link
   - Instantiate the ModalManager component as the first item in the render section. This will ensure that whenever we open a modal, it's guaranteed to be visible
     - `<ModalManager />`
 
-### [13. Creating a sign-in form: LoginForm component](https://github.com/sungnga/react-revents/commit/0562d383aa6d94d95affe44d1349c7fbc06950fb)
+### [13. Creating a sign-in form: LoginForm component](https://github.com/sungnga/react-revents/commit/0562d383aa6d94d95affe44d1349c7fbc06950fb?ts=2)
 - On the NavBar, when the user clicks on the 'Login' button, a sign-in modal opens on the page and the user can provide their email and password to login. We'll create a LoginForm component which has the modal content that can be rendered inside the ModalWrapper as children. The ModalManger will look for the type of modal to be displayed. The LoginForm will have validation as well
 - In src/features/auth folder, create a component/file called LoginForm.jsx
 - In LoginForm.jsx file:
@@ -2166,7 +2166,7 @@ The codebase for each step can be found in the commit link
     />
     ```
 
-### [14. Adding an authReducer](https://github.com/sungnga/react-revents/commit/250581fa2cdff71e18de156d2856b7fe4a20eb17)
+### [14. Adding an authReducer](https://github.com/sungnga/react-revents/commit/250581fa2cdff71e18de156d2856b7fe4a20eb17?ts=2)
 - Let's create an authReducer so we can store our authentication state in Redux store
 - In src/features/auth folder, create authConstants.js, authActions.js, and authReducer.js files
 - In authConstants.js file:
@@ -2197,7 +2197,7 @@ The codebase for each step can be found in the commit link
     }
     ```
 - In authReducer.js file:
-  - Import the constants: `mport { SIGN_IN_USER, SIGN_OUT_USER } from './authConstants';`
+  - Import the constants: `import { SIGN_IN_USER, SIGN_OUT_USER } from './authConstants';`
   - Create an initialState object
     ```javascript
     const initialState = {
@@ -2247,7 +2247,7 @@ The codebase for each step can be found in the commit link
   - Add the authReducer as auth property to the combineReducers() function. This will give us access to the auth state
     - `auth: authReducer`
 
-### [15. Hooking up the LoginForm](https://github.com/sungnga/react-revents/commit/bce868ff3d43900a656b6d1667a0ed5a31d58017)
+### [15. Hooking up the LoginForm](https://github.com/sungnga/react-revents/commit/bce868ff3d43900a656b6d1667a0ed5a31d58017?ts=2)
 - When we submit the LoginForm, we want to dispatch the signInUser() action with the login data. We also want to close the modal after we submitted
 - In LoginForm.jsx file:
   - Import the useDispatch() hook: `import { useDispatch } from 'react-redux';`
@@ -2280,11 +2280,11 @@ The codebase for each step can be found in the commit link
   - Import useSelector() and useDispatch() hooks: `import { useSelector, useDispatch } from 'react-redux';`
   - Import useHistory() hook: `import { useHistory } from 'react-router-dom';`
   - Import signOutUser action: `import { signOutUser } from './authActions';`
-  - Creat a dispatch method using the useDispatch() hook
+  - Create a dispatch method using the useDispatch() hook
     - `const dispatch = useDispatch();`
   - Get the browser history object using the useHistory() hook
     - `const history = useHistory();`
-  - When the 'Sign out' dropdown item is clicked, we want to do two things. Call the signOutUser() action to signout the user and redirect user to home page
+  - When the 'Sign out' dropdown item is clicked, we want to do two things. Call the signOutUser() action to sign out the user and redirect user to home page
     - On the onClick event, use an arrow function to execute the dispatch() method and call the signOutUser() action
     - Then use the history.push() method to direct use to homepage
     ```javascript
@@ -2313,7 +2313,7 @@ The codebase for each step can be found in the commit link
   - Provides a map of an area with given co-ordinations
   Takes a Lat/Lng
 
-### [1. Enable Google Maps APIs and generate API key](https://github.com/sungnga/react-revents/commit/d49e7d442a8c6acf4d4c3577be1189e173a4c73b)
+### [1. Enable Google Maps APIs and generate API key](https://github.com/sungnga/react-revents/commit/d49e7d442a8c6acf4d4c3577be1189e173a4c73b?ts=2)
 - Go to Google Developer Console site and login with Google account
   - https://console.developers.google.com/
 - Click on the 'New Project' button to create a new project. Name the project
@@ -2327,7 +2327,7 @@ The codebase for each step can be found in the commit link
 - In the APIs & Services menu, select Credentials
   - Click the '+ CREATE CREDENTIALS' button at the top. This will generate the API key
 
-### [2. Setting up places autocomplete](https://github.com/sungnga/react-revents/commit/d49e7d442a8c6acf4d4c3577be1189e173a4c73b)
+### [2. Setting up places autocomplete](https://github.com/sungnga/react-revents/commit/d49e7d442a8c6acf4d4c3577be1189e173a4c73b?ts=2)
 - Source: https://github.com/hibiken/react-places-autocomplete
 - Install: `npm i react-places-autocomplete`
 - Add this script to index.html file and replace the api key you get from Google APIs for this project
@@ -2347,7 +2347,7 @@ The codebase for each step can be found in the commit link
   - Instantiate the component in the render section: `<div><TestPlaceInput /></div>`
 - When typing in the input field, it should give an auto-suggest list of places. And when a place is selected, that selected place will show up in the input field. The lat/long of the place will print in the console
 
-### [3. Creating a custom place input: MyPlaceInput component](https://github.com/sungnga/react-revents/commit/2fb8d7f61296edf33b68c1f5e8236906b8e1cd9d)
+### [3. Creating a custom place input: MyPlaceInput component](https://github.com/sungnga/react-revents/commit/2fb8d7f61296edf33b68c1f5e8236906b8e1cd9d?ts=2)
 - The react-places-autocomplete library gives us:
   - A PlacesAutocomplete componenent
   - geocodeByAddress() method:
@@ -2447,7 +2447,7 @@ The codebase for each step can be found in the commit link
     }
     ```
 
-### [4. Using the place input: MyPlaceInput component](https://github.com/sungnga/react-revents/commit/8814420cf7d1c2cd3b11f725769a355fb4ce2603)
+### [4. Using the place input: MyPlaceInput component](https://github.com/sungnga/react-revents/commit/8814420cf7d1c2cd3b11f725769a355fb4ce2603?ts=2)
 - In EventForm.jsx file:
   - Import the MyPlaceInput component: `import MyPlaceInput from '../../../app/common/form/MyPlaceInput';`
   - For 'City' and 'Venue' input fields, use `<MyPlaceInput />` component
@@ -2507,7 +2507,7 @@ The codebase for each step can be found in the commit link
     />
     ```
 
-### [5. Narrowing the place input search results: EventForm](https://github.com/sungnga/react-revents/commit/bd90e4e056200eb9569674d1b20d26c156e9f917)
+### [5. Narrowing the place input search results: EventForm](https://github.com/sungnga/react-revents/commit/bd90e4e056200eb9569674d1b20d26c156e9f917?ts=2)
 - What we want to do next is when we select a specific city, we want to see venues that are located in that area
 - In EventForm.jsx file:
   - In render props, pass down the values props to our form
@@ -2530,7 +2530,7 @@ The codebase for each step can be found in the commit link
     />
     ```
 
-### [6. google-map-react library: display google maps onto a page](https://github.com/sungnga/react-revents/commit/dc90a8cbd55afb432479dc46a601dc632ae099f1)
+### [6. google-map-react library: display google maps onto a page](https://github.com/sungnga/react-revents/commit/dc90a8cbd55afb432479dc46a601dc632ae099f1?ts=2)
 - Source: https://www.npmjs.com/package/google-map-react
 - Install: `npm i google-map-react`
 - Display a Google map based on the given city's latLng coordinates. We'll use the google-map-react library to display the map. We'll first test out the Google maps in sandbox to display a map based on the city's latLng coordinates that the user typed in the 'Search Places' input field
@@ -2605,7 +2605,7 @@ The codebase for each step can be found in the commit link
   }
   ```
 
-### [7. Adding the map to the EventDetailedPage: EventDetailedMap component](https://github.com/sungnga/react-revents/commit/2a678333f0ac0b4e900dc63fbdd6cdbb7123bf2e)
+### [7. Adding the map to the EventDetailedPage: EventDetailedMap component](https://github.com/sungnga/react-revents/commit/2a678333f0ac0b4e900dc63fbdd6cdbb7123bf2e?ts=2)
   - On the EventDetailedPage, when we click on the 'Show Map' button, we get to see a map of where the event is taking place
   - In src/features/events/eventDetailed folder, create a component/file called EventDetailedMap.jsx
   - In EventDetailedMap.jsx file:
@@ -2647,7 +2647,7 @@ The codebase for each step can be found in the commit link
   - Create a mapOpen state using useState() hook and set the initial value to false
     - `const [mapOpen, setMapOpen] = useState(false);`
   - For the 'Show Map' Button element, we want to toggle the 'Show Map' and 'Hide Map' button depending on the mapOpen state
-    - On onClick event, switch the mapOpen state using the setMapyOpenToggle() method
+    - On onClick event, switch the mapOpen state using the setMapOpenToggle() method
     - Then for the Button content, if mapOpen state is true, show 'Hide Map'. If mapOpen is false, show 'Show Map'
     ```javascript
     <Button
@@ -2677,7 +2677,7 @@ The codebase for each step can be found in the commit link
 **Install Redux Thunk**
 - Install: `npm i redux-thunk`
 
-### [1. Set up Redux Thunk and create an asyncReducer](https://github.com/sungnga/react-revents/commit/c3074a233f82451597a21dd400815662e3231352)
+### [1. Set up Redux Thunk and create an asyncReducer](https://github.com/sungnga/react-revents/commit/c3074a233f82451597a21dd400815662e3231352?ts=2)
 - In configureStore.js file:
   - The createStore() method takes 3 params: a reducer, a preloadedState, and an enhancer
   - The only store enhancer that ships with Redux is applyMiddleware(). The middleware that we're going to apply is the Redux thunk, but we've also got a devToolEnhancer(). So in order to use both of the devToolEnhancer() and Redux thunk, we're going to bring in the composeWithDevTools() method from redux-devtools-extension. The composeWithDevTools() is already come with the devToolEnhancer()
@@ -2754,7 +2754,7 @@ The codebase for each step can be found in the commit link
   - Import the asyncReducer: `import asyncReducer from '../async/asyncReducer';`
   - Add the asyncReducer to the combineReducers() method as the value for async property: `async: asyncReducer`
 
-### [2. Using asynchronous functions in action creator functions](https://github.com/sungnga/react-revents/commit/864047803975e60dd8e86d5a5aa4cfc60bc96704)
+### [2. Using asynchronous functions in action creator functions](https://github.com/sungnga/react-revents/commit/864047803975e60dd8e86d5a5aa4cfc60bc96704?ts=2)
 - In src/app/common/util folder, create a file called util.js. Any functions that don't belong anywhere else that we can apply anywhere in our application go in this file
 - In util.js file:
   - Write a delay function that delays for a certain amount of time in ms millisecond
@@ -2778,7 +2778,7 @@ The codebase for each step can be found in the commit link
     - Then in this async function,
       - dispatch the asyncActionStart() action
       - since we're using an async function, use the 'await' keyword and call the delay() function to delay the request for 2 seconds
-      - after that, we want to dispatch anothat action with the type of INCREMENT_COUNTER and the payload is the amount
+      - after that, we want to dispatch another action with the type of INCREMENT_COUNTER and the payload is the amount
       - lastly, dispatch the asyncActionFinish() action
       - note that we want to call the delay() function and dispatch the INCREMENT_COUNTER and asyncActionFinish() actions inside a try/catch block. This way, if there's any problem with this asynchronous action, it's going to be caught by whatever is inside the catch block
       - if we do have an error inside the catch block,  we dispatch the asyncActionError() action and pass in the error received by the catch block. This way we can store the error inside the asyncReducer for the store and we can do whatever we want with that error in the future
@@ -2797,7 +2797,7 @@ The codebase for each step can be found in the commit link
     }
     ```
   - Do the same thing for the decrement action creator function
-  - So now when the 'Increment' or 'Decrement' button is clicked, it'll delay for the amount of time set, before it will increment or decement the counter
+  - So now when the 'Increment' or 'Decrement' button is clicked, it'll delay for the amount of time set, before it will increment or decrement the counter
 - We can use the loading state to display a loading indicator to the user that something is happening
 - In Sandbox.jsx file:
   - Extract and destructure the loading state property from the async reducer using the useSelector() hook
@@ -2812,7 +2812,7 @@ The codebase for each step can be found in the commit link
     />
     ```
 
-### [3. Isolating the loading indicators: counter sandbox](https://github.com/sungnga/react-revents/commit/753f6876385268a2a25a2f16c9bfec3e29d30b26)
+### [3. Isolating the loading indicators: counter sandbox](https://github.com/sungnga/react-revents/commit/753f6876385268a2a25a2f16c9bfec3e29d30b26?ts=2)
 - Right now both of the increment and decrement button loading indicators are loading when one button is clicked. So first we need to identify which button is actually clicked. We can specify a name property for each button. We can then get this name on the onClick event handler by calling event.target.name
 - Sandbox.jsx file:
   - Create a target local state using the useState() hook and initialize its value to null
@@ -2835,7 +2835,7 @@ The codebase for each step can be found in the commit link
     />
     ```
 
-### [4. Adding toast notifications: react-toastify library](https://github.com/sungnga/react-revents/commit/dcf3406454a41e3579bede5c4e7c7c2b93fc3520)
+### [4. Adding toast notifications: react-toastify library](https://github.com/sungnga/react-revents/commit/dcf3406454a41e3579bede5c4e7c7c2b93fc3520?ts=2)
 - Let's add the ability to notify the user when there's a problem. We'll use a toast notification library called react-toastify
 - Install: `npm i react-toastify`
 - Toasts, like modals, they need to appear anywhere in our application. For that, we use toasts at the top of the application inside the App.jsx file
@@ -2854,7 +2854,7 @@ The codebase for each step can be found in the commit link
   - In the catch block, call the toast.error() method and pass in the error received from the catch block
     - `toast.error(error)`
 
-### [5. Adding a mock API](https://github.com/sungnga/react-revents/commit/97e14aac08ddc2c1ac668f72e66bddab774fef19)
+### [5. Adding a mock API](https://github.com/sungnga/react-revents/commit/97e14aac08ddc2c1ac668f72e66bddab774fef19?ts=2)
 - Instead of displaying a static events coming from a sampleData file on the EventDashboard page, we can write a fetch-events asynchronous action to fetch the events and store it in the Redux store and then display the events coming from the store. Later on we can fetch the data from a database, like Firestore, and display it on the page
 - In src/app/api folder, create a file called mockApi.js
 - In mockApi.js file:
@@ -2888,7 +2888,7 @@ The codebase for each step can be found in the commit link
   - Import the fetch-event constant: `import { FETCH_EVENTS } from './eventConstants';`
   - Import the async actions: `import { asyncActionError, asyncActionFinish, asyncActionStart } from '../../app/async/asyncReducer';`
   - Import the fetchSampleData function: `import { fetchSampleData } from '../../app/api/mockApi';`
-  - Write a loadEvents function that fetches the events from sampleData and dispatches the FETCH_EVENTS action asychronously
+  - Write a loadEvents function that fetches the events from sampleData and dispatches the FETCH_EVENTS action asynchronously
     - This function returns an async function
     - The async function takes a dispatch as an argument. It is a dispatch() method coming from react-redux to dispatch actions
     - It first dispatches the asyncActonStart() action
@@ -2936,7 +2936,7 @@ The codebase for each step can be found in the commit link
     - `store.dispatch(loadEvents());`
   - Notice that this is an asynchronous action and there's a slight delay before the events load onto the page
 
-### [6. Adding a LoadingComponent](https://github.com/sungnga/react-revents/commit/10f0b51782a7d97b3f50cb349f78ce9d85d00acd)
+### [6. Adding a LoadingComponent](https://github.com/sungnga/react-revents/commit/10f0b51782a7d97b3f50cb349f78ce9d85d00acd?ts=2)
 - In src/app/layout folder, create a component/file called LoadingComponent.jsx
 - In LoadingComponent.jsx file:
   - Import React: `import React from 'react';`
@@ -2961,7 +2961,7 @@ The codebase for each step can be found in the commit link
     - `if (loading) return <LoadingComponent />;`
   - If we are not, then we want to return the JSX
 
-### [7. Using the Semantic Placeholder component to improve the UI](https://github.com/sungnga/react-revents/commit/e700c0ec7078e008e9fc90aeb5bf1dad8aec881b)
+### [7. Using the Semantic Placeholder component to improve the UI](https://github.com/sungnga/react-revents/commit/e700c0ec7078e008e9fc90aeb5bf1dad8aec881b?ts=2)
 - Instead of having a loading indictor taking up the entire page while we are waiting for the content to load, we can indicate the loading using a Semantic UI Placeholder component. A placeholder is used to reserve space for content that soon will appear in a layout. So we can design where the EventListItem component is showing that it's loading while we're waiting for its content
 - In src/features/events/eventDashboard folder, create a component/file called EventListItemPlaceholder.jsx
 - In EventListItemPlaceholder.jsx file:
@@ -3012,7 +3012,7 @@ The codebase for each step can be found in the commit link
     )}
     ```
 
-### [8. Adding an event filters component: EventFilters](https://github.com/sungnga/react-revents/commit/365f143fe921ae9bf96694003efef29c9d6d0c07)
+### [8. Adding an event filters component: EventFilters](https://github.com/sungnga/react-revents/commit/365f143fe921ae9bf96694003efef29c9d6d0c07?ts=2)
 - We want our user to be able to filter the event list based on the filter setting. They can also filter the events by selecting a date on a calendar. These filters will be on the right hand column of the EventDashboard page. We will use a react-calendar widget library for the calendar
 - Install React Calendar widget library:
   - `npm i react-calendar`
@@ -3076,7 +3076,7 @@ The codebase for each step can be found in the commit link
 - For example, if somebody creates a new event in our application and we send that up to Firestore, then anybody who's connected is also going to receive live of that event
 - This means that we don't have to write Javascript code to update our application because we maintain that connection to Firestore. As soon as Firestore is updated, then we get the updates on our application without needing to do the extra work
 
-### [1. Setting up Firebase and Firestore](https://github.com/sungnga/react-revents/commit/873629bc651bfaf662a0d69e4617df38ad8aad3d)
+### [1. Setting up Firebase and Firestore](https://github.com/sungnga/react-revents/commit/873629bc651bfaf662a0d69e4617df38ad8aad3d?ts=2)
 - Website: https://console.firebase.google.com/
 - Click the 'Add project' button to create a new project. Give the project a name. If the billing plan screen pops up, choose a different project name
 - Disable the Google Analytics for this project
@@ -3110,7 +3110,7 @@ The codebase for each step can be found in the commit link
 - Install the Firebase Javascript SDK
   - `npm i firebase`
 
-### [2. Firestore document fields](https://github.com/sungnga/react-revents/commit/1e773950558d658f6ee2460d00d1922701186dee)
+### [2. Firestore document fields](https://github.com/sungnga/react-revents/commit/1e773950558d658f6ee2460d00d1922701186dee?ts=2)
 - We're going to manually add data to Firestore to get a feel of the database structure
 - There are two types of database we can create. One is the Firebase database and the other is the Firestore database. We want the 'Cloud Firestore' database. Select this in the menu bar
 - Click on the 'Create database' button. Select the 'Start in test mode' option
@@ -3124,7 +3124,7 @@ The codebase for each step can be found in the commit link
     - the Type for an object Field is map
     - the Type for attendees Field is an array. Each item in the array is an object Field
 
-### [3. Listening to Firestore data](https://github.com/sungnga/react-revents/commit/deba6bae3d139f45e1bea8a39799ba3789572d83)
+### [3. Listening to Firestore data](https://github.com/sungnga/react-revents/commit/deba6bae3d139f45e1bea8a39799ba3789572d83?ts=2)
 - Now that we have some data in Firestore, let's implement how we can get the data into our application
 - In src/app/firestore folder, create a file called firestoreService.js. This file stores our Firebase and Firestore queries
 - In firestoreService.js file:
@@ -3149,12 +3149,12 @@ The codebase for each step can be found in the commit link
     - The useEffect() hook takes a callback function
     - When it comes to Firestore, we're going to subscribe, so we're listening to the data, and then we're going to unsubscribe. We're going to subscribe when the component mounts and unsubscribe when the component unmounts
     - In this callback function:
-      - Specify an unsubscribe function variable and set it equal to the getEventsFromstore() function
-      - In this getEventsFromstore() function, we need to pass in an observer. What we get back from this function is:
+      - Specify an unsubscribe function variable and set it equal to the getEventsFromFirestore() function
+      - In this getEventsFromFirestore() function, we need to pass in an observer. What we get back from this function is:
         - a `next` handler. And this is going to be what happens next after we received the data back from Firestore, what do we want to do next with it. Now, our data comes back from Firestore as a snapshot. This snapshot is a collection, so it'll return to us an array of documents in the form of `snapshot.docs`. We can use the .map() method to loop over the array to get the individual event, `docSnapshot`. Then inside this `docSnapshot` we can get the data from the events using `docSnapshot.data()`
         - an error. We're going to console log the error for now
     - Everything inside this callback function is what's going to happen when the component mounts. And because we're listening to something, we're subscribing to something, and then we want to do something when the component unmounts
-    - In our case, we want to return a function inside this useEffect() hook when the component unmounts. We return the unsubscrible function in order to unsubscribe from listening to the Firestore data when the component unmounts. When the return function is called, this is what is called when the component unmounts. So anything we add inside this return is effectively going to take an action to unsubscribe from listening to the data: `return unsubscribe;`
+    - In our case, we want to return a function inside this useEffect() hook when the component unmounts. We return the unsubscribe function in order to unsubscribe from listening to the Firestore data when the component unmounts. When the return function is called, this is what is called when the component unmounts. So anything we add inside this return is effectively going to take an action to unsubscribe from listening to the data: `return unsubscribe;`
     ```javascript
     useEffect(() => {
       const unsubscribe = getEventsFromFirestore({
@@ -3166,7 +3166,7 @@ The codebase for each step can be found in the commit link
     });
     ```
 
-### [4. Shaping the Firestore data and getting it into Redux store](https://github.com/sungnga/react-revents/commit/35aa9b3881cc11470eaee1ec132fc2498163f6b0)
+### [4. Shaping the Firestore data and getting it into Redux store](https://github.com/sungnga/react-revents/commit/35aa9b3881cc11470eaee1ec132fc2498163f6b0?ts=2)
 - The data we get back from Firestore has missing document id and the format of the date property is Firestore Timestamp, which is not usable for us. A common thing to do with Firebase and Firestore is shape the data so it's usable in our application. We're going to create a function to help us do that
 - In firestoreService.js file:
   - Write a dataFromSnapshot function that makes changes to the data from snapshot and returns the new version of data
@@ -3194,7 +3194,7 @@ The codebase for each step can be found in the commit link
   - When mapping through each docSnapshot, we want to call the dataFromSnapshot() function and pass in docSnapshot as an argument
     - `console.log(snapshot.docs.map((docSnapshot) => dataFromSnapshot(docSnapshot)))`
   - Now the data we get back should include an id property with the document id
-- Next is we want to convert Firestore timestap date into Javascript date
+- Next is we want to convert Firestore timestamp date into Javascript date
 - Back in firestoreService.js file and inside the dataFromSnapshot() function:
   - We want to check to see the type of object we get back inside the data. So we're going to loop over all the properties inside the snapshot data. If a property of the data object is a Firestore Timestamp, then we want to convert it into a Javascript date object
   - The date property of data object that we get back from snapshot comes with a handful of methods, and one of those methods is .toDate(). This method will convert the timestamp into Javascript date
@@ -3250,12 +3250,12 @@ The codebase for each step can be found in the commit link
   - A note on the useEffect() hook:
     - When we use useEffect(), we need to be careful of how many it's going to run. Every time this component receives properties, or the state reload, or something is changing, the component will re-renders and the code inside the useEffect() hook will run as well
     - When using useEffect() hook, we also need to provide it an array of dependencies as a 2nd argument. This ensures that the component only re-renders when there's a change in the listed dependencies
-    - We only want to listen to the Firestore data when the component mount and unlisten when the component unmounts. We don't want to call this action everytime the component re-renders
+    - We only want to listen to the Firestore data when the component mount and unlisten when the component unmounts. We don't want to call this action every time the component re-renders
     - In our case, the dependency is the dispatch() method. We can list dispatch as a dependency in the dependency array
       - `useEffect(callback, [dispatch])`
 
-### [5. Restoring the loading indicator](https://github.com/sungnga/react-revents/commit/a546f0e5440b2e13c4f878f232e91eaf9aab3e0e)
-- What happens when we listen to data from Firestore is we don't get a promise from Firestore. We're objserving the data
+### [5. Restoring the loading indicator](https://github.com/sungnga/react-revents/commit/a546f0e5440b2e13c4f878f232e91eaf9aab3e0e?ts=2)
+- What happens when we listen to data from Firestore is we don't get a promise from Firestore. We're observing the data
 - In EventDashboard.jsx file:
   - Import async actions: `import { asyncActionError, asyncActionFinish, asyncActionStart } from '../../../app/async/asyncReducer';`
   - Inside useEffect() hook:
@@ -3280,7 +3280,7 @@ The codebase for each step can be found in the commit link
     }, [dispatch]);
     ```
 
-### [6. Creating a custom hook: useFirestoreCollection() hook](https://github.com/sungnga/react-revents/commit/98ea71007b00081314a8e94a1bb57ea427225d42)
+### [6. Creating a custom hook: useFirestoreCollection() hook](https://github.com/sungnga/react-revents/commit/98ea71007b00081314a8e94a1bb57ea427225d42?ts=2)
 - Up until now we've been using other people's hooks to write our application. Our useEffect() hook is getting long with more actions being dispatched. We can write our own custom hook so it can be reusable 
 - In src/app/hooks folder, create a file called useFirestoreCollection.js
   - By convention, whenever creating a hook, start with 'use'
@@ -3357,7 +3357,7 @@ The codebase for each step can be found in the commit link
     });
     ```
 
-### [7. Adding a useFirestoreDoc() hook](https://github.com/sungnga/react-revents/commit/4ee912a69203b2c3b92e18406f5a56ba03ae854b)
+### [7. Adding a useFirestoreDoc() hook](https://github.com/sungnga/react-revents/commit/4ee912a69203b2c3b92e18406f5a56ba03ae854b?ts=2)
 - We want to get individual documents rather than a collection from Firestore. We need to create another custom hook and a query function to get a document from Firestore
 - In src/app/hooks folder, create a file called useFirestoreDoc.js
 - In useFirestoreDoc.js file:
@@ -3424,12 +3424,12 @@ The codebase for each step can be found in the commit link
   - Check to see if it's loading or if there's no event. If one of these cases is true, return the `<LoadingComponent />`
     - `if (loading || !event) return <LoadingComponent content='Loading event...' />;`
 
-### [8. Handling not found documents](https://github.com/sungnga/react-revents/commit/8e7d760418f5464baa98b2743451d2b4b1408a62)
+### [8. Handling not found documents](https://github.com/sungnga/react-revents/commit/8e7d760418f5464baa98b2743451d2b4b1408a62?ts=2)
 - When we try to fetch an event from Redux store or from Firestore, we use the event id from the URL params of the EventDetailedPage. When we try to get a document in Firestore based on the event id and it can't find it, Firestore will not return an error. However, it will still return a snapshot object and in the snapshot, there's an exists property that's set to false
-- We can use this exists property to check if a document data is found in Firestore. If this exists property is false, we can dispatch an asynActionError() action and provide a custom code and message about the error
+- We can use this exists property to check if a document data is found in Firestore. If this exists property is false, we can dispatch an asyncActionError() action and provide a custom code and message about the error
 - In useFirestoreDoc.js file:
   - Write a condition to check if snapshot.exists property is false
-  - If it is, dispatch the asynActionError() action and provide a custom error code and message
+  - If it is, dispatch the asyncActionError() action and provide a custom error code and message
   - And then return. This means the function will stop executing anything after
   ```javascript
   useEffect(() => {
@@ -3456,7 +3456,7 @@ The codebase for each step can be found in the commit link
     }, deps); //eslint-disable-line react-hooks/exhaustive-deps
   ```
 
-### [9. Adding an error component: ErrorComponent](https://github.com/sungnga/react-revents/commit/c7001a61c132678a5623cd155e5a980c9b00632b)
+### [9. Adding an error component: ErrorComponent](https://github.com/sungnga/react-revents/commit/c7001a61c132678a5623cd155e5a980c9b00632b?ts=2)
 - The current problem we're having is if no event document is found, the `<LoadingComponent />` continues to run. So we're going to create an error component to handle errors and redirect user
 - In src/app/common/errors folder, create a component/file called ErrorComponent.jsx
 - In ErrorComponent.jsx file:
@@ -3504,7 +3504,7 @@ The codebase for each step can be found in the commit link
   - Write a condition that checks for the error state. If there's an error, return with the Redirect component and set the path to '/error'. The route of this '/error' path will render the ErrorComponent and display the error page
     - `if (error) return <Redirect to='/error' />;`
 
-### [10. Creating and updating events in Firestore](https://github.com/sungnga/react-revents/commit/a51888a1743c9b03cd1d45bfed0753382f53f421)
+### [10. Creating and updating events in Firestore](https://github.com/sungnga/react-revents/commit/a51888a1743c9b03cd1d45bfed0753382f53f421?ts=2)
 - In EventForm.jsx file:
   - Import the following:
     ```javascript
@@ -3517,7 +3517,7 @@ The codebase for each step can be found in the commit link
     ```
   - Extract the loading and error properties from asyncReducer using useSelect() hook
     - `const { error, loading } = useSelector((state) => state.async);`
-  - When we want to update an event by clicking on the 'Manage Event' button, it'll route to the update event form and the event information is populated in the input fields. However, when we refesh the page, the event information is no longer there. The data doesn't persist. We need to load the event info from Firestore when the component mounts
+  - When we want to update an event by clicking on the 'Manage Event' button, it'll route to the update event form and the event information is populated in the input fields. However, when we refresh the page, the event information is no longer there. The data doesn't persist. We need to load the event info from Firestore when the component mounts
   - Use the useFirestoreDoc() custom hook we wrote for the EventDetailedPage component
   - Also the conditional logic to display the loading indicator
   - Also the conditional logic to display the error page
@@ -3588,7 +3588,7 @@ The codebase for each step can be found in the commit link
     }}
     ```
 
-### [11. Fix an issue w/ Create Event, sort events by date](https://github.com/sungnga/react-revents/commit/7072124e1b3170e69440dca0304943577137a03c)
+### [11. Fix an issue w/ Create Event, sort events by date](https://github.com/sungnga/react-revents/commit/7072124e1b3170e69440dca0304943577137a03c?ts=2)
 - We're running into a problem when we click on the 'Create Event' button to create a new event. The useFirestoreDoc() hook runs and tries to find an event document id in Firestore. Obviously when we first try to create a new event, there isn't an event id. When we're creating an new event, we don't want to run the useEffect()/useFirestoreDoc() hook which trigger the query in Firestore. However, we cannot stop running a useEffect() hook and that's the rule
 - To work around this issue, we can write a condition to exit out of the useFirestoreDoc() hook and thus listening to Firestore doesn't start when we're creating a new event
 - In useFirestoreDoc.js file:
@@ -3621,7 +3621,7 @@ The codebase for each step can be found in the commit link
   }
   ```
 
-### [12. Deleting an event](https://github.com/sungnga/react-revents/commit/c42f52b336419c244b9d53b4d099ada5eaee9c4a)
+### [12. Deleting an event](https://github.com/sungnga/react-revents/commit/c42f52b336419c244b9d53b4d099ada5eaee9c4a?ts=2)
 - In firestoreService.js file:
   - Write a deleteEventInFirestore function to delete an event in Firestore
     - This function takes an eventId as an argument
@@ -3645,7 +3645,7 @@ The codebase for each step can be found in the commit link
     ```
   - In our application, however, the user won't be able to delete an event. They can cancel an event instead
 
-### [13. Cancelling an event function](https://github.com/sungnga/react-revents/commit/80fd9fcd548b10cb1febad416ee970114428f1f6)
+### [13. Cancelling an event function](https://github.com/sungnga/react-revents/commit/80fd9fcd548b10cb1febad416ee970114428f1f6?ts=2)
 - In firestoreService.js file:
   - Write a cancelEventToggle function that toggles the cancel state of an event
     - This function takes an event as an argument
@@ -3692,7 +3692,7 @@ The codebase for each step can be found in the commit link
     )}
     ```
 
-### [14. Adding a confirmation prompt](https://github.com/sungnga/react-revents/commit/e813ac0c831b2e60d5f43d154c8be425b704b410)
+### [14. Adding a confirmation prompt](https://github.com/sungnga/react-revents/commit/e813ac0c831b2e60d5f43d154c8be425b704b410?ts=2)
 - When the user clicks on the 'Cancel Event' or 'Reactivate Event' button, we want to display a confirmation dialog box for them to confirm. Semantic UI has a Confirm component that we can use to achieve this
 - In EventForm.jsx file:
   - Import the cancelEventToggle function: `import { cancelEventToggle } from '../../../app/firestore/firestoreService';`
@@ -3774,14 +3774,14 @@ The codebase for each step can be found in the commit link
 - Cannot add additional properties to the User object directly
 - We're going store user profile which have more flexibility. Can store additional properties in Firestore
 
-### [1. Logging in with Firebase](https://github.com/sungnga/react-revents/commit/abfd8b83db3041faa7a088826b1540cc34a50d45)
+### [1. Logging in with Firebase](https://github.com/sungnga/react-revents/commit/abfd8b83db3041faa7a088826b1540cc34a50d45?ts=2)
 - Go to Google Firebase console: https://console.firebase.google.com/
 - Click on Authentication in main menu. Then in Authentication page, select 'Sign-in method' at the top menu bar
   - It'll list all the different options
   - Enable Email/Password, the first item on the list
 - Select 'Users' at the top menu bar
   - Click on 'Add user' button to add a user
-  - Fill in the Email and Pasword for the user
+  - Fill in the Email and Password for the user
   - Once a user is created, a user UID is created for this user
   - All the users are listed in this 'Users' tab
 In src/app/firestore folder, create a file called firebaseService.js
@@ -3821,7 +3821,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     };
     ```
 
-### [2. Persisting the login](https://github.com/sungnga/react-revents/commit/853f6153a02b24a6544b9fecb787063aa7497ecd)
+### [2. Persisting the login](https://github.com/sungnga/react-revents/commit/853f6153a02b24a6544b9fecb787063aa7497ecd?ts=2)
 - What Firebase and Firestore uses to retain information inside the browser to persist things like user login is inside the Application/Storage/IndexedDB/firebaseLocalStorageDb
 - When we login with a user or do anything with authentication, then Firebase gives us a listener for when the authentication state is changed. The `firebase.auth().onAuthStateChanged()` method adds an observer for changes to the user's sign-in state. So when a user logs in or a user logs out, then this particular method is going to listen for that particular status. And then we can take actions when the authentication state is changed
 - We'll use this method and what it returns is a Firebase user object. So we're going to check to see if we have a user. If a user is authenticated, then we have a user object
@@ -3851,7 +3851,7 @@ In src/app/firestore folder, create a file called firebaseService.js
   - Import the verifyAuth() action function: `import { verifyAuth } from '../../features/auth/authActions';`
   - We're going to make an adjustment to the store. We don't want to return the store directly. We want to do something to the store and then return the store
   - First, create a store variable and assign it to the createStore() method
-  - Then dispatch the veryifyAuth() action to the store
+  - Then dispatch the verifyAuth() action to the store
   - Then return the store
     ```javascript
     export function configureStore() {
@@ -3885,7 +3885,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     }}
     ```
 
-### [3. Signing out the user in Firebase](https://github.com/sungnga/react-revents/commit/d4868677f6dc81d4bdf79b83e8fb9f1567c8f2ad)
+### [3. Signing out the user in Firebase](https://github.com/sungnga/react-revents/commit/d4868677f6dc81d4bdf79b83e8fb9f1567c8f2ad?ts=2)
 - When a user clicks on the 'Sign out' button, we want them sign out in Firebase. We need to write a function to do this
 - In firebaseService.js file:
   - Write a signOutFirebase function that signs out user in Firebase
@@ -3917,7 +3917,7 @@ In src/app/firestore folder, create a file called firebaseService.js
   - On the onClick event for 'Sign out' Dropdown, call the handleSignOut method
     - `<Dropdown.Item onClick={handleSignOut} text='Sign out' icon='power' />`
 
-### [4. Registering new users in Firebase: RegisterForm component](https://github.com/sungnga/react-revents/commit/ae41655bd3c837ffb6edec62572b928f02a69cfa)
+### [4. Registering new users in Firebase: RegisterForm component](https://github.com/sungnga/react-revents/commit/ae41655bd3c837ffb6edec62572b928f02a69cfa?ts=2)
 - In src/features/auth folder, create a component/file called RegisterForm.jsx
 - In RegisterForm.jsx file:
   - The RegisterForm is very similar to the the LoginForm. Copy and paste the code as starter
@@ -4017,7 +4017,7 @@ In src/app/firestore folder, create a file called firebaseService.js
   - On the onSubmit event handler, call the registerInFirebase() method inside the try block and pass in the values as an argument. Add the 'await' keyword in front of it since this is an async operation
     - `await registerInFirebase(values);`
 
-### [5. Handling auth errors in LoginForm and RegisterForm](https://github.com/sungnga/react-revents/commit/ac13eb8a6072ebed86e8434c5da8d9c1433b9d8d)
+### [5. Handling auth errors in LoginForm and RegisterForm](https://github.com/sungnga/react-revents/commit/ac13eb8a6072ebed86e8434c5da8d9c1433b9d8d?ts=2)
 - In the LoginForm, we want to display an error message to the user if they aren't able to login
 - In LoginForm.jsx file:
   - Import Semantic Label component: `import { Label } from 'semantic-ui-react';`
@@ -4067,14 +4067,14 @@ In src/app/firestore folder, create a file called firebaseService.js
     }}
     ```
 
-### [6. Setting user profile data in Firestore and Firebase](https://github.com/sungnga/react-revents/commit/8bd7aa7c60c89e019754c1d800eed7490ab2c679)
+### [6. Setting user profile data in Firestore and Firebase](https://github.com/sungnga/react-revents/commit/8bd7aa7c60c89e019754c1d800eed7490ab2c679?ts=2)
 - When we register a new user, we also want to add the user profile data into Firestore. By storing user profile in Firestore, we get live updates when they make changes to their profile information. So we're going to add profile data into Firestore database. Right now we have events collection in Firestore. We're going to have a collection of document for each user that registers to our application
 - In firestoreService file:
   - Write a setUserProfileData function that creates a users collection in Firestore that contains a collection of user profile documents
     - This function takes user as an argument
     - Call the db.collection('users').doc(user.uid).set() method to create and set a document in a collection
       - We don't need to have a collection already in place. If the specified collection doesn't exist, it will create one
-      - A .set() method allows us to specify a document reference (user.uid) ourselves even though we'er creating this document at the same time
+      - A .set() method allows us to specify a document reference (user.uid) ourselves even though we're creating this document at the same time
       - Specify the document, the document's Fields, inside the .set() method
     ```javascript
     export function setUserProfileData(user) {
@@ -4107,7 +4107,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     }
     ```
 
-### [7. Creating a social login component: SocialLogin component](https://github.com/sungnga/react-revents/commit/916774da98b3e40493a6a7a067ff49242186ca59)
+### [7. Creating a social login component: SocialLogin component](https://github.com/sungnga/react-revents/commit/916774da98b3e40493a6a7a067ff49242186ca59?ts=2)
 - In src/features/auth folder, create a component/file called SocialLogin.jsx
 - In SocialLogin.jsx file:
   - Import React: `import React from 'react';`
@@ -4133,7 +4133,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     <SocialLogin />
     ```
 
-### [8. Facebook login setup](https://github.com/sungnga/react-revents/commit/1055722ba69ad7994c4736247fb5458198cb3298)
+### [8. Facebook login setup](https://github.com/sungnga/react-revents/commit/1055722ba69ad7994c4736247fb5458198cb3298?ts=2)
 - Go to Facebook developers website: https://developers.facebook.com/
 - Once logged in with Facebook account, click on the 'Add a New project' button
 - Select the 'For Everything Else' option. Give the project a name
@@ -4153,7 +4153,7 @@ In src/app/firestore folder, create a file called firebaseService.js
   - Add 2 Number of Test Users to Create
   - Once the Test Users are listed, change their names and give new passwords
 
-### [9. Adding the Facebook login method](https://github.com/sungnga/react-revents/commit/eece91426a8a393e19ee98d748cb9e40b79a4db3)
+### [9. Adding the Facebook login method](https://github.com/sungnga/react-revents/commit/eece91426a8a393e19ee98d748cb9e40b79a4db3?ts=2)
 - In firebaseService.jsx file:
   - Import the setUserProfileData function : `import { setUserProfileData } from './firestoreService';`
   - Import toast: `import { toast } from 'react-toastify';`
@@ -4249,7 +4249,7 @@ In src/app/firestore folder, create a file called firebaseService.js
 - Click on Authentication in main menu. Then in Authentication page, select 'Sign-in method' at the top menu bar
 - Enable Google Sign-in. Provide Project support email and click Save. Easy peasy
 
-### [11. Adding an account page: AccountPage component](https://github.com/sungnga/react-revents/commit/76b1845362e2c84734486398343141eab7230cdf)
+### [11. Adding an account page: AccountPage component](https://github.com/sungnga/react-revents/commit/76b1845362e2c84734486398343141eab7230cdf?ts=2)
 - In src/features/auth folder, create a component/file called AccountPage.jsx
 - In AccountPage.jsx file:
   - Import the following:
@@ -4351,7 +4351,7 @@ In src/app/firestore folder, create a file called firebaseService.js
   - Make this dropdown as a link and set the pathname to '/account'
   - `<Dropdown.Item as={Link} to='/account' text='My account' icon='settings' />`
 
-### [12. Adding additional user info into the authReducer](https://github.com/sungnga/react-revents/commit/9cbd03d1187c9cc2acf44ad9489d3cc35b666f9d)
+### [12. Adding additional user info into the authReducer](https://github.com/sungnga/react-revents/commit/9cbd03d1187c9cc2acf44ad9489d3cc35b666f9d?ts=2)
 - In authReducer.js file:
   - In the SIGN_IN_USER case, add additional properties to the currentUser object
     ```javascript
@@ -4383,7 +4383,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     - `{currentUser.providerId === 'facebook.com' && ( ... )`
     - `{currentUser.providerId === 'google.com' && ( ... )`
 
-### [13. Adding a password change function](https://github.com/sungnga/react-revents/commit/e741125f0b77a52e10ce4714c9ec1f436cd054c5)
+### [13. Adding a password change function](https://github.com/sungnga/react-revents/commit/e741125f0b77a52e10ce4714c9ec1f436cd054c5?ts=2)
 - In firebaseService.js file:
   - Write an updateUserPassword function that updates user password
     - This function takes creds as an argument. creds is the newPassword1 and newPassword2 values
@@ -4431,7 +4431,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     />
     ```
 
-### [14. Fixing our issue with app initialization](https://github.com/sungnga/react-revents/commit/29ed8cca2b17432a848f702d32d65f8347c8f727)
+### [14. Fixing our issue with app initialization](https://github.com/sungnga/react-revents/commit/29ed8cca2b17432a848f702d32d65f8347c8f727?ts=2)
 - When a user is signed in and then visits the My Account page and then refreshes the page, we will run into an error that says Cannot read property 'providerId' of null. That is because we've initialized our app and the auth state is currently null and there's no user object. Certain page or component requires the user visiting the page be authenticated and we wrote a conditional somewhere in the component that is looking for the user object. ProviderId is one of the properties of the user object. When the Account page refreshes, it causes the component to re-render. And in the application initialization stage, it's looking for the providerId property but the currentUser object is currently null (no user object), so the application crashed
 - So what we need to take a look at is our application initialization. Our components are going to attempt to display as soon as possible and we need to add some control into that and wait until certain things have loaded in our application before we attempt to display the components. At the moment, whether we're authenticated or not, there may be other information that we want to load in when we initialize our application before anything else loads up
 - In our case, we're going to do this in the asyncReducer. We want to add an initialized flag into our asyncReducer and anything else that we need to do before our component renders
@@ -4441,7 +4441,7 @@ In src/app/firestore folder, create a file called firebaseService.js
   - Add an additional initialState property of initialized and set it to false:
     ```javascript
     const initialState = {
-      laoding: false,
+      loading: false,
       error: null,
       initialized: false
     };
@@ -4502,7 +4502,7 @@ In src/app/firestore folder, create a file called firebaseService.js
 
 ## USER PROFILES
 
-### [1. Adding a profile page: ProfilePage and ProfileHeader components](https://github.com/sungnga/react-revents/commit/0e67c6085a797b3819cb90a5cf691479daa44668)
+### [1. Adding a profile page: ProfilePage and ProfileHeader components](https://github.com/sungnga/react-revents/commit/0e67c6085a797b3819cb90a5cf691479daa44668?ts=2)
 - In src/features/profiles/profilePage folder, create a component/file called ProfilePage.jsx
 - In ProfilePage.jsx file:
   - Import React: `import React from 'react';`
@@ -4587,7 +4587,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     />
     ```
 
-### [2. Adding the profile content: ProfileContent component](https://github.com/sungnga/react-revents/commit/6db94425bed1b19877597d23cda493de0709bc48)
+### [2. Adding the profile content: ProfileContent component](https://github.com/sungnga/react-revents/commit/6db94425bed1b19877597d23cda493de0709bc48?ts=2)
 - In features/profiles/profilePage folder, create a component/file called ProfileContent.jsx
 - In ProfileContent.jsx file:
   - Import React: `import React from 'react';`
@@ -4616,7 +4616,7 @@ In src/app/firestore folder, create a file called firebaseService.js
   - Import the ProfileContent component: `import ProfileContent from './ProfileContent';`
     - In jsx, instantiate the ProfileContent component right after the ProfileHeader component: `<ProfileContent />`
 
-### [3. Creating the redux actions](https://github.com/sungnga/react-revents/commit/03b38de54bb60fd72ce5a981617b840fa3c0542f)
+### [3. Creating the redux actions](https://github.com/sungnga/react-revents/commit/03b38de54bb60fd72ce5a981617b840fa3c0542f?ts=2)
 - In src/features/profiles folder, create a file called profileConstants.js
 - In profileConstants.js file:
   - Add a constant LISTEN_TO_CURRENT_USER_PROFILE action
@@ -4679,7 +4679,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     - `profile: profileReducer`
 - We can go to the Redux devTools console and check out our Redux state and we should be able to find a new profile state with a currentUserProfile property in it. The currentUserProfile is currently null, but we can hook up our ProfilePage to Firestore and get the user profile data down so we can display it in the page
 
-### [4. Connecting the ProfilePage to the store](https://github.com/sungnga/react-revents/commit/7eb7cfc1ff2e33451de4f277975ddb99ca17331c)
+### [4. Connecting the ProfilePage to the store](https://github.com/sungnga/react-revents/commit/7eb7cfc1ff2e33451de4f277975ddb99ca17331c?ts=2)
 - In ProfilePage.jsx file:
   - Import useDispatch() and useSelector() hooks: `import { useDispatch, useSelector } from 'react-redux';`
   - Create a dispatch() method using useDispatch() hook
@@ -4742,7 +4742,7 @@ In src/app/firestore folder, create a file called firebaseService.js
   - Set the Header content to display the profile displayName
     - `content={profile.displayName}`
 
-### [5. Adding an about page: AboutTab component](https://github.com/sungnga/react-revents/commit/69218be2b3b063969a70cdd8794e7bc059251eec)
+### [5. Adding an about page: AboutTab component](https://github.com/sungnga/react-revents/commit/69218be2b3b063969a70cdd8794e7bc059251eec?ts=2)
 - In features/profiles/profilePage folder, create a component/file called AboutTab.jsx
 - In AboutTab.jsx file:
   - Import the following:
@@ -4806,7 +4806,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     - Then pass down the profile props to the AboutTab child component
     - `{ menuItem: 'About', render: () => <AboutTab profile={profile} /> }`
 
-### [6. Adding the profile form: ProfileForm component](https://github.com/sungnga/react-revents/commit/0d3d53db637540b38a2d0672028cab977aeb7eb2)
+### [6. Adding the profile form: ProfileForm component](https://github.com/sungnga/react-revents/commit/0d3d53db637540b38a2d0672028cab977aeb7eb2?ts=2)
 - In features/profiles/profilePage folder, create a component/file called ProfileForm.jsx
 - In ProfileForm.jsx file:
   - Import the following:
@@ -4864,7 +4864,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     - Pass down the profile props to the ProfileForm child component
     - `{editMode ? ( <ProfileForm profile={profile} /> ) : ( ... )}`
 					
-### [7. Adding the update user actions](https://github.com/sungnga/react-revents/commit/504a233fd8470cd1f65e474687949a5dfa0126ce)
+### [7. Adding the update user actions](https://github.com/sungnga/react-revents/commit/504a233fd8470cd1f65e474687949a5dfa0126ce?ts=2)
 - When the 'Update profile' button is clicked, we want to update the user profile in Firebase auth and in the user document in Firestore users collection. And since we're listening to Firebase user profile, the profileReducer in Redux store will receive the update and then the update is display in the page
 - To get this done, we want to check if the currentUser object in the authReducer has a differently displayName. If it does, then we want to update the firebase.auth().currentUser profile in the Firebase using the .updateProfile() method. We also want to update the user profile document in Firestore users collection
 - In firestoreService.js file:
@@ -4920,7 +4920,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     }}
     ```
  
-### [8. Initializing the app with the current user profile](https://github.com/sungnga/react-revents/commit/5e319c671a7039073c448dd081f6f977492bfc23)
+### [8. Initializing the app with the current user profile](https://github.com/sungnga/react-revents/commit/5e319c671a7039073c448dd081f6f977492bfc23?ts=2)
 - Once a user is successfully logged in, the user profile displayed in the NavBar on the right hand side is currently populated from the authReducer. It's listening to state change in Firebase.auth. If the user updates their displayName, they would have to refresh the ProfilePage to see the updated change. Instead, we want this to listen to the currentUserProfile profileReducer in Firestore and update the change from there
 - We will need to create another action and another state for the profileReducer
 - In profileConstants.js file:
@@ -5018,7 +5018,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     ```
 - Now when the user updates their displayName in the 'Update profile' form, it'll update the current user displayName in the NavBar as well
 
-### [9. Selecting other user profiles](https://github.com/sungnga/react-revents/commit/e0516493ffe64b06e5cf4f56e5e7911a6f3467a8)
+### [9. Selecting other user profiles](https://github.com/sungnga/react-revents/commit/e0516493ffe64b06e5cf4f56e5e7911a6f3467a8?ts=2)
 - When a user visits another user's profile page we want to show or hide certain data depending on whether they're the currently logged in user. For example, we don't want a user have access to the 'Edit/Cancel' button to edit a profile if they're are not the current user of this profile page. Or make the 'Follow' button available if the current logged in user visits their own profile page. We can find out the current logged in user with their uid in the currentUser property in the authReducer
 - In ProfilePage.jsx file:
   - Import the listenToSelectedUserProfile() action: `import { listenToSelectedUserProfile } from '../profileActions';`
@@ -5054,7 +5054,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     ```
 - In ProfileHeader.jsx file:
   - Receive the isCurrentUser props from the ProfilePage parent component and destructure it
-  - In JSX, we only want to display/reveal the 'Following' button in the ProfileHeader section if the user is NOT the currentUser. This prevents them from following themselves. If they're visiting someone else's ProfilePage, then they're not the isCurrentUser of this page and they would see the 'Following' button and they can follow this particular user
+  - In JSX, we only want to display/reveal the 'Following' button in the ProfileHeader section if the user is NOT the currentUser. This prevents them from following themselves. If they're visiting someone else ProfilePage, then they're not the isCurrentUser of this page and they would see the 'Following' button and they can follow this particular user
     ```javascript
     {!isCurrentUser && (
       <>
@@ -5104,7 +5104,7 @@ In src/app/firestore folder, create a file called firebaseService.js
   - Set a photo as their main photo
   - Delete a photo
 
-### [1. Adding a profile photos page: PhotosTab component](https://github.com/sungnga/react-revents/commit/27805ae5bae024401cec9caf6dc4c183a2a3635e)
+### [1. Adding a profile photos page: PhotosTab component](https://github.com/sungnga/react-revents/commit/27805ae5bae024401cec9caf6dc4c183a2a3635e?ts=2)
 - In src/features/profiles/profilePage folder, create a component/file called PhotosTab.jsx
 - In PhotosTab.jsx file:
   - Import React: `import React, { useState } from 'react';`
@@ -5161,7 +5161,7 @@ In src/app/firestore folder, create a file called firebaseService.js
 		},
     ```
 
-### [2. Adding a photo upload widget: PhotoUploadWidget component](https://github.com/sungnga/react-revents/commit/bef10054b30f581a90f6ca1147ef8aa40da8daa0)
+### [2. Adding a photo upload widget: PhotoUploadWidget component](https://github.com/sungnga/react-revents/commit/bef10054b30f581a90f6ca1147ef8aa40da8daa0?ts=2)
 - In src/app/common/photos folder, create a component/file called PhotoUploadWidget.jsx
 - In PhotoUploadWidget.jsx file:
   - Import React: `import React from 'react';`
@@ -5193,7 +5193,7 @@ In src/app/firestore folder, create a file called firebaseService.js
   - In JSX, right where the editMode is true, render the PhotoUploadWidget component
     - `{editMode ? ( <PhotoUploadWidget /> ) : ( ... )}`
 					
-### [3. React-dropzone: PhotoWidgetDropzone component](https://github.com/sungnga/react-revents/commit/5459f5e3bd160f368f8c37be3cd8ce09260b2aa2)
+### [3. React-dropzone: PhotoWidgetDropzone component](https://github.com/sungnga/react-revents/commit/5459f5e3bd160f368f8c37be3cd8ce09260b2aa2?ts=2)
 - React-dropzone source: https://www.npmjs.com/package/react-dropzone
 - Install react-dropzone library: `npm i react-dropzone`
 - In src/app/common/photos folder, create a component/file called PhotoWidgetDropzone.jsx
@@ -5288,7 +5288,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     ```
 - Now when we drag an image file to the dropzone widget, the border should turn green. When it's not active, it should have a grey dashed border. Also, the files state of the PhotoUploadWidget component should contain the image file we just uploaded
 
-### [4. React-cropper: PhotoWidgetCropper component](https://github.com/sungnga/react-revents/commit/91afa24984ff09251b4fe254585d8fe968c0a2b8)
+### [4. React-cropper: PhotoWidgetCropper component](https://github.com/sungnga/react-revents/commit/91afa24984ff09251b4fe254585d8fe968c0a2b8?ts=2)
 - After the user uploaded an image, we want them to be able to crop the image using the react-cropper library
 - React-cropper source: https://github.com/react-cropper/react-cropper
 - Install react-cropper library: `npm i react-cropper`
@@ -5425,10 +5425,10 @@ In src/app/firestore folder, create a file called firebaseService.js
     </Grid.Column>
     ```
 
-### [5. Adding an upload image method: upload to FirebaseStorage, Firebase.auth, and Firestore](https://github.com/sungnga/react-revents/commit/970d27be4a661e34d4ddb35367e0d4db38011989)
+### [5. Adding an upload image method: upload to FirebaseStorage, Firebase.auth, and Firestore](https://github.com/sungnga/react-revents/commit/970d27be4a661e34d4ddb35367e0d4db38011989?ts=2)
 - Now that we have the image upload widget working, we want to upload to FirebaseStorage. We also want to update the photoURL in the Firebase.auth, so that if we do need to use the currentUser anywhere in our app, we have the updated user profile. We also want to update the user's main profile photo if this is the first image they uploaded. We need to create two methods. One is for FirebaseStorage to upload the file and the second is for firestoreService
 - In firebaseService.js file:
-  - Write an uploadToFirebaseStorage method that uploads a file to FiresbaseStorage
+  - Write an uploadToFirebaseStorage method that uploads a file to FirebaseStorage
     - This function takes file and filename as arguments
     - First, get the user reference, the currently logged in user, from firebase.auth().currentUser and assign it to a user variable
     - Then get the storage ref from firebase.storage().ref() and assign to a storageRef variable
@@ -5454,7 +5454,7 @@ In src/app/firestore folder, create a file called firebaseService.js
       - First, call the userDocRef.get() method to get the user document and assign the returned data to userDoc variable. This is equivalent to making an api call and it's an async operation. Add 'await' keyword in front of it
       - Second, write an if statement to check the user document to see if they do not have a photo in there
         - If they don't, then we want to update the user document photoURL property with the downloadURL using the .update() method. This is an async operation, so add 'await' keyword in front of it
-        - Then also update the user photoURL property in firebase.auth by calling the .updateProfile() method on user. Rememeber that `const user = firebase.auth().currentUser;`. This is also an async operation, so add the 'await' keyword in front of it
+        - Then also update the user photoURL property in firebase.auth by calling the .updateProfile() method on user. Remember that `const user = firebase.auth().currentUser;`. This is also an async operation, so add the 'await' keyword in front of it
       - Third, we want to add the photo to the photos collection inside the user document in Firestore users collection. This is an async operation, so add the 'await' keyword. We also want to add a return so that we can use this data later
         - So first, we want to access the user document with `db.collection('users').doc(user.uid)`
         - To add a new collection inside the user document, add the `.collection('photos')` method after it and pass in the name of the collection. If there's a photos collection for this user already, it simply adds the photo to this existing collection
@@ -5483,7 +5483,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     }
     ```
 
-### [6. Using the upload method in the photo widget](https://github.com/sungnga/react-revents/commit/094507eab3007714f727d9cc21d276a58b43be31)
+### [6. Using the upload method in the photo widget](https://github.com/sungnga/react-revents/commit/094507eab3007714f727d9cc21d276a58b43be31?ts=2)
 - In PhotoUploadWidget.jsx file:
   - Import the following:
     ```javascript
@@ -5493,10 +5493,10 @@ In src/app/firestore folder, create a file called firebaseService.js
     import { uploadToFirebaseStorage } from '../../firestore/firebaseService'
     import { updateUserProfilePhoto } from '../../firestore/firestoreService';
     ```
-  - Create a loading state to handle the loading indicator. Use useState() hook and inititalize its value to false
+  - Create a loading state to handle the loading indicator. Use useState() hook and initialize its value to false
     - `const [loading, setLoading] = useState(false);`
   - Write a handleUploadImage function that uploads the photo to FirebaseStorage, updates the photoURL property in Firestore user doc and in user profile firebase.auth, and adds the photo to the Firestore photos collection. It's done by executing the uploadToFirebaseStorage() and updateUserProfilePhoto() methods
-    - First thing is call the setLoading() methdod to set the loading indicator to true
+    - First thing is call the setLoading() method to set the loading indicator to true
     - Second, we want to give each of the image we upload a unique name. To do that we'll make use of the cuid library to give us a unique id and a utility function to give us the file extension
     - Third, create an uploadTask by calling the uploadToFirebaseStorage() method with the image and filename to upload to FirebaseStorage
       - The uploadTask will return a snapshot or we can get a snapshot from the uploadTask
@@ -5590,13 +5590,13 @@ In src/app/firestore folder, create a file called firebaseService.js
         icon='close'
       />
       ```
-- Go to Firesbase console website: https://console.firebase.google.com/
+- Go to Firebase console website: https://console.firebase.google.com/
   - Select Storage from the main menu
   - Click on the 'Get Started' button and accept the default bucket rules
   - This will create a storage for our application
 
-### [7. Displaying the images in PhotosTab](https://github.com/sungnga/react-revents/commit/f4f8ed37bb74c4ab1ebdc63ef6628688f1531636)
-- Now that we're able to upload photos to firebaseStoge, firebase.auth, and Firestore, we want to create a new constant, a new action, and new reducer to store photos in Redux store
+### [7. Displaying the images in PhotosTab](https://github.com/sungnga/react-revents/commit/f4f8ed37bb74c4ab1ebdc63ef6628688f1531636?ts=2)
+- Now that we're able to upload photos to firebaseStorage, firebase.auth, and Firestore, we want to create a new constant, a new action, and new reducer to store photos in Redux store
 - In profileConstants.js file:
   - Create a new constant for LISTEN_TO_USER_PHOTOS
   - `export const LISTEN_TO_USER_PHOTOS = 'LISTEN_TO_USER_PHOTOS';`
@@ -5639,7 +5639,7 @@ In src/app/firestore folder, create a file called firebaseService.js
 - In firestoreService.js file:
   - Write a query getUserPhotos function that gets user photos from Firestore photos collection
     - This function takes userUid as an argument
-    - It returns the photos from Firstore photos collection
+    - It returns the photos from Firestore photos collection
     ```javascript
     export function getUserPhotos(userUid) {
       return db.collection('users').doc(userUid).collection('photos');
@@ -5687,7 +5687,7 @@ In src/app/firestore folder, create a file called firebaseService.js
       ```
 - Now we should be able to see the user photos collection in the PhotosTab
 
-### [8. Setting the main profile photo](https://github.com/sungnga/react-revents/commit/a7f565af70ebe9a499b33604398ef83c68369d5a)
+### [8. Setting the main profile photo](https://github.com/sungnga/react-revents/commit/a7f565af70ebe9a499b33604398ef83c68369d5a?ts=2)
 - In firestoreService.js file:
   - Write an async setMainPhoto function that updates the photoURL property in Firestore user document and updates the user profile photoURL property in firebase.auth
     - This function takes photo as an argument
@@ -5773,7 +5773,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     ```
   - In the 'Main' Button element:
     - Add a name property and set it to photo.id
-    - For the loading property, set it to `updating.isUpdatng && updating.target === photo.id`. The loading indicator will only run if isUpdating is true AND the updating target is equal to photo.id, which is the name of the Button element
+    - For the loading property, set it to `updating.isUpdating && updating.target === photo.id`. The loading indicator will only run if isUpdating is true AND the updating target is equal to photo.id, which is the name of the Button element
     - Add a disabled property and set it to `photo.url === profile.photoURL`. This prevents the user from setting this photo as the main photo again if this photo is already the profile photo
     - For onClick event handler,
       - call the handleSetMainPhoto method inside the callback function since we need to pass in parameters to the method
@@ -5793,7 +5793,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     />    
     ```
 
-### [9. Deleting a photo](https://github.com/sungnga/react-revents/commit/61b9f1c243a2c89b15329948049c3249491bd001)
+### [9. Deleting a photo](https://github.com/sungnga/react-revents/commit/61b9f1c243a2c89b15329948049c3249491bd001?ts=2)
 - When deleting a photo, we want to remove it from firebaseStorage and from Firestore photos collection
 - In firebaseService.js file:
   - Write a deleteFromFirebaseStorage function that deletes a photo from firebaseStorage
@@ -5810,7 +5810,7 @@ In src/app/firestore folder, create a file called firebaseService.js
       return photoRef.delete();
     }
     ```
-- In firesoreService.js file:
+- In firestoreService.js file:
   - Write a deletePhotoFromCollection function that deletes an image from Firestore photos collection based on the given photoId
     - This function takes photoId as an argument
     - First, get the current user uid from firebase.auth and assign it to userUid variable
@@ -5858,7 +5858,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     ```
   - In the 'trash' icon Button element:
     - Add a name property and set it to photo.id
-    - Add a loading property and set it to `deleting.isDeletng && deleting.target === photo.id`. The loading indicator will only run if isDeleting is true AND the deleting target is equal to photo.id, which is the name of the Button element
+    - Add a loading property and set it to `deleting.isDeleting && deleting.target === photo.id`. The loading indicator will only run if isDeleting is true AND the deleting target is equal to photo.id, which is the name of the Button element
     - Add a disabled property and set it to `photo.url === profile.photoURL`. This prevents the user from deleting the photo if this photo is the profile photo. They would need to swap another photo for the profile photo first before deleting this particular photo
     - For onClick event handler, 
       - call the handleDeletePhoto() method inside a callback function since we need to pass in parameters to the method 
@@ -5869,7 +5869,7 @@ In src/app/firestore folder, create a file called firebaseService.js
       name={photo.id}
       onClick={(e) => handleDeletePhoto(photo, e.target.name)}
       loading={
-        deleting.isdeleting && deleting.target === photo.id
+        deleting.isDeleting && deleting.target === photo.id
       }
       disabled={photo.url === profile.photoURL}
       basic
@@ -5881,7 +5881,7 @@ In src/app/firestore folder, create a file called firebaseService.js
 
 ## FIREBASE RELATIONSHIPS
 
-### [1. Adding attendances to an event](https://github.com/sungnga/react-revents/commit/6c51ccc5016acbfc0489b0b1531db4fc971af505)
+### [1. Adding attendances to an event](https://github.com/sungnga/react-revents/commit/6c51ccc5016acbfc0489b0b1531db4fc971af505?ts=2)
 - In firestoreService.js file:
   - In addEventToFirestore() function:
     - What we have going on at the moment when we're creating an event is we're manually adding static data to the fields. Now that we have the information we need to dynamically populate these fields when we create an event, we're going to update this function
@@ -5913,7 +5913,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     }
     ```
 
-### [2. Setting up the event detailed header](https://github.com/sungnga/react-revents/commit/1d1746ed3de67bc6dc2453c348a0a640b900769c)
+### [2. Setting up the event detailed header](https://github.com/sungnga/react-revents/commit/1d1746ed3de67bc6dc2453c348a0a640b900769c?ts=2)
 - We want to configure the EventDetailedHeader so that only certain buttons show depending on the user's status to that event. Are they the host, are they the attendee, or are they not an attendee?
 - In EventDetailedPage.jsx file:
   - First, we want to get the currentUser property from authReducer using useSelector() hook
@@ -5950,7 +5950,7 @@ In src/app/firestore folder, create a file called firebaseService.js
       )}
       ```
 
-### [3. Adding the join event handler](https://github.com/sungnga/react-revents/commit/8ef5ded88fa4f52c9de96a338e2a009c254180ea)
+### [3. Adding the join event handler](https://github.com/sungnga/react-revents/commit/8ef5ded88fa4f52c9de96a338e2a009c254180ea?ts=2)
 - In firestoreService.js file:
   - Write a addUserAttendance function that adds the currentUser to a given event
     - This function takes an event as an argument
@@ -6009,7 +6009,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     </Button>
     ```
 
-### [4. Cancelling a user attenadance](https://github.com/sungnga/react-revents/commit/772b2357be15b7feea0a510910855e3172535db8)
+### [4. Cancelling a user attendance](https://github.com/sungnga/react-revents/commit/772b2357be15b7feea0a510910855e3172535db8?ts=2)
 - When it comes to removing objects from Firestore arrays, it can be a bit of a challenge. We can't use an arrayRemove() method to remove an object from an array. In our case, it's removing a user from an event's attendees list. The attendees array contains the user objects. To get this done, first, we need to get the events collection document and then use a normal array filter method to update the array and remove the currentUser from the array
 - In firestoreService.js file:
   - Write an async cancelUserAttendance function that gets the event doc to remove the currentUser from the attendees array property and from the attendeeIds array property of a given event. This is an async function since we need to get the events collection doc
@@ -6020,7 +6020,7 @@ In src/app/firestore folder, create a file called firebaseService.js
       - Use the .get() method to get the event doc from events collection document of a given event.id. Add the 'await' keyword in front of it for we need to wait for this operation to complete. Assign it to an eventDoc variable
       - Then use the .update() method to update the attendeeIds and attendees properties in events collection document of a given event.id
         - For the attendeeIds property, use the .arrayRemove() method to remove the user.uid from the array
-        - For the attendees property, first, access the data of the eventDoc that we got back `eventDoc.data()`. Then call the .filter() method on the attendees array to upate the array and remove the attendee.id that matches with the user.uid
+        - For the attendees property, first, access the data of the eventDoc that we got back `eventDoc.data()`. Then call the .filter() method on the attendees array to update the array and remove the attendee.id that matches with the user.uid
     ```javascript
     export async function cancelUserAttendance(event) {
       const user = firebase.auth().currentUser;
@@ -6069,7 +6069,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     </Button>
     ```
 
-### [5. Adding the user nav links](https://github.com/sungnga/react-revents/commit/b6c038ab89d355de42eb04757473efe85309a4d5)
+### [5. Adding the user nav links](https://github.com/sungnga/react-revents/commit/b6c038ab89d355de42eb04757473efe85309a4d5?ts=2)
 - In the EventDetailedPage, we want to add a ribbon label to the user what hosts the event. We also want to add nav links for the attendees and hosts throughout the event page. This way, when other users visiting the event page, they can easily go to others profile pages
 - In EventDetailedPage.jsx file:
   - Pass down the event.hostUid as hostUid props to the EventDetailedSidebar child component
@@ -6118,7 +6118,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     </Item.Description>
     ```
 
-### [6. Adding the filter functionality](https://github.com/sungnga/react-revents/commit/d165815131c1784e724bdea247a85749f7dc8f33)
+### [6. Adding the filter functionality](https://github.com/sungnga/react-revents/commit/d165815131c1784e724bdea247a85749f7dc8f33?ts=2)
 - In EventDashboard.jsx file:
   - Create a predicate state using useState() hook
     - What we're going to use to initialize the state is a Javascript map. This is a Javascript object that allows us to use certain methods and we can get and set different elements in this map easily. This is a sufficient way for users to set a particular filter
@@ -6154,7 +6154,7 @@ In src/app/firestore folder, create a file called firebaseService.js
       - Add a loading property and set it to loading state. We want to disable the filter button while the app is fetching and loading the data
       - Add an active property and set it to predicate state. Since the predicate is a map object, we can call the .get() method on predicate and pass in a key to it
       - For the onClick event handler, call the setPredicate() method inside a callback function and pass in the key and value as arguments
-    - Inside the Caledar component:
+    - Inside the Calendar component:
       - For the onChange event handler, the callback function takes the date value as an argument. Then call the setPredicate() method in the callback and pass in startDate as the key and the date value as the value
       - Add a value property and set it to the predicate state. We can use the .get() method on predicate and pass in 'startDate' or `new Date()` as the key. The `new Date()` is today's date
       - Add a tileDisabled property and this takes a callback. Set loading in the callback
@@ -6194,7 +6194,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     }
     ```
 
-### [7. Getting the filtered data](https://github.com/sungnga/react-revents/commit/b0032fddb996fe71391c9c9855ae7906bcbaaf31)
+### [7. Getting the filtered data](https://github.com/sungnga/react-revents/commit/b0032fddb996fe71391c9c9855ae7906bcbaaf31?ts=2)
 - Now we're going to hook up the filter functionality to listen to events from Firestore method in our firestoreService. So we can go out and listen to the new data we're going to get returned from Firestore
 - In firestoreService.js file:
   - Let's modify the listenToEventsFromFirestore() function that we wrote earlier:
@@ -6252,9 +6252,9 @@ In src/app/firestore folder, create a file called firebaseService.js
   }
   ```
   - The problem showing in the console is: `FirebaseError: The query requires an index` and a link to the Firebase console is listed to fix this particular problem
-  - The problem we're running into is when we're filtering more than one Fields in Firestore, we need to create a composite index in Firestore. Everytime we'er querying multiple Fields we will run into this issue. Firestore will generate the index for us, but we need to go to the website to create the index
+  - The problem we're running into is when we're filtering more than one Fields in Firestore, we need to create a composite index in Firestore. Every time we're querying multiple Fields we will run into this issue. Firestore will generate the index for us, but we need to go to the website to create the index
 
-### [8. Adding the user event filters: EventsTab component](https://github.com/sungnga/react-revents/commit/6c75a15e7ecb22632e1af1e8ab5b74f64aa966e9)
+### [8. Adding the user event filters: EventsTab component](https://github.com/sungnga/react-revents/commit/6c75a15e7ecb22632e1af1e8ab5b74f64aa966e9?ts=2)
 - In src/features/profiles/profilePage folder, create a component/file called EventsTab.jsx
 - In EventsTab.jsx file:
   - Use the code from the AboutTab component as a starter, because the page layout is going to be similar
@@ -6329,11 +6329,11 @@ In src/app/firestore folder, create a file called firebaseService.js
   - In the 'Events' menuItem, render the EventsTab component
     - `{ menuItem: 'Events', render: () => <EventsTab /> },`
 
-### [9. Adding the user event query](https://github.com/sungnga/react-revents/commit/0d74bc949ad8eb547596285db8156c04794c1a16)
+### [9. Adding the user event query](https://github.com/sungnga/react-revents/commit/0d74bc949ad8eb547596285db8156c04794c1a16?ts=2)
 - In firestoreService.js file:
   - Write an getUserEventsQuery function that gets the user events in Firestore events collection based on the specified query clauses
     - This function takes activeTab and userUid as parameters
-    - First, get a referenece to the events collection and assign it to an eventsRef variable
+    - First, get a reference to the events collection and assign it to an eventsRef variable
     - Also get a reference to today's date using `new Date()`. Assign it to a today variable
     - Then use a switch statement to handle the filters for different activeTab
       - The switch we're looking for is activeTab that we receive
@@ -6366,7 +6366,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     }
     ```
 
-### [10. Adding profile actions for user events](https://github.com/sungnga/react-revents/commit/4bcaa902b5fdb6c1a9e80817f9372f6f8dff9816)
+### [10. Adding profile actions for user events](https://github.com/sungnga/react-revents/commit/4bcaa902b5fdb6c1a9e80817f9372f6f8dff9816?ts=2)
 - In profileConstants.js file:
   - Add another constant for LISTEN_TO_USER_EVENTS. We're creating this action in profile actions because this action is part of the profile page, even though we're listening for events
     - `export const LISTEN_TO_USER_EVENTS = 'LISTEN_TO_USER_EVENTS';`
@@ -6479,12 +6479,12 @@ In src/app/firestore folder, create a file called firebaseService.js
   - Realtime Database: Store and sync data in realtime across all connected clients
   - Cloud Firestore: Realtime updates, powerful queries, and automatic scaling
 
-### [1. Setting up Firebase Realtime Database](https://github.com/sungnga/react-revents/commit/6be1ad67daa5491b97603535eadeb7a01e93c711)
+### [1. Setting up Firebase Realtime Database](https://github.com/sungnga/react-revents/commit/6be1ad67daa5491b97603535eadeb7a01e93c711?ts=2)
 - Go to Firebase dashboard: https://console.firebase.google.com/
 - Select Realtime Database from the main menu
 - Click on the Rules tab at the top and edit the rules
   - This will allow the authenticated user to read and write the chat comments
-  ```javacript
+  ```js
   {
     "rules": {
       ".read": "auth != null",
@@ -6515,7 +6515,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     }
     ```
 
-### [2. Setting up the chat form: EventDetailedChatForm component](https://github.com/sungnga/react-revents/commit/4e080bc310a04ce3c1e1c649a80ebd92fa04795f)
+### [2. Setting up the chat form: EventDetailedChatForm component](https://github.com/sungnga/react-revents/commit/4e080bc310a04ce3c1e1c649a80ebd92fa04795f?ts=2)
 - In EventDetailedPage.jsx file:
   - Pass down the eventId as props to the EventDetailedChat child component
     - `<EventDetailedChat eventId={event.id} />`
@@ -6582,7 +6582,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     ```
 - Now when a currentUser adds a comment in the chat form, the comment is added in firebase database under: chat -> eventId -> comment ID along with the comment detailed info
 
-### [3. Listening to the chat data](https://github.com/sungnga/react-revents/commit/9565df803a5a6f02b3cf5c176a90026526abc81c)
+### [3. Listening to the chat data](https://github.com/sungnga/react-revents/commit/9565df803a5a6f02b3cf5c176a90026526abc81c?ts=2)
 - Now that we have some comments in firebase database to listen to, we're going to add them to Redux store and use that to display on the page
 - In eventConstants.js file:
   - Create another constant for LISTEN_TO_EVENT_CHAT
@@ -6670,7 +6670,7 @@ In src/app/firestore folder, create a file called firebaseService.js
   - Write a firebaseObjectToArray helper function that shapes the snapshot data into an array that we can use
     - This function takes snapshot as a parameter
     - First, check to see if there's a snapshot. If there is, run the following code
-    - To convert the snapshot object into an array, use Object.entries() method and pass in the snapshort as an argument. This will return an array
+    - To convert the snapshot object into an array, use Object.entries() method and pass in the snapshot as an argument. This will return an array
       - For example, if we have 2 comment objects inside the snapshot object, the Object.entries() methods will return an array that has 2 array items in it. The 1st array item is the first comment and the 2nd array item is the second comment. In each array item, the 1st index is the comment id key in string and the 2nd index is the comment data in object. The 2nd array item is the same structure but for the second comment
       - `[[comment1], [comment2]] -> [["comment1_key", {comment1_value_dataObject}], ["comment2_key", {comment2_value_dataObject}]]`
     - Then to convert each array item into an object, we first use .map() method on the array to get each array item and then use the Object.assign() method to create a new object
@@ -6692,7 +6692,7 @@ In src/app/firestore folder, create a file called firebaseService.js
   - Call the firebaseObjectToArray() function and pass in snapshot.val(). Console log it to see what we get. What we get back is an array of comment objects. The comment object contains all of the properties about the comment, including the id property
     - `console.log(firebaseObjectToArray(snapshot.val()));`
   - Now that we have the chat comments in the form that we can use, the next thing is dispatch the listenToEventChat() action and pass in the new version of snapshot
-  - We can check in Redux store and see the comments data is populated in the commments array property in the eventReducer
+  - We can check in Redux store and see the comments data is populated in the comments array property in the eventReducer
     ```javascript
     useEffect(() => {
       getEventChatRef(eventId).on('value', (snapshot) => {
@@ -6703,7 +6703,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     }, [eventId, dispatch]);
     ```
 
-### [4. Displaying the chat comments](https://github.com/sungnga/react-revents/commit/74ccf69b1a65288aff15ac9f1809b99910828b1d)
+### [4. Displaying the chat comments](https://github.com/sungnga/react-revents/commit/74ccf69b1a65288aff15ac9f1809b99910828b1d?ts=2)
 - In EventDetailedChat.jsx file:
   - Import the Link component: `import { Link } from 'react-router-dom';`
   - Import formatDistance: `import { formatDistance } from 'date-fns';`
@@ -6736,18 +6736,18 @@ In src/app/firestore folder, create a file called firebaseService.js
     </Comment.Group>
     ```
 
-### [5. Improving the chat UI](https://github.com/sungnga/react-revents/commit/19161a374a01aac69a1a8dba4dbc3aba45b2933a)
+### [5. Improving the chat UI](https://github.com/sungnga/react-revents/commit/19161a374a01aac69a1a8dba4dbc3aba45b2933a?ts=2)
 - In EventDetailedChat.jsx file:
   - Right now the chat displays the last comment at the bottom. We have no way to change the order in firebase db, but we can reverse the order on the client side
     - Inside useEffect() hook, use the .reverse() method on firebaseObjectToArray() to reverse the snapshot array
     - `dispatch(listenToEventChat(firebaseObjectToArray(snapshot.val()).reverse()));`
-  - Move the EventDetailedChatForm componment to outside and above the Comment.Group element. This way, the chat form is above the chat comments
+  - Move the EventDetailedChatForm component to outside and above the Comment.Group element. This way, the chat form is above the chat comments
 - We want users to be able to type in their comment and just hit the Enter key to submit the comment. We will remove the 'Add reply' button altogether. With that, we need to change we way we submit the textArea input field
 - In EventDetailedChatForm.jsx file:
   - Remove the current MyTextArea component and the Button element
   - Import the Field component: `import { Field, Form, Formik } from 'formik';`
   - Import Loader component: `import { Loader } from 'semantic-ui-react';`
-  - Inside the Form wrapper component, we'er going to use the Formik Field component to render the textArea input field
+  - Inside the Form wrapper component, we're going to use the Formik Field component to render the textArea input field
   - Inside the Field component:
     - Use render props to extract the field props. Destructure it in the render props function
     - Then inside the render props function,
@@ -6798,9 +6798,9 @@ In src/app/firestore folder, create a file called firebaseService.js
       ))}
     </Comment.Text>
     ```
-  - Note that in firebase database, the text property of a coment will still have the '\n' included in the text string. What we did in the Comment.Text element is how we want to display the text on the page. The .split() method did not change the original text string
+  - Note that in firebase database, the text property of a comment will still have the '\n' included in the text string. What we did in the Comment.Text element is how we want to display the text on the page. The .split() method did not change the original text string
 
-### [6. Clearing the chat comments and chat form validation](https://github.com/sungnga/react-revents/commit/b1f6ad63b52ca9dbd419b43c8a1aab6ba260113f)
+### [6. Clearing the chat comments and chat form validation](https://github.com/sungnga/react-revents/commit/b1f6ad63b52ca9dbd419b43c8a1aab6ba260113f?ts=2)
 - Right now when we go visit another event page, the current chat comments array that's in the redux store is displaying in every event page. We should not be able to see some other event chat comments when we visit an event page. What we need to do is clear the comments property in eventReducer redux state when the EventDetailedPage dismounts. We need to create an action to clear the store state
 - In eventConstants.js file:
   - Create another constant for CLEAR_COMMENTS action
@@ -6822,7 +6822,7 @@ In src/app/firestore folder, create a file called firebaseService.js
   - Import the constant: `import { CLEAR_COMMENTS } from '../eventConstants';`
   - When we're using an useEffect() hook, after a component is unmounted (as in we moved away from this event to somewhere else), then we can use a return function inside the useEffect() to do something else, like cleanup
   - Inside the useEffect() hook:
-    - Use a return callback function to dispatch the action type of CLEAR_COMMENTS. This will callout the eventReducer function to clear out the comments array
+    - Use a return callback function to dispatch the action type of CLEAR_COMMENTS. This will call out the eventReducer function to clear out the comments array
     - What we can also do is turn off the listener for the event chat in firebase db when a component is unmounted. In the return callback, call the getEventChatRef() method and then call the .off() method on it
     ```javascript
     useEffect(() => {
@@ -6859,8 +6859,8 @@ In src/app/firestore folder, create a file called firebaseService.js
     }
     ```
 
-### [7. Adding the reply functionality](https://github.com/sungnga/react-revents/commit/069145b1d7911383064264e87a0789206cbc45ce)
-- Enable a user to reply to a chat comment and we'll only make it one level deep. When the user hits the 'Reply' to a comment, we want to display the EventDetailedChatForm compononent. And after they submitted the reply, we want to close the reply form automatically. Another thing we want to do is add a parentId property to the comment data object. If it's the original comment, then the parentId is set to 0. But if it's a reply comment, then the parentId is set to its parent comment id
+### [7. Adding the reply functionality](https://github.com/sungnga/react-revents/commit/069145b1d7911383064264e87a0789206cbc45ce?ts=2)
+- Enable a user to reply to a chat comment and we'll only make it one level deep. When the user hits the 'Reply' to a comment, we want to display the EventDetailedChatForm component. And after they submitted the reply, we want to close the reply form automatically. Another thing we want to do is add a parentId property to the comment data object. If it's the original comment, then the parentId is set to 0. But if it's a reply comment, then the parentId is set to its parent comment id
 - In firebaseService.js file:
   - Lets modify the addEventChatComment function:
     - Instead of accepting comment as a parameter, we accept values that's coming from the form instead
@@ -6947,7 +6947,7 @@ In src/app/firestore folder, create a file called firebaseService.js
     }}
     ```
 
-### [8. Displaying the replies](https://github.com/sungnga/react-revents/commit/48adce6a4fa3a89e3f0485c7891b891bf0f80573)
+### [8. Displaying the replies](https://github.com/sungnga/react-revents/commit/48adce6a4fa3a89e3f0485c7891b891bf0f80573?ts=2)
 - Right now all of our original comments and reply comments are in one array in firebase database and we have no way to organize the comments in a tree structure. However, we can organize the display of it on the client side. We need to create a utility function to organize our dataset
 - In src/app/common/util/util.js file:
   - Write a createDataTree utility function to create a data tree based on a given array/dataset
@@ -6959,10 +6959,10 @@ In src/app/firestore folder, create a file called firebaseService.js
     - Create a dataTree variable and set it to an empty array
       - `let dataTree = [];`
     - Then loop over each element in dataset array using the .forEach() method again. For each element, 
-      - if parentId property is true (original comment parentId is set to 0. 0 means false), add the hashtable object (which contains this element data) using the .push() method to the childNodes array property of a hashtable object of that parentId. Remember that childNodes is a property of hashtable object. To acess childNodes of a specific hashtable object, use `hashtable[specify_the_hash].childNodes`. And then call a method on childNodes
+      - if parentId property is true (original comment parentId is set to 0. 0 means false), add the hashtable object (which contains this element data) using the .push() method to the childNodes array property of a hashtable object of that parentId. Remember that childNodes is a property of hashtable object. To access childNodes of a specific hashtable object, use `hashtable[specify_the_hash].childNodes`. And then call a method on childNodes
       - if parentId property is false or doesn't exist (meaning, this is the original comment), add the hashtable object, which contains this element data, to the dataTree array using the .push() method
     - Return the dataTree array
-    - The dataTree array contains an array of hastable objects, which are the original comment objects. If there are reply comments to the original comment, they live in the childNodes array property of the original comment object. Each reply comment is also an object and it contains a childNodes array property as well and it has a parentId of its parent comment id
+    - The dataTree array contains an array of hashtable objects, which are the original comment objects. If there are reply comments to the original comment, they live in the childNodes array property of the original comment object. Each reply comment is also an object and it contains a childNodes array property as well and it has a parentId of its parent comment id
     ```javascript
     export function createDataTree(dataset) {
       let hashtable = Object.create(null);
